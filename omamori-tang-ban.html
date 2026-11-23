@@ -26,12 +26,13 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style>
 :root{
-  --bg:#0d0a1f; --bg2:#171233; --panel:rgba(255,255,255,.06); --panel2:rgba(255,255,255,.09);
+  --bg:#0d0b10; --bg2:#141017; --panel:rgba(255,255,255,.06); --panel2:rgba(255,255,255,.09);
   --line:rgba(255,255,255,.14); --txt:#f4f1ff; --muted:#b9b3d9; --gold:#f5c86b; --gold2:#e8a33d;
   --pink:#ff7eb0; --teal:#3fd9c0; --violet:#8b7bff; --radius:18px;
 }
@@ -123,12 +124,61 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
 .col-item .del{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.62);color:#fff;cursor:pointer;font-size:12px;line-height:1;display:grid;place-items:center}
 .col-item .del:hover{background:#c22430}
 .hidden{display:none!important}
+/* ===== V4 — TÔNG TRANG TRỌNG CAO CẤP ===== */
+body{background:radial-gradient(1100px 640px at 82% -10%,rgba(201,164,92,.13) 0%,transparent 55%),radial-gradient(900px 620px at -12% 34%,rgba(94,52,30,.16) 0%,transparent 55%),linear-gradient(180deg,#0d0b10 0%,#141017 58%,#0d0b10 100%)}
+header.site{background:rgba(13,11,16,.82)}
+.logo .mark{background:linear-gradient(135deg,#e9cd8a,#c9a45c);color:#241a05;box-shadow:0 6px 18px rgba(201,164,92,.3)}
+.hero h1{background:linear-gradient(94deg,#fdf8ec 5%,#e6c886 52%,#c9a45c 90%);-webkit-background-clip:text;background-clip:text}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border-color:rgba(201,164,92,.26);box-shadow:0 14px 34px rgba(0,0,0,.32)}
+.panel h3{font-family:'Playfair Display',serif;font-size:16.5px;letter-spacing:.4px;color:#f3e7c8}
+.sec-title{color:#f3e7c8;letter-spacing:.3px}
+.chip{border-radius:999px;padding:9px 15px}
+.chip.on{background:linear-gradient(135deg,rgba(201,164,92,.30),rgba(201,164,92,.14));border-color:#c9a45c;box-shadow:0 4px 16px rgba(201,164,92,.22)}
+.btn-gold{background:linear-gradient(180deg,#e9cd8a,#c9a45c);color:#241a05;box-shadow:0 10px 26px rgba(201,164,92,.30)}
+.btn-gold:hover{box-shadow:0 14px 30px rgba(201,164,92,.42)}
+.stage-card{border-color:rgba(201,164,92,.35);border-radius:22px}
+.tier-card.cur{border-color:#c9a45c;box-shadow:0 10px 30px rgba(201,164,92,.14)}
+.progress i{background:linear-gradient(90deg,#c9a45c,#e6c886)}
+input[type=text]:focus,textarea:focus{border-color:#c9a45c;box-shadow:0 0 0 3px rgba(201,164,92,.15)}
+.sb-native{background:linear-gradient(180deg,#e9cd8a,#c9a45c);color:#241a05}
+/* ===== MÃ QR LINK QUÀ ===== */
+.qr-wrap{display:flex;gap:18px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.qr-box{background:#fff;padding:10px;border-radius:14px;line-height:0;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.qr-box canvas{width:150px;height:150px}
+.qr-info{flex:1;min-width:220px}
+.qr-info b{font-size:15px;color:#f3e7c8}
+.qr-info p{font-size:13px;color:var(--muted);line-height:1.6;margin:6px 0 12px}
+/* ===== MÀN MỞ QUÀ (NGƯỜI NHẬN) ===== */
+#giftGate{position:fixed;inset:0;z-index:120;background:radial-gradient(900px 600px at 50% 18%,rgba(201,164,92,.14),transparent 60%),linear-gradient(180deg,#0b0910,#141017);display:flex;align-items:center;justify-content:center;padding:22px;transition:opacity .65s ease,visibility .65s}
+#giftGate.opened{opacity:0;visibility:hidden}
+.gate-inner{text-align:center;max-width:460px;width:100%}
+.gate-kicker{font-size:12px;letter-spacing:3.5px;text-transform:uppercase;color:#c9a45c;font-weight:700}
+.gate-title{font-family:'Playfair Display',serif;font-size:clamp(27px,6vw,38px);line-height:1.25;margin:14px 0 8px;color:#fdf8ec}
+.gate-from{color:var(--muted);font-size:14px;min-height:20px;line-height:1.6}
+.gift-box{position:relative;width:150px;height:118px;margin:36px auto 32px;animation:boxFloat 2.6s ease-in-out infinite}
+@keyframes boxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.gb-body{position:absolute;left:0;right:0;bottom:0;height:88px;border-radius:8px;background:linear-gradient(160deg,#7d1220,#a31624 55%,#6d0e1a);box-shadow:0 24px 44px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.18)}
+.gb-lid{position:absolute;left:-8px;right:-8px;top:0;height:32px;border-radius:8px;background:linear-gradient(160deg,#931a29,#7d1220);box-shadow:0 6px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.22);z-index:2}
+.gb-ribbon-v{position:absolute;left:50%;top:0;bottom:0;width:22px;transform:translateX(-50%);background:linear-gradient(90deg,#b08a2e,#e6c886,#b08a2e);z-index:3}
+.gb-bow{position:absolute;left:50%;top:-14px;width:52px;height:26px;transform:translateX(-50%);z-index:4}
+.gb-bow:before,.gb-bow:after{content:"";position:absolute;top:0;width:26px;height:24px;border:4px solid #e6c886;border-radius:50% 50% 50% 0}
+.gb-bow:before{left:0;transform:rotate(-38deg)}
+.gb-bow:after{right:0;transform:rotate(128deg)}
+#holdBtn{position:relative;overflow:hidden;width:100%;max-width:340px;padding:16px 22px;border-radius:999px;border:1px solid #c9a45c;background:rgba(201,164,92,.08);color:#f3e7c8;font-family:inherit;font-weight:800;font-size:16px;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none}
+#holdBtn .hold-fill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,rgba(201,164,92,.45),rgba(230,200,134,.65))}
+#holdBtn .hold-label{position:relative;z-index:1}
+.gate-hint{margin-top:12px;font-size:12.5px;color:var(--muted)}
+#confettiCv{position:fixed;inset:0;z-index:130;pointer-events:none}
+/* ===== THẺ LỜI CHÚC MỞ NHƯ THƯ ===== */
+.wish-preview{transform-origin:top center}
+.wish-preview.letter-open{animation:letterOpen 1.15s cubic-bezier(.22,.9,.3,1) both}
+@keyframes letterOpen{0%{transform:perspective(700px) rotateX(-72deg) translateY(-8px);opacity:.25}55%{opacity:1}100%{transform:perspective(700px) rotateX(0) translateY(0);opacity:1}}
 </style>
 </head>
 <body>
 <header class="site">
   <div class="wrap nav">
-    <div class="logo"><span class="mark">🎁</span> Túi May Mắn <span style="color:var(--muted);font-weight:600;font-size:13px">Lucky Bag</span></div>
+    <div class="logo"><span class="mark">✦</span> Túi May Mắn <span style="color:var(--muted);font-weight:600;font-size:13px">Lucky Bag</span></div>
     <div class="spacer"></div>
     <span class="pill"><span class="dot"></span><span id="pointsLabel">0 điểm may mắn</span></span>
     <span class="tier-badge" id="tierBadge">Hạng Thường</span>
@@ -140,13 +190,12 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
     <h1>Một chiếc túi nhỏ,<br>gói trọn lời chúc lớn</h1>
     <p class="sub">Tự tay dựng chiếc túi may mắn <b style="color:var(--gold)">3D sống động</b> — chọn vải gấm, họa tiết, charm và phong cảnh theo ý bạn, viết lời chúc, rồi gửi tặng người thương qua Zalo, Facebook hay Email. Làm nhiệm vụ để mở khóa túi <b style="color:var(--gold)">VIP</b> và <b style="color:var(--gold)">Pro</b> lộng lẫy hơn.</p>
     <div class="cta-row">
-      <a class="btn btn-gold" href="#lam-tui">✂️ Bắt đầu làm túi</a>
-      <a class="btn btn-ghost" href="#nhiem-vu">🏆 Nhiệm vụ &amp; hạng túi</a>
+      <a class="btn btn-gold" href="#lam-tui">Bắt đầu làm túi</a>
+      <a class="btn btn-ghost" href="#nhiem-vu">Nhiệm vụ &amp; hạng túi</a>
     </div>
   </div>
 
   <div class="recv-banner" id="recvBanner">
-    <div style="font-size:26px">💌</div>
     <h2 style="font-family:'Playfair Display',serif;margin:6px 0" id="recvTitle">Bạn nhận được một túi may mắn!</h2>
     <p style="color:var(--muted);font-size:14px" id="recvSub">Xoay chiếc túi để ngắm món quà, đọc lời chúc bên dưới nhé.</p>
   </div>
@@ -155,18 +204,18 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
     <div class="stage-card">
       <canvas id="stage"></canvas>
       <span class="stage-tier tier-badge" id="stageTier">Hạng Thường</span>
-      <span class="stage-hint">👆 Kéo để xoay túi · Cuộn để phóng to</span>
+      <span class="stage-hint">Kéo để xoay túi · Cuộn để phóng to</span>
     </div>
 
     <div id="controls">
       <div class="panel">
-        <h3>🎉 1 · Dịp tặng</h3>
+        <h3>Bước 1 · Dịp tặng</h3>
         <p class="desc">Chọn dịp — lời chúc mẫu và phong cảnh sẽ gợi ý theo.</p>
         <div class="chips" id="occasionChips"></div>
       </div>
 
       <div class="panel">
-        <h3>🧵 2 · Vải &amp; họa tiết</h3>
+        <h3>Bước 2 · Vải, họa tiết &amp; form</h3>
         <p class="desc">Vải gấm nhiều lớp, họa tiết dệt nổi — hạng VIP và Pro mở thêm vải giới hạn.</p>
         <div class="chips" id="fabricChips"></div>
         <label class="f">Form túi</label>
@@ -176,7 +225,7 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
       </div>
 
       <div class="panel">
-        <h3>🪢 3 · Dây rút &amp; charm</h3>
+        <h3>Bước 3 · Dây rút &amp; charm</h3>
         <p class="desc">Charm treo là điểm nhấn của túi — mỗi charm mang một ý nghĩa riêng.</p>
         <div class="chips" id="cordChips"></div>
         <label class="f">Charm treo</label>
@@ -184,13 +233,13 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
       </div>
 
       <div class="panel">
-        <h3>🏞️ 4 · Phong cảnh</h3>
+        <h3>Bước 4 · Phong cảnh</h3>
         <p class="desc">Khung cảnh sau túi — có cảnh chuyển động chỉ dành cho hạng VIP và Pro.</p>
         <div class="chips" id="sceneChips"></div>
       </div>
 
       <div class="panel">
-        <h3>✍️ 5 · Lời chúc</h3>
+        <h3>Bước 5 · Lời chúc</h3>
         <label class="f">Tặng cho</label>
         <input type="text" id="inTo" placeholder="Tên người nhận — ví dụ: Mẹ, Bạn Lan, Thầy Cô..." maxlength="40">
         <label class="f">Lời chúc của bạn</label>
@@ -207,25 +256,33 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
   </div>
 
   <section class="block" id="gui-tang">
-    <div class="sec-title">💌 6 · Gửi tặng</div>
+    <div class="sec-title">Bước 6 · Gửi tặng</div>
     <p class="sec-sub">Bấm một nút — chiếc túi cùng lời chúc được soạn sẵn và mở đúng ứng dụng bạn chọn. Người nhận mở link là thấy đúng chiếc túi bạn vừa làm, không cần cài thêm gì.</p>
     <div class="share-grid">
-      <button class="share-btn sb-native" id="btnNativeShare">📤 Chia sẻ nhanh</button>
+      <button class="share-btn sb-native" id="btnNativeShare">Chia sẻ nhanh</button>
       <a class="share-btn sb-zalo" id="btnZalo" href="#" target="_blank" rel="noopener">Zalo</a>
       <a class="share-btn sb-fb" id="btnFb" href="#" target="_blank" rel="noopener">Facebook</a>
       <a class="share-btn sb-msg" id="btnMsg" href="#" target="_blank" rel="noopener">Messenger</a>
-      <a class="share-btn sb-mail" id="btnMail" href="#">✉️ Email / Gmail</a>
-      <button class="share-btn sb-copy" id="btnCopy">🔗 Sao chép link</button>
+      <a class="share-btn sb-mail" id="btnMail" href="#">Email / Gmail</a>
+      <button class="share-btn sb-copy" id="btnCopy">Sao chép link</button>
     </div>
     <div class="link-box">
       <input type="text" id="giftLink" readonly>
       <button class="btn btn-gold" id="btnCopy2" style="padding:11px 18px">Sao chép</button>
     </div>
+    <div class="qr-wrap">
+      <div class="qr-box"><canvas id="qrCanvas" width="0" height="0"></canvas></div>
+      <div class="qr-info">
+        <b>Mã QR của chiếc túi này</b>
+        <p>Người nhận chỉ cần quét mã bằng camera điện thoại là mở đúng chiếc túi kèm lời chúc của bạn — không cần gõ hay dán link.</p>
+        <button class="btn btn-ghost" id="btnQrDownload" style="padding:10px 16px">Tải ảnh QR</button>
+      </div>
+    </div>
     <p style="font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.6">Mẹo: nút <b style="color:var(--txt)">Chia sẻ nhanh</b> trên điện thoại mở thẳng khay chia sẻ của máy — chọn Zalo, Messenger, Gmail hay Facebook đều được, nội dung đã soạn sẵn kèm link túi.</p>
   </section>
 
   <section class="block" id="tai-khoan">
-    <div class="sec-title">👤 7 · Tài khoản của bạn</div>
+    <div class="sec-title">Tài khoản của bạn</div>
     <p class="sec-sub">Đặt tên để lưu điểm, bộ sưu tập túi và mã giới thiệu của riêng bạn — chơi lâu dài, quay lại lúc nào cũng còn nguyên. Dữ liệu lưu ngay trên máy của bạn.</p>
     <div class="panel">
       <label class="f" style="margin-top:0">Tên hiển thị</label>
@@ -234,18 +291,18 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
         <button class="btn btn-gold" id="btnSaveName" style="padding:11px 18px">Lưu tên</button>
       </div>
       <p id="accInfo" style="font-size:13.5px;margin-top:12px;line-height:1.7;color:var(--muted)">Bạn chưa đặt tên.</p>
-      <button class="btn btn-ghost hidden" id="btnGoogle" style="margin-top:10px">🔐 Đăng nhập bằng Google</button>
+      <button class="btn btn-ghost hidden" id="btnGoogle" style="margin-top:10px">Đăng nhập bằng Google</button>
       <p id="googleNote" style="font-size:12px;color:var(--muted);margin-top:8px">Đăng nhập Google đang được kết nối — hiện bạn chơi với tài khoản lưu trên máy này.</p>
     </div>
     <div class="panel">
-      <h3>🎒 Bộ sưu tập của tôi</h3>
+      <h3>Bộ sưu tập của tôi</h3>
       <p class="desc">Lưu lại những chiếc túi ưng ý để dùng lại bất cứ lúc nào — bấm vào một chiếc để nạp lại đúng thiết kế đó.</p>
-      <button class="btn btn-gold" id="btnSaveBag">💾 Lưu túi này vào bộ sưu tập</button>
+      <button class="btn btn-gold" id="btnSaveBag">Lưu túi này vào bộ sưu tập</button>
       <div class="collection-grid" id="collectionGrid"></div>
       <p id="collectionEmpty" style="font-size:13px;color:var(--muted);margin-top:10px">Chưa có chiếc túi nào trong bộ sưu tập.</p>
     </div>
     <div class="panel">
-      <h3>📣 Giới thiệu bạn bè</h3>
+      <h3>Giới thiệu bạn bè</h3>
       <p class="desc">Gửi link giới thiệu riêng của bạn — bạn bè mở link và làm chiếc túi đầu tiên là bạn nhận thêm điểm may mắn (nhiệm vụ "Người giới thiệu" +15 điểm).</p>
       <div class="link-box" style="margin-top:0">
         <input type="text" id="refLink" readonly>
@@ -255,13 +312,13 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
         <a class="share-btn sb-zalo" id="refZalo" href="#" target="_blank" rel="noopener">Zalo</a>
         <a class="share-btn sb-fb" id="refFb" href="#" target="_blank" rel="noopener">Facebook</a>
         <a class="share-btn sb-msg" id="refMsg" href="#" target="_blank" rel="noopener">Messenger</a>
-        <a class="share-btn sb-mail" id="refMail" href="#">✉️ Email / Gmail</a>
+        <a class="share-btn sb-mail" id="refMail" href="#">Email / Gmail</a>
       </div>
     </div>
   </section>
 
   <section class="block" id="nhiem-vu">
-    <div class="sec-title">🏆 Nhiệm vụ &amp; hạng túi</div>
+    <div class="sec-title">Nhiệm vụ &amp; hạng túi</div>
     <p class="sec-sub">Hoàn thành nhiệm vụ để tích điểm may mắn. Điểm càng cao, hạng túi càng sang — vải giới hạn, charm độc quyền, phong cảnh chuyển động và hiệu ứng lấp lánh sẽ lần lượt mở ra.</p>
     <div class="panel" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px">
@@ -273,22 +330,22 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
     <div id="missionList"></div>
     <div class="tier-cards" style="margin-top:16px">
       <div class="tier-card" id="cardTier0">
-        <h4>🎁 Hạng Thường</h4>
+        <h4>Hạng Thường</h4>
         <ul><li>6 màu vải lụa + 6 họa tiết dệt</li><li>5 form túi · 8 charm cơ bản</li><li>7 phong cảnh</li></ul>
       </div>
       <div class="tier-card" id="cardTier1">
-        <h4>🌟 Hạng VIP · 50 điểm</h4>
+        <h4>Hạng VIP · 50 điểm</h4>
         <ul><li>Vải vàng kim &amp; tím hoàng gia</li><li>Charm vương miện, sao băng</li><li>Phong cảnh cực quang chuyển động</li><li>Hiệu ứng hạt lấp lánh quanh túi</li></ul>
       </div>
       <div class="tier-card" id="cardTier2">
-        <h4>💎 Hạng Pro · 120 điểm</h4>
+        <h4>Hạng Pro · 120 điểm</h4>
         <ul><li>Vải gấm đen vàng giới hạn</li><li>Charm kim cương phát sáng</li><li>Phong cảnh cung điện vàng</li><li>Viền sáng hoàng kim + mưa sao băng</li></ul>
       </div>
     </div>
   </section>
 
   <section class="block">
-    <div class="sec-title">✨ Vì sao tặng một chiếc túi may mắn?</div>
+    <div class="sec-title">Vì sao tặng một chiếc túi may mắn?</div>
     <p class="sec-sub">Một món quà nhỏ không tốn kém nhưng đầy thành ý: người nhận mở túi, đọc lời chúc mang tên mình, rồi lại tự tay làm một chiếc khác để tặng tiếp. Mỗi chiếc túi được làm ra là một lời chúc được gửi đi — và là một người mới biết đến Túi May Mắn.</p>
     <div class="cta-row" style="display:flex;gap:10px;flex-wrap:wrap">
       <a class="btn btn-gold" href="#lam-tui">Làm túi của bạn ngay</a>
@@ -301,6 +358,26 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:24px 0 34px;colo
   Túi May Mắn Tặng Bạn · Lucky Bag for a Friend — món quà lời chúc gửi tặng người thương.<br>
   Mở link là xem được ngay bằng Chrome, Zalo, Messenger — không cần tài khoản, không cần cài app.
 </footer>
+
+<div id="giftGate" class="hidden" role="dialog" aria-label="Mở quà">
+  <div class="gate-inner">
+    <div class="gate-kicker">Bạn nhận được một món quà</div>
+    <h2 class="gate-title" id="gateTitle">Một chiếc Túi May Mắn<br>dành riêng cho bạn</h2>
+    <p class="gate-from" id="gateFrom"></p>
+    <div class="gift-box" aria-hidden="true">
+      <div class="gb-lid"></div>
+      <div class="gb-body"></div>
+      <div class="gb-ribbon-v"></div>
+      <div class="gb-bow"></div>
+    </div>
+    <button id="holdBtn" type="button">
+      <span class="hold-fill" id="holdFill"></span>
+      <span class="hold-label">Nhấn giữ để mở quà</span>
+    </button>
+    <p class="gate-hint">Giữ nguyên 1,2 giây — đừng buông tay nhé</p>
+  </div>
+</div>
+<canvas id="confettiCv"></canvas>
 
 <div class="toast" id="toast"></div>
 
@@ -370,11 +447,11 @@ const SCENES = [
   {id:'cungdien', name:'🏯 Cung điện vàng', tier:2}
 ];
 const FORMS = [
-  {id:'codien', name:'🏮 Cổ điển', tier:0, pts:[[0,.02],[.62,.05],[1.02,.22],[1.16,.55],[1.1,.95],[.98,1.35],[.8,1.7],[.58,1.98],[.55,2.1],[.66,2.2],[.68,2.3]]},
-  {id:'tron', name:'🌕 Tròn đầy', tier:0, pts:[[0,.02],[.7,.04],[1.18,.2],[1.34,.5],[1.3,.9],[1.14,1.3],[.88,1.66],[.6,1.95],[.57,2.08],[.68,2.18],[.7,2.28]]},
-  {id:'caothon', name:'🎍 Cao thon', tier:0, pts:[[0,.02],[.52,.05],[.86,.3],[.95,.8],[.92,1.25],[.84,1.6],[.7,1.85],[.56,2.02],[.54,2.12],[.64,2.2],[.66,2.3]]},
-  {id:'vuong', name:'🎁 Vuông', tier:0, pts:[[0,.02],[.95,.03],[1.08,.1],[1.12,.5],[1.1,1.0],[1.04,1.45],[.9,1.75],[.62,1.98],[.56,2.1],[.66,2.2],[.68,2.3]]},
-  {id:'mini', name:'💝 Mini', tier:0, scale:.82, pts:[[0,.02],[.62,.05],[1.02,.22],[1.16,.55],[1.1,.95],[.98,1.35],[.82,1.68],[.62,1.96],[.6,2.08],[.74,2.18],[.76,2.28]]}
+  {id:'codien', name:'Cổ điển cân đối', tier:0, pts:[[0,.02],[.62,.05],[1.02,.22],[1.16,.55],[1.1,.95],[.98,1.35],[.8,1.7],[.58,1.98],[.55,2.1],[.66,2.2],[.68,2.3]]},
+  {id:'tron', name:'Tròn đầy như túi tiền', tier:0, pts:[[0,.02],[.8,.03],[1.32,.15],[1.45,.42],[1.4,.8],[1.18,1.18],[.88,1.58],[.62,1.94],[.55,2.1],[.66,2.2],[.68,2.3]]},
+  {id:'caothon', name:'Cao thon thanh thoát', tier:0, pts:[[0,.02],[.46,.05],[.74,.28],[.86,.75],[.84,1.2],[.78,1.55],[.66,1.85],[.55,2.02],[.53,2.12],[.63,2.22],[.65,2.32]]},
+  {id:'vuong', name:'Vuông đứng cứng cáp', tier:0, pts:[[0,.02],[.94,.02],[1.06,.08],[1.1,.45],[1.09,1.0],[1.05,1.45],[.94,1.72],[.64,1.96],[.56,2.1],[.66,2.2],[.68,2.3]]},
+  {id:'mini', name:'Mini nhỏ xinh', tier:0, scale:.78, pts:[[0,.02],[.62,.05],[1.02,.22],[1.16,.55],[1.1,.95],[.98,1.35],[.82,1.68],[.62,1.96],[.6,2.08],[.7,2.18],[.72,2.28]]}
 ];
 const MISSIONS = [
   {id:'m1', icon:'🎁', name:'Chiếc túi đầu tiên', desc:'Hoàn thành và tạo link cho chiếc túi đầu tiên của bạn.', pts:10, check:p=>p.created>=1},
@@ -458,7 +535,9 @@ function syncWish(){
   $('pvMsg').textContent = state.msg || '...';
   $('pvFrom').textContent = state.from? ('— '+state.from) : '';
   updateGiftLink();
+  if(state.to!==lastTagName){ lastTagName=state.to; clearTimeout(tagTimer); tagTimer=setTimeout(()=>refresh3D(),280); }
 }
+let tagTimer=null, lastTagName='__init__';
 ['inTo','inMsg','inFrom'].forEach(id=>$(id).addEventListener('input', syncWish));
 
 function renderProgress(){
@@ -491,7 +570,29 @@ function updateGiftLink(){
   $('btnFb').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url);
   $('btnMsg').href='https://www.facebook.com/dialog/send?link='+encodeURIComponent(url)+'&app_id=966242223397117&redirect_uri='+encodeURIComponent(url);
   $('btnMail').href='mailto:?subject='+encodeURIComponent('🎁 Tặng bạn một chiếc Túi May Mắn')+'&body='+encodeURIComponent('Chào '+(state.to||'bạn')+',\n\nMình tự tay làm tặng bạn một chiếc Túi May Mắn kèm lời chúc. Mở link này để nhận túi nhé:\n'+url+'\n\n'+state.msg+'\n\n— '+(state.from||'Một người bạn'));
+  renderQR(url);
 }
+/* ============ MÃ QR LINK QUÀ ============ */
+function renderQR(url){
+  const cv=$('qrCanvas'); if(!cv) return;
+  if(typeof qrcode!=='function'){ cv.style.display='none'; return; }
+  try{
+    const qr=qrcode(0,'M'); qr.addData(url); qr.make();
+    const n=qr.getModuleCount(), cell=3, quiet=4, size=(n+quiet*2)*cell;
+    cv.width=size; cv.height=size; cv.style.display='block';
+    const g=cv.getContext('2d'); g.fillStyle='#ffffff'; g.fillRect(0,0,size,size); g.fillStyle='#1a1420';
+    for(let r=0;r<n;r++) for(let col=0;col<n;col++) if(qr.isDark(r,col)) g.fillRect((col+quiet)*cell,(r+quiet)*cell,cell,cell);
+  }catch(e){ cv.style.display='none'; }
+}
+(function(){
+  const b=$('btnQrDownload'); if(!b) return;
+  b.addEventListener('click', ()=>{
+    const cv=$('qrCanvas');
+    if(!cv||!cv.width){ toast('Mã QR chưa sẵn sàng — thử lại sau giây lát nhé'); return; }
+    const a=document.createElement('a'); a.download='tui-may-man-qr.png'; a.href=cv.toDataURL('image/png'); a.click();
+    toast('Đã tải ảnh QR — gửi kèm ảnh này là bạn bè quét mở túi ngay');
+  });
+})();
 function markCreated(){ progress.created++; if(!progress.occasions.includes(state.occasion)) progress.occasions.push(state.occasion); award(); if(window.__onBagCreated) window.__onBagCreated(); }
 function markSent(){ progress.sent++; award(); }
 let createdMarked=false;
@@ -524,7 +625,7 @@ $('btnNativeShare').addEventListener('click', async ()=>{
       state.cord=d.c||state.cord; state.charm=d.ch||state.charm; state.scene=d.s||state.scene; state.form=d.fm||state.form;
       $('inTo').value=d.to||''; $('inMsg').value=d.m||''; $('inFrom').value=d.fr||'';
       $('recvBanner').classList.add('show');
-      if(d.to) $('recvTitle').textContent='💌 '+d.to+' ơi, bạn nhận được một túi may mắn!';
+      if(d.to) $('recvTitle').textContent=d.to+' ơi, bạn nhận được một túi may mắn!';
       document.title='Bạn nhận được một Túi May Mắn!';
     }
   }
@@ -586,6 +687,22 @@ function fabricTexture(){
     x.globalAlpha=.10; x.fillStyle='#fff';
     for(let i=0;i<512;i+=128){ x.fillRect(0,i,512,44); } x.globalAlpha=1;
   }
+  /* Thêu nổi gấm: motif hoa văn dệt hai tông (chỉ sáng + bóng đổ lệch) tạo chiều sâu thêu thật */
+  (function brocade(){
+    function medallion(cx,cy,R,style){
+      x.strokeStyle=style; x.lineWidth=2.2;
+      for(let p=0;p<8;p++){ const a=p*Math.PI/4;
+        x.beginPath(); x.ellipse(cx+Math.cos(a)*R*.55, cy+Math.sin(a)*R*.55, R*.34, R*.17, a, 0, Math.PI*2); x.stroke(); }
+      x.beginPath(); x.arc(cx,cy,R*.20,0,Math.PI*2); x.stroke();
+      x.beginPath(); x.arc(cx,cy,R*.09,0,Math.PI*2); x.stroke();
+      for(let d=0;d<4;d++){ const a=d*Math.PI/2+Math.PI/4, dx=cx+Math.cos(a)*R*1.05, dy=cy+Math.sin(a)*R*1.05;
+        x.beginPath(); x.moveTo(dx,dy-R*.10); x.lineTo(dx+R*.10,dy); x.lineTo(dx,dy+R*.10); x.lineTo(dx-R*.10,dy); x.closePath(); x.stroke(); }
+    }
+    for(let row=0;row<3;row++) for(let col=0;col<4;col++){
+      const cx=col*128+(row%2?64:0)+32, cy=row*170+86;
+      medallion(cx+2,cy+2.5,44,'rgba(0,0,0,.20)'); medallion(cx,cy,44,'rgba(255,242,205,.30)');
+    }
+  })();
   const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(2,1);
   return t;
 }
@@ -721,13 +838,19 @@ function buildCharm(id){
   return g;
 }
 
-function tagTexture(){
+function tagTexture(name){
   const [c,x]=makeCanvas(128,256);
   x.fillStyle='#fdf6e3'; x.fillRect(0,0,128,256);
-  x.strokeStyle='#c22430'; x.lineWidth=8; x.strokeRect(8,8,112,240);
-  x.fillStyle='#c22430'; x.font='bold 34px serif'; x.textAlign='center';
-  const word='MAY MẮN'; word.split('').forEach((ch,i)=>{ if(ch!==' ') x.fillText(ch,64,58+i*30); });
-  x.fillStyle='#e8a33d'; x.font='20px serif'; x.fillText('★',64,236);
+  x.strokeStyle='#b08a2e'; x.lineWidth=6; x.strokeRect(7,7,114,242);
+  x.strokeStyle='#c22430'; x.lineWidth=2; x.strokeRect(14,14,100,228);
+  x.textAlign='center';
+  x.fillStyle='#c22430'; x.font='bold 17px serif'; x.fillText('TẶNG',64,42);
+  const raw=(name||'').trim();
+  const word= raw? raw.toUpperCase() : 'MAY MẮN';
+  const chars=word.replace(/\s+/g,'').split('').slice(0,7);
+  x.fillStyle='#8a1f2d'; x.font='bold 30px serif';
+  chars.forEach((ch,i)=>{ x.fillText(ch,64,88+i*26); });
+  x.fillStyle='#c9a45c'; x.font='18px serif'; x.fillText('★',64,240);
   return new THREE.CanvasTexture(c);
 }
 
@@ -736,20 +859,26 @@ function initThree(){
   const canvas=$('stage');
   const renderer=new THREE.WebGLRenderer({canvas, antialias:true, preserveDrawingBuffer:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(42,1,.1,100); camera.position.set(0,1.7,6.4);
-  scene.add(new THREE.AmbientLight(0xffffff,.55));
-  const key=new THREE.DirectionalLight(0xfff1d6,1.05); key.position.set(3.5,6,5); scene.add(key);
+  scene.add(new THREE.AmbientLight(0xffffff,.38));
+  scene.add(new THREE.HemisphereLight(0xfff2dd,0x241a2e,.5));
+  const key=new THREE.DirectionalLight(0xfff1d6,1.15); key.position.set(3.5,6,5); key.castShadow=true;
+  key.shadow.mapSize.set(1024,1024); key.shadow.camera.left=-3.5; key.shadow.camera.right=3.5; key.shadow.camera.top=4; key.shadow.camera.bottom=-2; key.shadow.radius=4;
+  scene.add(key);
+  const fill=new THREE.DirectionalLight(0xdfe8ff,.35); fill.position.set(-4,2,4); scene.add(fill);
   const rim=new THREE.DirectionalLight(0x9ec4ff,.5); rim.position.set(-4,3,-4); scene.add(rim);
   const warm=new THREE.PointLight(0xffc98a,.7,20); warm.position.set(0,1,3.4); scene.add(warm);
 
   const group=new THREE.Group(); scene.add(group);
   const form0=FORMS.find(x=>x.id===state.form)||FORMS[0];
-  const pouch=new THREE.Mesh(new THREE.LatheGeometry(form0.pts.map(p=>new THREE.Vector2(p[0],p[1])),48), new THREE.MeshStandardMaterial({roughness:.62,metalness:.06}));
+  const pouch=new THREE.Mesh(new THREE.LatheGeometry(form0.pts.map(p=>new THREE.Vector2(p[0],p[1])),48), new THREE.MeshPhysicalMaterial({roughness:.58, metalness:0, sheen:1, sheenRoughness:.45, sheenColor:new THREE.Color(0xffe2ae), clearcoat:.22, clearcoatRoughness:.55}));
+  pouch.castShadow=true;
   group.add(pouch);
-  const rimBand=new THREE.Mesh(new THREE.TorusGeometry(.6,.085,14,40), new THREE.MeshStandardMaterial({roughness:.5,metalness:.1}));
+  const rimBand=new THREE.Mesh(new THREE.TorusGeometry(.6,.085,14,40), new THREE.MeshStandardMaterial({color:0xc9a45c, roughness:.3, metalness:.95}));
   rimBand.rotation.x=Math.PI/2; rimBand.position.y=2.14; group.add(rimBand);
-  const cordMat=new THREE.MeshStandardMaterial({roughness:.45,metalness:.15});
+  const cordMat=new THREE.MeshStandardMaterial({roughness:.38, metalness:.55});
   const knot=new THREE.Mesh(new THREE.SphereGeometry(.11,14,12), cordMat); knot.position.set(0,2.06,.6); group.add(knot);
   function cordTube(from,to,bow){
     const mid=from.clone().lerp(to,.5); mid.z+=bow; mid.y+=.06;
@@ -763,12 +892,12 @@ function initThree(){
   const ring=new THREE.Mesh(new THREE.TorusGeometry(.05,.014,8,20), new THREE.MeshStandardMaterial({color:0xf5c86b,metalness:.9,roughness:.3}));
   ring.position.set(0,1.44,.74); group.add(ring);
   let charm=null;
-  const tag=new THREE.Mesh(new THREE.PlaneGeometry(.34,.68), new THREE.MeshStandardMaterial({map:tagTexture(),roughness:.8,side:THREE.DoubleSide}));
+  const tag=new THREE.Mesh(new THREE.PlaneGeometry(.34,.68), new THREE.MeshStandardMaterial({map:tagTexture(state.to),roughness:.8,side:THREE.DoubleSide}));
   tag.position.set(.42,1.28,.92); tag.rotation.set(-.06,.35,.1); group.add(tag);
   const glowRing=new THREE.Mesh(new THREE.TorusGeometry(1.35,.02,10,64), new THREE.MeshBasicMaterial({color:0xf5c86b,transparent:true,opacity:0}));
   glowRing.rotation.x=Math.PI/2; glowRing.position.y=.06; group.add(glowRing);
-  const ground=new THREE.Mesh(new THREE.CircleGeometry(2.6,40), new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.3}));
-  ground.rotation.x=-Math.PI/2; ground.position.y=-.02; scene.add(ground);
+  const ground=new THREE.Mesh(new THREE.CircleGeometry(2.6,40), new THREE.ShadowMaterial({opacity:.34}));
+  ground.rotation.x=-Math.PI/2; ground.position.y=-.02; ground.receiveShadow=true; scene.add(ground);
   group.position.y=-1.15; ground.position.y=-1.16;
 
   /* Hạt bay theo cảnh & hạng */
@@ -780,16 +909,17 @@ function initThree(){
 
   function applyLook(){
     const tex=fabricTexture();
-    pouch.material.map=tex; pouch.material.bumpMap=tex; pouch.material.bumpScale=.03; pouch.material.needsUpdate=true;
+    pouch.material.map=tex; pouch.material.bumpMap=tex; pouch.material.bumpScale=.055; pouch.material.needsUpdate=true;
     const fm=FORMS.find(x=>x.id===state.form)||FORMS[0];
     pouch.geometry.dispose(); pouch.geometry=new THREE.LatheGeometry(fm.pts.map(p=>new THREE.Vector2(p[0],p[1])),48);
     group.scale.setScalar(fm.scale||1);
-    const f=FABRICS.find(x=>x.id===state.fabric)||FABRICS[0];
-    rimBand.material.color.set(f.c2);
     const cord=CORDS.find(x=>x.id===state.cord)||CORDS[0];
     cordMat.color.set(cord.color);
     if(charm) group.remove(charm);
-    charm=buildCharm(state.charm); charm.position.set(0,1.22,.78); group.add(charm);
+    charm=buildCharm(state.charm); charm.position.set(0,1.22,.78);
+    charm.scale.setScalar(state.form==='mini'? 1.3 : 1);
+    group.add(charm);
+    tag.material.map=tagTexture(state.to); tag.material.needsUpdate=true;
     scene.background=backdropTexture();
     const t=tierOf(progress.points);
     const colMap={dao:0xffb7d5, dem:0xcfe0ff, truc:0xa8ffc9, bien:0xffd9a8, nui:0xfff0c0, cucquang:0xa8ffe9, cungdien:0xffe1a1, phodenlong:0xffc98a, donghoa:0xfff2a8};
@@ -977,12 +1107,83 @@ if(FIREBASE_CONFIG){
               saveAll(); renderProgress(); renderAllChips(); renderAccount(); renderCollection();
             } else { window.__syncUp(); }
           }).catch(function(){});
-        } else { btn.textContent='🔐 Đăng nhập bằng Google'; }
+        } else { btn.textContent='Đăng nhập bằng Google'; }
       });
     }
   }catch(e){}
 }
 renderAccount(); renderCollection();
+</script>
+
+<script>
+/* ============ NGHI THỨC MỞ QUÀ — CHỈ CHẾ ĐỘ NGƯỜI NHẬN (#g=) ============ */
+(function(){
+  if(!location.hash.startsWith('#g=')) return;
+  let d=null;
+  try{ d=decodeGift(location.hash.slice(3)); }catch(e){}
+  if(!d) return;
+  const gate=$('giftGate'); if(!gate) return;
+  function esc(s){ const t=document.createElement('textarea'); t.textContent=s; return t.innerHTML; }
+  if(d.to) $('gateTitle').innerHTML='Một chiếc Túi May Mắn<br>dành cho '+esc(d.to);
+  if(d.fr) $('gateFrom').textContent='Từ '+d.fr+' — có một lời chúc đang chờ bạn bên trong';
+  gate.classList.remove('hidden');
+  document.body.style.overflow='hidden';
+  const btn=$('holdBtn'), fill=$('holdFill');
+  const HOLD_MS=1200;
+  let startT=0, raf=0, opened=false;
+  function step(){
+    const p=Math.min(1,(performance.now()-startT)/HOLD_MS);
+    fill.style.width=(p*100)+'%';
+    if(p>=1){ finish(); return; }
+    raf=requestAnimationFrame(step);
+  }
+  function begin(e){ if(opened) return; if(e) e.preventDefault(); startT=performance.now(); cancelAnimationFrame(raf); raf=requestAnimationFrame(step); }
+  function cancel(){ if(opened) return; cancelAnimationFrame(raf); fill.style.width='0%'; }
+  btn.addEventListener('pointerdown', begin);
+  btn.addEventListener('pointerup', cancel);
+  btn.addEventListener('pointerleave', cancel);
+  btn.addEventListener('pointercancel', cancel);
+  btn.addEventListener('contextmenu', e=>e.preventDefault());
+  function finish(){
+    opened=true; cancelAnimationFrame(raf); fill.style.width='100%';
+    confettiBurst();
+    setTimeout(()=>{
+      gate.classList.add('opened');
+      document.body.style.overflow='';
+      const pv=document.querySelector('.wish-preview'); if(pv) pv.classList.add('letter-open');
+      const st=$('lam-tui'); if(st) st.scrollIntoView({behavior:'smooth'});
+      setTimeout(()=>{ gate.style.display='none'; },700);
+    },450);
+  }
+  function confettiBurst(){
+    const cv=$('confettiCv'); if(!cv) return;
+    const g=cv.getContext('2d'); cv.width=innerWidth; cv.height=innerHeight;
+    const golds=['#e6c886','#c9a45c','#f5d98b','#fff3d6'];
+    const P=[];
+    for(let i=0;i<150;i++){
+      const petal=i%3===0;
+      P.push({ x:innerWidth/2+(Math.random()-.5)*innerWidth*.55, y:innerHeight*.32+(Math.random()-.5)*60,
+        vx:(Math.random()-.5)*7, vy:-(2.5+Math.random()*5.5), s:petal? 9+Math.random()*7 : 3+Math.random()*4,
+        rot:Math.random()*Math.PI*2, vr:(Math.random()-.5)*.25, petal:petal,
+        col: petal? (i%2? '#f2a7c3':'#e98bb0') : golds[i%golds.length] });
+    }
+    const t0=performance.now();
+    (function anim(){
+      const el=(performance.now()-t0)/1000;
+      g.clearRect(0,0,cv.width,cv.height);
+      if(el>3.2) return;
+      P.forEach(p=>{
+        p.vy+=.09; p.x+=p.vx+Math.sin(el*3+p.rot)*.7; p.y+=p.vy; p.rot+=p.vr;
+        g.save(); g.translate(p.x,p.y); g.rotate(p.rot); g.globalAlpha=Math.max(0,1-el/3.2);
+        g.fillStyle=p.col;
+        if(p.petal){ g.beginPath(); g.ellipse(0,0,p.s,p.s*.55,0,0,Math.PI*2); g.fill(); }
+        else { g.fillRect(-p.s/2,-p.s/2,p.s,p.s*.7); }
+        g.restore();
+      });
+      requestAnimationFrame(anim);
+    })();
+  }
+})();
 </script>
 </body>
 </html>
