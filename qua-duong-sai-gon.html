@@ -1,0 +1,1421 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>Qua Đường Sài Gòn</title>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R0WP31V8S8"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-R0WP31V8S8');
+</script>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+(function(c,l,a,r,i,t,y){
+c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "zi0g7dpb5n");
+</script>
+    <style>
+      :root{
+        --ink:#fff7e8;
+        --panel:rgba(16,20,38,.92);
+        --panel-line:rgba(255,255,255,.14);
+        --accent:#ffb020;
+        --accent2:#ff5470;
+        --teal:#19c2a6;
+        color-scheme:dark;
+      }
+      *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+      html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#0b0e1f}
+      body{
+        font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+        color:var(--ink);
+        touch-action:none;
+        overscroll-behavior:none;
+      }
+      #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 90% at 50% 0%,#1b2350 0%,#0b0e1f 60%)}
+      #stage{position:relative;width:100%;height:100%;max-width:520px;margin:0 auto}
+      canvas{display:block;width:100%;height:100%}
+
+      /* ---------- HUD ---------- */
+      #hud{position:absolute;inset:0;pointer-events:none;display:none}
+      #hud.on{display:block}
+      .hud-top{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;right:10px;display:flex;align-items:flex-start;gap:8px}
+      .chip{
+        background:rgba(10,13,28,.72);border:1px solid var(--panel-line);border-radius:14px;
+        padding:6px 12px;backdrop-filter:blur(4px);line-height:1.15;
+      }
+      .chip .lab{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.75;font-weight:700}
+      .chip .val{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}
+      .chip.coin .val{color:var(--accent);font-size:18px}
+      #comboChip{display:none;border-color:rgba(255,84,112,.6)}
+      #comboChip .val{color:var(--accent2);font-size:18px}
+      .spacer{flex:1}
+      .icon-btn{
+        pointer-events:auto;min-width:44px;min-height:44px;border-radius:14px;border:1px solid var(--panel-line);
+        background:rgba(10,13,28,.72);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      }
+      .icon-btn:active{transform:scale(.94)}
+      #sceneTag{
+        position:absolute;top:calc(env(safe-area-inset-top,0px) + 78px);left:50%;transform:translateX(-50%);
+        font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.9;
+        background:rgba(10,13,28,.5);padding:4px 12px;border-radius:999px;border:1px solid var(--panel-line);white-space:nowrap;
+      }
+      #warn{
+        position:absolute;left:50%;bottom:118px;transform:translateX(-50%);display:none;
+        background:rgba(200,30,45,.9);color:#fff;font-weight:900;font-size:15px;padding:8px 16px;border-radius:999px;
+        animation:pulse .5s infinite alternate;white-space:nowrap;box-shadow:0 6px 24px rgba(255,40,60,.45);
+      }
+      @keyframes pulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.07)}}
+      .side-btns{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;justify-content:space-between;padding:0 14px}
+      .side-btn{
+        pointer-events:auto;width:64px;height:64px;border-radius:50%;border:1px solid var(--panel-line);
+        background:rgba(10,13,28,.6);color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+        backdrop-filter:blur(3px);
+      }
+      .side-btn:active{transform:scale(.92);background:rgba(255,176,32,.35)}
+      #tapHint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 92px);transform:translateX(-50%);font-size:12.5px;font-weight:700;opacity:.9;text-align:center;width:78%;pointer-events:none;text-shadow:0 2px 8px #000;background:rgba(10,13,28,.45);border-radius:999px;padding:4px 10px}
+
+      /* ---------- Overlays ---------- */
+      .overlay{
+        position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+        padding:22px 18px;text-align:center;background:linear-gradient(180deg,rgba(8,10,24,.55),rgba(8,10,24,.86));
+        z-index:5;overflow-y:auto;
+      }
+      .overlay.on{display:flex}
+      .card{
+        background:var(--panel);border:1px solid var(--panel-line);border-radius:24px;
+        padding:26px 22px;max-width:420px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.5);
+      }
+      h1.game-title{
+        margin:0 0 2px;font-size:clamp(30px,8.5vw,44px);font-weight:900;line-height:1.05;letter-spacing:.01em;
+        color:#fff;text-shadow:0 3px 0 #c2183f,0 8px 28px rgba(255,84,112,.35);
+      }
+      .tagline{margin:6px 0 0;font-size:15px;opacity:.9}
+      .howto{
+        margin:16px auto 4px;text-align:left;font-size:14.5px;line-height:1.55;max-width:340px;
+        background:rgba(255,255,255,.06);border:1px solid var(--panel-line);border-radius:16px;padding:12px 16px;
+      }
+      .howto b{color:var(--accent)}
+      .stat-row{display:flex;gap:10px;justify-content:center;margin:16px 0 4px;flex-wrap:wrap}
+      .stat{
+        background:rgba(255,255,255,.07);border:1px solid var(--panel-line);border-radius:16px;padding:10px 16px;min-width:96px;
+      }
+      .stat .n{font-size:24px;font-weight:900;font-variant-numeric:tabular-nums}
+      .stat .l{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;font-weight:700}
+      .btn{
+        appearance:none;border:0;cursor:pointer;border-radius:999px;font-weight:900;color:#231303;
+        background:linear-gradient(180deg,#ffd35c,#ff9d1c);box-shadow:0 8px 0 #b25f00,0 16px 34px rgba(255,157,28,.35);
+        padding:16px 34px;font-size:19px;min-height:56px;min-width:200px;margin-top:14px;
+        transition:transform .06s ease, box-shadow .06s ease;
+      }
+      .btn:active{transform:translateY(5px);box-shadow:0 3px 0 #b25f00,0 8px 18px rgba(255,157,28,.3)}
+      .btn.ghost{
+        background:rgba(255,255,255,.08);color:var(--ink);border:1px solid var(--panel-line);
+        box-shadow:none;font-size:15px;padding:12px 22px;min-height:48px;min-width:0;
+      }
+      .btn.ghost:active{transform:scale(.97)}
+      .btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+      #overTitle{font-size:34px;font-weight:900;margin:0;color:#fff}
+      #overMsg{margin:8px 0 0;font-size:15px;opacity:.92;line-height:1.5}
+      #newBest{display:none;margin-top:10px;font-weight:900;color:var(--accent);font-size:16px;animation:pulse2 .5s infinite alternate}
+      @keyframes pulse2{from{transform:scale(1)}to{transform:scale(1.06)}}
+      .zero-ad{margin-top:14px;font-size:12.5px;opacity:.7;font-weight:700;letter-spacing:.06em}
+
+      /* ---------- Collection ---------- */
+      #collection .card{max-width:460px}
+      .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+      .char-cell{
+        background:rgba(255,255,255,.06);border:2px solid var(--panel-line);border-radius:18px;padding:10px 6px 8px;
+        cursor:pointer;min-height:118px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--ink);
+        font-family:inherit;
+      }
+      .char-cell canvas{width:52px;height:64px}
+      .char-cell .nm{font-size:12.5px;font-weight:800;line-height:1.2}
+      .char-cell .cost{font-size:12px;font-weight:800;color:var(--accent)}
+      .char-cell .cost.owned{color:var(--teal)}
+      .char-cell.selected{border-color:var(--accent);background:rgba(255,176,32,.14)}
+      .char-cell.locked{opacity:.85}
+      #colMsg{min-height:20px;font-size:13.5px;font-weight:700;color:var(--accent);margin-top:10px}
+      h2.col-title{margin:0;font-size:24px;font-weight:900}
+      .col-sub{opacity:.85;font-size:14px;margin-top:4px}
+      @media (max-width:380px){ .grid{grid-template-columns:repeat(2,1fr)} }
+
+      /* ---------- Hôm nay: thi ngày / nhiệm vụ / streak ---------- */
+      .btn.daily{
+        background:linear-gradient(180deg,#ff8a5c,#e83e6b);color:#fff;
+        box-shadow:0 8px 0 #9c2347,0 16px 34px rgba(232,62,107,.35);
+      }
+      .btn.daily:active{box-shadow:0 3px 0 #9c2347,0 8px 18px rgba(232,62,107,.3)}
+      .badge{
+        display:none;background:#ff5470;color:#fff;border-radius:999px;font-size:12px;font-weight:900;
+        padding:1px 8px;margin-left:6px;vertical-align:middle;
+      }
+      .badge.on{display:inline-block}
+      #streakMsg{display:none;margin-top:12px;font-weight:800;color:var(--teal);font-size:14px;line-height:1.45}
+      #ovDaily{display:none;font-weight:800;font-size:14.5px;margin:10px 0 0;color:#ff8a5c}
+      .today-sec{text-align:left;margin-top:18px}
+      .today-sec h3{margin:0 0 8px;font-size:16px;font-weight:900;color:var(--accent)}
+      .mrow{
+        background:rgba(255,255,255,.06);border:1px solid var(--panel-line);border-radius:14px;
+        padding:10px 12px;margin-bottom:8px;
+      }
+      .mrow .mtop{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+      .mrow .mname{font-weight:800;font-size:14.5px}
+      .mrow .mrew{font-weight:900;color:var(--accent);font-size:13.5px;white-space:nowrap}
+      .mbar{height:9px;border-radius:99px;background:rgba(255,255,255,.12);margin-top:8px;overflow:hidden}
+      .mfill{height:100%;border-radius:99px;background:linear-gradient(90deg,#19c2a6,#ffd35c)}
+      .mrow .mbot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;min-height:38px}
+      .mrow .mprog{font-size:12.5px;opacity:.85;font-weight:700}
+      .claim-btn{
+        appearance:none;border:0;cursor:pointer;border-radius:999px;font-weight:900;font-size:13px;
+        background:linear-gradient(180deg,#ffd35c,#ff9d1c);color:#231303;padding:8px 16px;min-height:38px;
+      }
+      .claim-btn:disabled{background:rgba(255,255,255,.12);color:rgba(255,255,255,.45);cursor:default}
+      .claim-btn.done{background:rgba(25,194,166,.25);color:var(--teal)}
+      .hist-row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 2px;border-bottom:1px dashed rgba(255,255,255,.12)}
+      .hist-row:last-child{border-bottom:0}
+      .ms-track{display:flex;gap:6px;flex-wrap:wrap}
+      .ms-chip{
+        border:1px solid var(--panel-line);border-radius:999px;padding:5px 10px;font-size:12.5px;font-weight:800;
+        background:rgba(255,255,255,.06);
+      }
+      .ms-chip.got{border-color:var(--teal);color:var(--teal)}
+      #todayScr .card{max-width:460px}
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="stage">
+        <canvas id="cv"></canvas>
+
+        <!-- HUD -->
+        <div id="hud">
+          <div class="hud-top">
+            <div class="chip"><div class="lab">Quãng đường</div><div class="val" id="hudScore">0</div></div>
+            <div class="chip coin"><div class="lab">Xu</div><div class="val">🪙 <span id="hudCoins">0</span></div></div>
+            <div class="chip" id="comboChip"><div class="lab">Combo Suýt!</div><div class="val" id="hudCombo">×1</div></div>
+            <div class="spacer"></div>
+            <button class="icon-btn" id="muteBtn" aria-label="Bật / tắt âm thanh">🔊</button>
+          </div>
+          <div id="sceneTag">🏮 Chợ Sáng</div>
+          <div id="warn">⚠️ KẸT XE ĐANG DÂNG LÊN — ĐI TIẾP ĐI!</div>
+          <div id="tapHint">Chạm = lao lên 1 làn · Vuốt ◀ ▶ = lách làn</div>
+          <div class="side-btns">
+            <button class="side-btn" id="btnLeft" aria-label="Lách trái">◀</button>
+            <button class="side-btn" id="btnRight" aria-label="Lách phải">▶</button>
+          </div>
+        </div>
+
+        <!-- START -->
+        <div class="overlay on" id="startScr">
+          <div class="card">
+            <h1 class="game-title">QUA ĐƯỜNG<br/>SÀI GÒN</h1>
+            <p class="tagline">Một chạm lao qua dòng xe máy — canh nhịp, né xe, đừng để kẹt xe nuốt chửng!</p>
+            <div class="howto">
+              👆 <b>Chạm</b> (hoặc Space) — lao lên 1 làn, +1 điểm<br/>
+              👈👉 <b>Vuốt / phím ←→</b> — lách sang làn bên<br/>
+              🪙 Nhặt <b>xu</b> mở khóa nhân vật mới<br/>
+              😱 Xe sượt sát người = <b>“Suýt!”</b> cộng điểm × combo<br/>
+              🚌 Đứng yên quá 3 giây — <b>kẹt xe dâng lên nuốt bạn!</b><br/>
+              🌇 <b>Thi ngày “Giờ Tan Tầm”</b> + nhiệm vụ ngày — thêm xu, thêm thử thách mới mỗi ngày
+            </div>
+            <div class="stat-row">
+              <div class="stat"><div class="n" id="stBest">0</div><div class="l">Kỷ lục</div></div>
+              <div class="stat"><div class="n" id="stCoins">0</div><div class="l">Xu đang có</div></div>
+              <div class="stat"><div class="n" id="stStreak">0</div><div class="l">🔥 Chuỗi ngày</div></div>
+            </div>
+            <button class="btn" id="playBtn">▶ CHƠI NGAY</button>
+            <button class="btn daily" id="dailyBtn">🌇 THI NGÀY — GIỜ TAN TẦM</button>
+            <div class="btn-row">
+              <button class="btn ghost" id="todayBtn">📋 Hôm nay<span class="badge" id="todayBadge">0</span></button>
+              <button class="btn ghost" id="colBtn">🧍 Bộ sưu tập nhân vật</button>
+            </div>
+            <div id="streakMsg"></div>
+            <div class="zero-ad">0 QUẢNG CÁO · CHƠI OFFLINE · SÓNG XE LUÔN CHỪA ĐƯỜNG SỐNG</div>
+          </div>
+        </div>
+
+        <!-- GAME OVER -->
+        <div class="overlay" id="overScr">
+          <div class="card">
+            <h2 id="overTitle">BỊ XE TÔNG RỒI! 💥</h2>
+            <p id="overMsg"></p>
+            <div id="newBest">🏆 KỶ LỤC MỚI!</div>
+            <div class="stat-row">
+              <div class="stat"><div class="n" id="ovScore">0</div><div class="l">Điểm ván này</div></div>
+              <div class="stat"><div class="n" id="ovDist">0</div><div class="l">Làn đã qua</div></div>
+              <div class="stat"><div class="n" id="ovCoins">0</div><div class="l">Xu nhặt được</div></div>
+            </div>
+            <p id="ovDaily"></p>
+            <p id="ovGap" style="font-weight:800;font-size:15px;margin:10px 0 0"></p>
+            <button class="btn" id="againBtn">↻ CHƠI LẠI NGAY</button>
+            <div class="btn-row">
+              <button class="btn ghost" id="colBtn2">🧍 Nhân vật</button>
+              <button class="btn ghost" id="homeBtn">🏠 Màn hình chính</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLLECTION -->
+        <div class="overlay" id="collection">
+          <div class="card">
+            <h2 class="col-title">Bộ sưu tập nhân vật</h2>
+            <div class="col-sub">Nhân vật chỉ thay hình cho vui — độ khó như nhau, điểm so sánh công bằng. Xu của bạn: <b style="color:var(--accent)">🪙 <span id="colCoins">0</span></b></div>
+            <div class="grid" id="charGrid"></div>
+            <div id="colMsg"></div>
+            <button class="btn ghost" id="colBack">← Quay lại</button>
+          </div>
+        </div>
+
+        <!-- HÔM NAY: THI NGÀY / NHIỆM VỤ / STREAK -->
+        <div class="overlay" id="todayScr">
+          <div class="card">
+            <h2 class="col-title">🌇 Hôm nay</h2>
+            <div class="col-sub" id="todayDate"></div>
+
+            <div class="today-sec">
+              <h3>🏁 Thi ngày — Giờ Tan Tầm</h3>
+              <p style="margin:0;font-size:14px;line-height:1.5;opacity:.92">Bản đồ &amp; dòng xe hôm nay gieo từ <b>hạt giống ngày</b> — ai chơi hôm nay cũng gặp đúng một thử thách. Chế độ thi <b>không có hồi sinh</b>: tông là hết ván, điểm ghi vào bảng ngày.</p>
+              <div class="stat-row" style="justify-content:flex-start;margin:12px 0 2px">
+                <div class="stat"><div class="n" id="tdBest">0</div><div class="l">Điểm cao nhất hôm nay</div></div>
+                <div class="stat"><div class="n" id="tdPlays">0</div><div class="l">Lượt thi hôm nay</div></div>
+              </div>
+              <button class="btn daily" id="dailyBtn2" style="min-width:0;width:100%">🌇 VÀO THI NGÀY</button>
+              <div id="histList" style="margin-top:10px"></div>
+            </div>
+
+            <div class="today-sec">
+              <h3>📋 Nhiệm vụ ngày</h3>
+              <div id="missionList"></div>
+            </div>
+
+            <div class="today-sec">
+              <h3>🔥 Chuỗi ngày chơi</h3>
+              <p style="margin:0 0 8px;font-size:14px;line-height:1.5">Chuỗi hiện tại: <b id="tdStreak" style="color:var(--accent)">0 ngày</b> liên tiếp. Đạt mốc là xu thưởng tự cộng vào ví:</p>
+              <div class="ms-track" id="msTrack"></div>
+            </div>
+
+            <button class="btn ghost" id="todayBack" style="margin-top:18px">← Quay lại</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+    "use strict";
+    /* ============================================================
+       QUA ĐƯỜNG SÀI GÒN — 1 chạm, sóng xe công bằng, kẹt xe ép tiến
+       ============================================================ */
+    var cv = document.getElementById('cv');
+    var ctx = cv.getContext('2d');
+    var stage = document.getElementById('stage');
+
+    /* ---------- Lưu trữ ---------- */
+    var store = {
+      get: function(k, d){ try{ var v = localStorage.getItem('qdsg_'+k); return v===null? d : JSON.parse(v); }catch(e){ return d; } },
+      set: function(k, v){ try{ localStorage.setItem('qdsg_'+k, JSON.stringify(v)); }catch(e){} }
+    };
+
+    var best     = store.get('best', 0);
+    var bank     = store.get('coins', 0);
+    var unlocked = store.get('unlocked', ['hocsinh']);
+    var curChar  = store.get('char', 'hocsinh');
+    var muted    = store.get('muted', false);
+
+    /* ============================================================
+       LỚP META NGÀY — thi ngày / nhiệm vụ ngày / streak
+       Dữ liệu cũ (best/coins/unlocked/char/muted) giữ nguyên khóa,
+       người chơi cũ không mất gì; lớp meta dùng khóa lưu riêng.
+       ============================================================ */
+    var seedBase = 0; /* hạt giống cộng vào seededRand: 0 = chế độ thường, khác 0 = thi ngày */
+
+    function pad2(n){ return (n<10?'0':'') + n; }
+    function todayStr(d){
+      d = d || new Date();
+      return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate());
+    }
+    function dateSeedOf(ds){
+      var p = ds.split('-');
+      return (+p[0])*10000 + (+p[1])*100 + (+p[2]);
+    }
+    function fmtDate(ds){
+      var p = ds.split('-');
+      return p[2] + '/' + p[1];
+    }
+    var TDAY  = todayStr();
+    var DSEED = dateSeedOf(TDAY);
+
+    /* --- Thi ngày "Giờ Tan Tầm": điểm cao nhất hôm nay + lịch sử các ngày --- */
+    var daily = store.get('daily', null);
+    if(!daily || typeof daily !== 'object' || !daily.history) daily = { date:TDAY, best:0, plays:0, history:{} };
+    if(daily.date !== TDAY){
+      if(daily.best > 0) daily.history[daily.date] = daily.best;
+      daily.date = TDAY; daily.best = 0; daily.plays = 0;
+    }
+    (function(){
+      var ks = Object.keys(daily.history).sort();
+      while(ks.length > 14){ delete daily.history[ks.shift()]; }
+    })();
+    store.set('daily', daily);
+
+    /* --- Nhiệm vụ ngày: 3 nhiệm vụ gieo theo ngày, tiến độ cộng dồn trong ngày --- */
+    var MISSION_DEFS = {
+      lanes: { icon:'🛣️', label:function(t){ return 'Qua tổng cộng ' + t + ' làn đường'; }, targets:[40,60,90,120], reward:function(t){ return Math.round(t*0.5); } },
+      coins: { icon:'🪙', label:function(t){ return 'Nhặt tổng cộng ' + t + ' xu'; },        targets:[12,18,25,35],  reward:function(t){ return 10 + Math.round(t*0.9); } },
+      nears: { icon:'😱', label:function(t){ return 'Đạt ' + t + ' lần “Suýt!”'; },          targets:[5,8,12,16],    reward:function(t){ return 15 + t*4; } }
+    };
+    function genMissions(ds){
+      var sd = dateSeedOf(ds), types = ['lanes','coins','nears'], out = [];
+      for(var i=0;i<types.length;i++){
+        var def = MISSION_DEFS[types[i]];
+        var ti = Math.floor(seededRand(sd*3 + i*101) * def.targets.length);
+        var t = def.targets[ti];
+        out.push({ type: types[i], target: t, reward: def.reward(t), claimed: false });
+      }
+      return out;
+    }
+    var missions = store.get('missions', null);
+    if(!missions || missions.date !== TDAY || !missions.list || !missions.progress){
+      missions = { date: TDAY, list: genMissions(TDAY), progress: { lanes:0, coins:0, nears:0 } };
+      store.set('missions', missions);
+    }
+    function missionProgress(type, n){
+      if(missions.date !== TDAY) return;
+      missions.progress[type] = (missions.progress[type]||0) + n;
+      store.set('missions', missions);
+      updateTodayBadge();
+    }
+    function claimableCount(){
+      var c = 0;
+      for(var i=0;i<missions.list.length;i++){
+        var m = missions.list[i];
+        if(!m.claimed && (missions.progress[m.type]||0) >= m.target) c++;
+      }
+      return c;
+    }
+
+    /* --- Streak: chuỗi ngày chơi liên tiếp, thưởng xu ở mốc 3/7/14/30 --- */
+    var STREAK_MILES = [ { d:3, r:30 }, { d:7, r:80 }, { d:14, r:150 }, { d:30, r:300 } ];
+    var streak = store.get('streak', null);
+    if(!streak || typeof streak !== 'object') streak = { last:'', count:0, paid:0 };
+    var streakToast = '';
+    (function touchStreak(){
+      if(streak.last === TDAY) return;
+      var y = new Date(); y.setDate(y.getDate()-1);
+      if(streak.last === todayStr(y)) streak.count += 1;
+      else { streak.count = 1; streak.paid = 0; }
+      streak.last = TDAY;
+      var gained = 0;
+      for(var i=0;i<STREAK_MILES.length;i++){
+        var m = STREAK_MILES[i];
+        if(streak.count >= m.d && streak.paid < m.d){ gained += m.r; streak.paid = m.d; }
+      }
+      if(gained > 0){
+        bank += gained; store.set('coins', bank);
+        streakToast = '🎁 Chuỗi ' + streak.count + ' ngày liên tiếp — thưởng +' + gained + ' xu đã cộng vào ví!';
+      }
+      store.set('streak', streak);
+    })();
+
+    /* ---------- Nhân vật ---------- */
+    /* 12 nhân vật — giá cân lại theo nguồn xu mới (nhiệm vụ ngày ~90 xu/ngày
+       + streak + nhặt trong ván) để xu luôn có chỗ tiêu dài hạn.
+       Nhân vật đã mở ở bản cũ giữ nguyên, không ai bị khóa lại. */
+    var CHARS = [
+      { id:'hocsinh', name:'Học Sinh',        cost:0    },
+      { id:'pho',     name:'Cô Bán Phở',      cost:25   },
+      { id:'xeom',    name:'Anh Xe Ôm',       cost:55   },
+      { id:'baove',   name:'Chú Bảo Vệ',      cost:100  },
+      { id:'vanphong',name:'Cô Văn Phòng',    cost:160  },
+      { id:'embe',    name:'Bé Được Mẹ Chở',  cost:230  },
+      { id:'giaothong',name:'Anh CSGT',       cost:320  },
+      { id:'sinhvien',name:'Chị Sinh Viên',   cost:430  },
+      { id:'banhoa',  name:'Cô Bán Hoa',      cost:560  },
+      { id:'xiclo',   name:'Bác Xích Lô',     cost:720  },
+      { id:'aodai',   name:'Cô Áo Dài',       cost:900  },
+      { id:'shipper', name:'Anh Shipper',     cost:1120 }
+    ];
+    function charById(id){ for(var i=0;i<CHARS.length;i++) if(CHARS[i].id===id) return CHARS[i]; return CHARS[0]; }
+
+    /* ---------- Cảnh ---------- */
+    var SCENES = [
+      { name:'Chợ Sáng',           icon:'🏮', from:0,  sky:'#ffd98a', skyTop:'#ff9d5c', ground:'#8a6f4d', safeCol:'#d9b380', road:'#4a4a55', speed:1.0,  density:1.0,  bus:false, car:false },
+      { name:'Đại Lộ Nguyễn Huệ',  icon:'🌆', from:40, sky:'#a8d8ff', skyTop:'#5f9df0', ground:'#7d8aa0', safeCol:'#b9c6d8', road:'#3d3f4d', speed:1.22, density:1.18, bus:false, car:true  },
+      { name:'Cầu Giờ Cao Điểm',   icon:'🌉', from:90, sky:'#ff9e7a', skyTop:'#c94f6d', ground:'#5d4a63', safeCol:'#9a7f92', road:'#33323f', speed:1.45, density:1.38, bus:true,  car:true  }
+    ];
+    function sceneFor(dist){
+      var s = SCENES[0];
+      for(var i=0;i<SCENES.length;i++) if(dist>=SCENES[i].from) s = SCENES[i];
+      return s;
+    }
+
+    /* ---------- Âm thanh (WebAudio synth) ---------- */
+    var AC = null, musicTimer = null, musicStep = 0, nextNoteTime = 0;
+    function audio(){
+      if(!AC){ try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC = null; } }
+      if(AC && AC.state==='suspended') AC.resume();
+      return AC;
+    }
+    function beep(freq, dur, type, vol, slideTo, delay){
+      if(muted) return; var ac = audio(); if(!ac) return;
+      var t = ac.currentTime + (delay||0);
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = type||'square'; o.frequency.setValueAtTime(freq, t);
+      if(slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(30,slideTo), t+dur);
+      g.gain.setValueAtTime(vol||0.12, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+      o.connect(g); g.connect(ac.destination);
+      o.start(t); o.stop(t+dur+0.02);
+    }
+    function sfx(name){
+      if(muted) return;
+      if(name==='hop'){ beep(520,0.07,'square',0.07,760); }
+      else if(name==='coin'){ beep(990,0.07,'square',0.1); beep(1320,0.12,'square',0.1,null,0.07); }
+      else if(name==='horn'){ beep(392,0.16,'sawtooth',0.14); beep(330,0.16,'sawtooth',0.12,null,0.02); }
+      else if(name==='brake'){ beep(1400,0.4,'sawtooth',0.1,300); beep(180,0.35,'triangle',0.16,60,0.05); }
+      else if(name==='unlock'){ [523,659,784,1047].forEach(function(f,i){ beep(f,0.12,'square',0.1,null,i*0.09); }); }
+      else if(name==='scene'){ [392,523,659].forEach(function(f,i){ beep(f,0.14,'triangle',0.12,null,i*0.08); }); }
+    }
+    /* Nhạc nền: giai điệu pentatonic vui, vòng lặp liền mạch bằng scheduler */
+    var MELODY = [523,587,659,784,659,587,523,587, 659,784,880,784,659,587,523,0,
+                  523,587,659,784,880,784,659,587, 659,587,523,587,392,0,440,0];
+    var BASS   = [131,0,196,0, 147,0,196,0, 131,0,196,0, 175,0,196,0];
+    function musicTick(){
+      if(!AC || muted) return;
+      var spb = 0.21; /* giây mỗi nốt */
+      while(nextNoteTime < AC.currentTime + 0.35){
+        var i = musicStep % MELODY.length;
+        var f = MELODY[i];
+        if(f){
+          var o = AC.createOscillator(), g = AC.createGain();
+          o.type='triangle'; o.frequency.value=f;
+          g.gain.setValueAtTime(0.055, nextNoteTime);
+          g.gain.exponentialRampToValueAtTime(0.0001, nextNoteTime+spb*0.95);
+          o.connect(g); g.connect(AC.destination);
+          o.start(nextNoteTime); o.stop(nextNoteTime+spb);
+        }
+        var b = BASS[musicStep % BASS.length];
+        if(b){
+          var o2 = AC.createOscillator(), g2 = AC.createGain();
+          o2.type='sine'; o2.frequency.value=b;
+          g2.gain.setValueAtTime(0.07, nextNoteTime);
+          g2.gain.exponentialRampToValueAtTime(0.0001, nextNoteTime+spb*0.95);
+          o2.connect(g2); g2.connect(AC.destination);
+          o2.start(nextNoteTime); o2.stop(nextNoteTime+spb);
+        }
+        nextNoteTime += spb; musicStep++;
+      }
+    }
+    function startMusic(){
+      if(!audio()) return;
+      if(musicTimer) return;
+      nextNoteTime = AC.currentTime + 0.06; musicStep = 0;
+      musicTimer = setInterval(musicTick, 90);
+    }
+    function stopMusic(){ if(musicTimer){ clearInterval(musicTimer); musicTimer = null; } }
+
+    /* ---------- Kích thước / lưới ---------- */
+    var W = 0, H = 0, COLS = 9, cellW = 0, ROW_H = 58;
+    function resize(){
+      var r = stage.getBoundingClientRect();
+      var dpr = Math.min(2, window.devicePixelRatio||1);
+      W = r.width; H = r.height;
+      cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      cellW = W / COLS;
+      ROW_H = Math.max(50, Math.min(66, H/11));
+    }
+    window.addEventListener('resize', resize);
+
+    /* ---------- Trạng thái game ---------- */
+    var MODE = 'menu'; /* menu | play | over */
+    var gameMode = 'normal'; /* normal | daily */
+    var rows = {};     /* chỉ số hàng -> dữ liệu hàng */
+    var player, camF, score, dist, runCoins, combo, comboT, lastFwdAt, jamY, jamActive;
+    var floats = [];   /* chữ bay: Suýt!, +xu */
+    var banner = null; /* banner chuyển cảnh */
+    var timeScale = 1, slowT = 0;
+    var elapsed = 0;
+    var lastSceneIdx = 0;
+
+    function seededRand(n){ var x = Math.sin(n*127.1+311.7+seedBase)*43758.5453; return x - Math.floor(x); }
+
+    /* Luồng ngẫu nhiên khi sinh sóng xe: chế độ thi ngày chạy theo hạt giống
+       ngày (mulberry32) — cùng một ngày, mọi người chơi gặp cùng thử thách;
+       chế độ thường giữ Math.random như bản gốc. */
+    var dailyStream = null;
+    var kindSeq = 0;
+    function mulberry32(a){
+      return function(){
+        a |= 0; a = a + 0x6D2B79F5 | 0;
+        var t = Math.imul(a ^ a>>>15, 1 | a);
+        t = t + Math.imul(t ^ t>>>7, 61 | t) ^ t;
+        return ((t ^ t>>>14) >>> 0) / 4294967296;
+      };
+    }
+    function rnd(){ return dailyStream ? dailyStream() : Math.random(); }
+
+    function diffAt(d){
+      /* độ khó tăng theo quãng đường: tốc độ + mật độ, khe sống hẹp dần nhưng không bao giờ = 0 */
+      var sc = sceneFor(d);
+      var ramp = Math.min(1, d/160);
+      return {
+        scene: sc,
+        speed: sc.speed * (1 + ramp*0.55),
+        density: sc.density * (1 + ramp*0.4),
+        gapMin: Math.max(0.85, 1.5 - ramp*0.6) /* giây trống tối thiểu giữa 2 đợt sóng — đường sống */
+      };
+    }
+
+    function makeRow(idx){
+      var d = diffAt(idx);
+      var isStart = idx <= 1;
+      var isSafe = isStart || (seededRand(idx*3+7) < 0.24);
+      var row = { idx: idx, safe: isSafe, vehicles: [], coin: -1, spawnT: 0, dir: 1, speed: 0 };
+      if(!isSafe){
+        row.dir = (idx % 2 === 0) ? 1 : -1;
+        if(seededRand(idx*5+1) < 0.5) row.dir = -row.dir;
+        var base = 2.1 + seededRand(idx*7+3)*1.1; /* ô/giây */
+        row.speed = base * d.speed;
+        row.spawnT = seededRand(idx*11+5) * 1.2;
+        /* đặt sẵn vài xe rải ra, luôn chừa khoảng trống lớn */
+        var x = -6 + seededRand(idx*13+2)*4;
+        while(x < COLS + 8){
+          var kind = pickKind(idx, d);
+          var len = kind==='bus' ? 3.4 : (kind==='car' ? 2.1 : 1.25);
+          row.vehicles.push({ x: row.dir>0 ? x : x, len: len, kind: kind, color: pickColor(idx, x), nearDone:false });
+          var gapCells = (d.gapMin * row.speed) + 1.6 + seededRand(idx*17+x)*2.4;
+          x += len + gapCells;
+        }
+      } else if(idx > 2 && seededRand(idx*19+4) < 0.5){
+        row.coin = 1 + Math.floor(seededRand(idx*23+9) * (COLS-2));
+      }
+      /* xu cũng xuất hiện trên làn xe (mạo hiểm hơn) */
+      if(!isSafe && seededRand(idx*29+6) < 0.16){
+        row.coin = 1 + Math.floor(seededRand(idx*31+3) * (COLS-2));
+      }
+      return row;
+    }
+    function pickKind(idx, d){
+      var r = seededRand(idx*37 + idx + (kindSeq++));
+      if(d.scene.bus && r < 0.14) return 'bus';
+      if(d.scene.car && r < 0.42) return 'car';
+      return 'bike';
+    }
+    var VEH_COLORS = ['#e63946','#457b9d','#ffb020','#2a9d8f','#8338ec','#ff6b35','#3a86ff','#ef476f','#06d6a0'];
+    function pickColor(idx, x){ return VEH_COLORS[Math.abs(Math.floor(seededRand(idx*41+x*3)*VEH_COLORS.length)) % VEH_COLORS.length]; }
+
+    function getRow(idx){
+      if(!rows[idx]) rows[idx] = makeRow(idx);
+      return rows[idx];
+    }
+
+    function resetGame(){
+      seedBase = (gameMode === 'daily') ? (DSEED % 997) * 13.7 : 0;
+      dailyStream = (gameMode === 'daily') ? mulberry32(DSEED ^ 0x9e3779b9) : null;
+      kindSeq = 0;
+      rows = {};
+      player = { col: 4, row: 0, fx: 4, frow: 0, hopT: 1, dead: false, face: 1 };
+      camF = -3.4;
+      score = 0; dist = 0; runCoins = 0;
+      combo = 0; comboT = 0;
+      lastFwdAt = elapsed; jamY = 0; jamActive = false;
+      floats = []; banner = null; timeScale = 1; slowT = 0;
+      lastSceneIdx = 0;
+      for(var i=-2;i<26;i++) getRow(i);
+      updateHUD();
+    }
+
+    /* ---------- Điều khiển ---------- */
+    function hopForward(){
+      if(MODE!=='play' || player.dead) return;
+      player.row += 1;
+      player.hopT = 0;
+      lastFwdAt = elapsed;
+      if(player.row > dist){
+        var gained = player.row - dist;
+        dist = player.row;
+        score += gained;
+        missionProgress('lanes', gained);
+        sfx('hop');
+        var sc = sceneFor(dist), si = SCENES.indexOf(sc);
+        if(si !== lastSceneIdx){
+          lastSceneIdx = si;
+          banner = { text: sc.icon + '  ' + sc.name.toUpperCase(), t: 0 };
+          sfx('scene');
+          document.getElementById('sceneTag').textContent = sceneTagText(sc);
+        }
+      }
+      checkCoin();
+      updateHUD();
+    }
+    function sidestep(dir){
+      if(MODE!=='play' || player.dead) return;
+      var nc = Math.max(0, Math.min(COLS-1, player.col + dir));
+      if(nc !== player.col){ player.col = nc; player.face = dir; checkCoin(); }
+    }
+    function checkCoin(){
+      var row = getRow(player.row);
+      if(row.coin === player.col){
+        row.coin = -1; runCoins++; bank++;
+        missionProgress('coins', 1);
+        store.set('coins', bank);
+        sfx('coin');
+        floats.push({ x: player.fx, y: player.frow, text:'+1 🪙', t:0, col:'#ffd35c' });
+        updateHUD();
+      }
+    }
+
+    /* ---------- Va chạm & Suýt ---------- */
+    function checkVehicles(dt){
+      var row = getRow(player.row);
+      if(row.safe) return;
+      var px0 = player.fx + 0.18, px1 = player.fx + 0.82;
+      for(var i=0;i<row.vehicles.length;i++){
+        var v = row.vehicles[i];
+        var vx0 = v.x, vx1 = v.x + v.len;
+        if(px1 > vx0 && px0 < vx1){ crash('hit'); return; }
+        /* Suýt!: xe vừa quét qua sát mép người chơi mà không chạm */
+        if(!v.nearDone){
+          var moving = row.dir;
+          var passed = moving>0 ? (vx0 > px1 && vx0 - px1 < 0.45) : (vx1 < px0 && px0 - vx1 < 0.45);
+          var closeSide = Math.abs((moving>0? vx0-px1 : px0-vx1)) < 0.45;
+          var aligned = (vx1 > px0 - 0.4 && vx0 < px1 + 0.4);
+          if(passed && closeSide && aligned){
+            v.nearDone = true;
+            combo = Math.min(5, combo + 1); comboT = 3.2;
+            var bonus = combo; /* +điểm thưởng nhân hệ số combo */
+            score += bonus;
+            missionProgress('nears', 1);
+            floats.push({ x: player.fx, y: player.frow - 0.4, text:'SUÝT! +' + bonus + (combo>1 ? ' ×'+combo : ''), t:0, col:'#ff5470' });
+            sfx('horn');
+            slowT = 0.32; /* chậm hình rất ngắn */
+            updateHUD();
+          }
+        }
+      }
+    }
+
+    function crash(kind){
+      if(player.dead) return;
+      player.dead = true;
+      sfx('brake');
+      stopMusic();
+      setTimeout(function(){ gameOver(kind); }, 420);
+    }
+
+    function gameOver(kind){
+      MODE = 'over';
+      var isBest = score > best;
+      if(isBest){ best = score; store.set('best', best); }
+      var ovD = document.getElementById('ovDaily');
+      if(gameMode === 'daily'){
+        var isDailyBest = score > daily.best;
+        if(isDailyBest) daily.best = score;
+        store.set('daily', daily);
+        ovD.style.display = 'block';
+        ovD.textContent = '🌇 Thi ngày: ' + score + ' điểm — ' + (isDailyBest ? 'cao nhất hôm nay! 🏆' : 'kỷ lục hôm nay đang là ' + daily.best + ' điểm.');
+      } else {
+        ovD.style.display = 'none';
+      }
+      document.getElementById('overTitle').textContent =
+        kind==='jam' ? 'BỊ KẸT XE NUỐT CHỬNG! 🚌' : 'BỊ XE TÔNG RỒI! 💥';
+      document.getElementById('overMsg').textContent =
+        kind==='jam' ? 'Đứng chờ lâu quá — dòng kẹt xe phía sau đã dâng lên tận nơi. Cứ tiến lên, đừng chần chừ!'
+                     : 'Sài Gòn giờ cao điểm không tha ai… Canh nhịp đợt sóng xe, lách qua khe trống nhé!';
+      document.getElementById('ovScore').textContent = score;
+      document.getElementById('ovDist').textContent = dist;
+      document.getElementById('ovCoins').textContent = runCoins;
+      document.getElementById('newBest').style.display = isBest ? 'block' : 'none';
+      document.getElementById('ovGap').textContent = isBest
+        ? 'Bạn vừa lập kỷ lục mới — ván sau phá tiếp nào!'
+        : (best > 0
+            ? ('Còn thiếu đúng ' + (best - score + 1) + ' điểm nữa là phá kỷ lục ' + best + '!')
+            : 'Ván làm quen thôi — ván sau cứ lao lên, đừng đứng chờ kẹt xe nhé!');
+      document.getElementById('overScr').classList.add('on');
+      document.getElementById('hud').classList.remove('on');
+      refreshStartStats();
+    }
+
+    function sceneTagText(sc){ return (gameMode==='daily' ? '🌇 Thi ngày · ' : '') + sc.icon + ' ' + sc.name; }
+    function startGame(m){
+      gameMode = (m === 'daily') ? 'daily' : 'normal';
+      audio(); startMusic();
+      resetGame();
+      MODE = 'play';
+      if(gameMode === 'daily'){ daily.plays += 1; store.set('daily', daily); }
+      document.getElementById('startScr').classList.remove('on');
+      document.getElementById('overScr').classList.remove('on');
+      document.getElementById('collection').classList.remove('on');
+      document.getElementById('todayScr').classList.remove('on');
+      document.getElementById('hud').classList.add('on');
+      document.getElementById('sceneTag').textContent = sceneTagText(SCENES[0]);
+    }
+
+    /* ---------- Cập nhật ---------- */
+    function update(dt){
+      elapsed += dt;
+      if(MODE !== 'play') return;
+      var dts = dt * timeScale;
+      if(slowT > 0){ slowT -= dt; timeScale = 0.35; if(slowT<=0) timeScale = 1; }
+
+      /* nhân vật lerp tới ô đích — cảm giác nhảy vọt */
+      player.hopT = Math.min(1, player.hopT + dt*7);
+      var ease = 1 - Math.pow(1-player.hopT, 3);
+      player.fx += (player.col - player.fx) * Math.min(1, dt*16);
+      player.frow += (player.row - player.frow) * Math.min(1, dt*(6+ease*6));
+
+      /* camera bám theo */
+      var targetCam = Math.max(-3.4, player.frow - 3.4);
+      camF += (targetCam - camF) * Math.min(1, dt*5);
+
+      /* xe chạy + sinh sóng mới — LUÔN chừa khe sống >= gapMin giây */
+      var lo = Math.floor(camF) - 3, hi = Math.floor(camF) + Math.ceil(H/ROW_H) + 6;
+      for(var idx=lo; idx<=hi; idx++){
+        if(idx < 0) continue;
+        var row = getRow(idx);
+        if(row.safe) continue;
+        var d = diffAt(idx);
+        for(var i=0;i<row.vehicles.length;i++){
+          var v = row.vehicles[i];
+          v.x += row.dir * row.speed * dts;
+        }
+        /* dọn xe đã ra khỏi màn hình phía sau, sinh đợt mới ở phía trước */
+        row.vehicles = row.vehicles.filter(function(v){
+          return row.dir>0 ? (v.x + v.len > -8) : (v.x < COLS + 8);
+        });
+        var lead = null;
+        for(var j=0;j<row.vehicles.length;j++){
+          var vv = row.vehicles[j];
+          if(lead===null || (row.dir>0 ? vv.x > lead.x : vv.x < lead.x)) lead = vv;
+        }
+        row.spawnT -= dts;
+        if(row.spawnT <= 0){
+          var spawnEdge = row.dir>0 ? -7.5 : COLS + 7.5;
+          var clear = true;
+          for(var k=0;k<row.vehicles.length;k++){
+            var w = row.vehicles[k];
+            if(Math.abs(w.x - spawnEdge) < 6.5){ clear = false; break; }
+          }
+          if(clear){
+            /* một đợt sóng: 1–3 xe nối nhau, sau đó là KHE SỐNG bắt buộc */
+            var n = 1 + Math.floor(rnd()* (d.density>1.25?3:2));
+            var x = spawnEdge;
+            for(var m=0;m<n;m++){
+              var kind = pickKind(idx, d);
+              var len = kind==='bus' ? 3.4 : (kind==='car' ? 2.1 : 1.25);
+              var vx = row.dir>0 ? x : x - len;
+              row.vehicles.push({ x: vx, len: len, kind: kind, color: pickColor(idx, x+m), nearDone:false });
+              x += row.dir * (len + 0.35 + rnd()*0.5);
+            }
+            var waveTime = Math.abs(x - spawnEdge) / row.speed;
+            row.spawnT = waveTime + d.gapMin + rnd()*0.9; /* khe trống >= gapMin giây */
+          } else {
+            row.spawnT = 0.25;
+          }
+        }
+      }
+      /* dọn hàng quá xa phía sau */
+      var keys = Object.keys(rows);
+      for(var q=0;q<keys.length;q++){ if(+keys[q] < camF - 8) delete rows[keys[q]]; }
+
+      checkVehicles(dts);
+
+      /* combo phai dần */
+      if(comboT > 0){ comboT -= dt; if(comboT<=0){ combo = 0; updateHUD(); } }
+
+      /* ÁP LỰC KẸT XE: đứng yên > 3s thì dòng xe phía sau dâng lên */
+      var idle = elapsed - lastFwdAt;
+      if(idle > 3 && !player.dead){
+        jamActive = true;
+        jamY += dt * (46 + (idle-3)*22); /* càng chờ lâu dâng càng nhanh */
+        document.getElementById('warn').style.display = 'block';
+        var playerScreenY = H - (player.frow - camF) * ROW_H - ROW_H/2;
+        var jamTop = H - jamY;
+        if(jamTop < playerScreenY + ROW_H*0.35){ crash('jam'); }
+      } else {
+        jamActive = false;
+        jamY = Math.max(0, jamY - dt*160);
+        document.getElementById('warn').style.display = 'none';
+      }
+
+      /* chữ bay */
+      for(var f=floats.length-1; f>=0; f--){ floats[f].t += dt; if(floats[f].t>1.1) floats.splice(f,1); }
+      if(banner){ banner.t += dt; if(banner.t>2.2) banner = null; }
+    }
+
+    /* ---------- Vẽ ---------- */
+    function rr(x,y,w,h,r){
+      ctx.beginPath();
+      ctx.moveTo(x+r,y);
+      ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+      ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r);
+      ctx.closePath();
+    }
+    function drawVehicle(v, row, y){
+      var x = v.x * cellW;
+      var w = v.len * cellW;
+      var h = ROW_H * 0.72;
+      var yy = y + (ROW_H-h)/2;
+      var dir = row.dir;
+      ctx.save();
+      /* bóng đổ */
+      ctx.fillStyle = 'rgba(0,0,0,.3)';
+      rr(x+3, yy+h-6, w, 9, 5); ctx.fill();
+      /* đèn pha */
+      var grad = ctx.createRadialGradient(dir>0? x+w : x, yy+h/2, 2, dir>0? x+w : x, yy+h/2, cellW*1.1);
+      grad.addColorStop(0,'rgba(255,240,170,.5)'); grad.addColorStop(1,'rgba(255,240,170,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(dir>0? x+w : x, yy+h/2, cellW*1.1, 0, Math.PI*2); ctx.fill();
+      if(v.kind==='bike'){
+        /* xe máy: thân thon + người lái + mũ bảo hiểm */
+        ctx.fillStyle = v.color; rr(x+w*0.18, yy+h*0.34, w*0.64, h*0.34, 7); ctx.fill();
+        ctx.fillStyle = '#22242e';
+        ctx.beginPath(); ctx.arc(x+w*0.2, yy+h*0.78, h*0.17, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x+w*0.8, yy+h*0.78, h*0.17, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#f2c094';
+        ctx.beginPath(); ctx.arc(x+w*0.52, yy+h*0.3, h*0.15, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = v.color;
+        ctx.beginPath(); ctx.arc(x+w*0.52, yy+h*0.28, h*0.16, Math.PI, Math.PI*2); ctx.fill();
+        ctx.fillStyle = 'rgba(20,20,30,.85)'; rr(x+w*0.4, yy+h*0.42, w*0.24, h*0.3, 4); ctx.fill();
+      } else if(v.kind==='car'){
+        ctx.fillStyle = v.color; rr(x+2, yy+h*0.22, w-4, h*0.6, 9); ctx.fill();
+        ctx.fillStyle = 'rgba(190,230,255,.9)'; rr(x+w*0.24, yy+h*0.3, w*0.2, h*0.3, 4); ctx.fill(); rr(x+w*0.56, yy+h*0.3, w*0.2, h*0.3, 4); ctx.fill();
+        ctx.fillStyle = v.color; rr(x+w*0.2, yy+h*0.08, w*0.6, h*0.24, 8); ctx.fill();
+        ctx.fillStyle = '#1c1e28';
+        ctx.beginPath(); ctx.arc(x+w*0.22, yy+h*0.86, h*0.15, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x+w*0.78, yy+h*0.86, h*0.15, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#fff3b0'; ctx.fillRect(dir>0? x+w-6 : x+2, yy+h*0.45, 4, 6);
+        ctx.fillStyle = '#ff5964'; ctx.fillRect(dir>0? x+2 : x+w-6, yy+h*0.45, 4, 6);
+      } else { /* bus */
+        ctx.fillStyle = v.color; rr(x+2, yy+2, w-4, h-2, 10); ctx.fill();
+        ctx.fillStyle = '#ffe45e'; rr(x+2, yy+4, w-4, h*0.2, 8); ctx.fill();
+        ctx.fillStyle = 'rgba(190,230,255,.92)';
+        var nw = Math.floor(v.len*2);
+        for(var i=0;i<nw;i++){ rr(x+10+i*(w-20)/nw, yy+h*0.34, (w-20)/nw-5, h*0.26, 3); ctx.fill(); }
+        ctx.fillStyle = '#fff'; ctx.font = '900 ' + Math.round(h*0.26) + 'px sans-serif'; ctx.textAlign='center';
+        ctx.fillText('XE BUÝT', x+w/2, yy+h*0.82);
+        ctx.fillStyle = '#1c1e28';
+        ctx.beginPath(); ctx.arc(x+w*0.16, yy+h*0.94, h*0.13, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x+w*0.84, yy+h*0.94, h*0.13, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawCharacter(c, cx, cy, s, id, hop){
+      /* s = chiều cao tổng; vẽ nhân vật nhìn thẳng, phong cách chibi phẳng có bóng */
+      var u = s/64;
+      var bounce = hop ? Math.abs(Math.sin(hop*Math.PI)) * 10*u : 0;
+      cy -= bounce;
+      ctx.save();
+      ctx.translate(cx, cy);
+      /* bóng */
+      ctx.fillStyle = 'rgba(0,0,0,.28)';
+      ctx.beginPath(); ctx.ellipse(0, 30*u + bounce, 15*u, 5*u, 0, 0, Math.PI*2); ctx.fill();
+      var skin = '#f6c48b', hair = '#2b2118';
+      function head(hairCol, hat){
+        ctx.fillStyle = skin;
+        ctx.beginPath(); ctx.arc(0, -12*u, 11*u, 0, Math.PI*2); ctx.fill();
+        if(hat==='nonla'){
+          ctx.fillStyle = '#e8c96a';
+          ctx.beginPath(); ctx.moveTo(-15*u, -16*u); ctx.lineTo(15*u, -16*u); ctx.lineTo(0, -27*u); ctx.closePath(); ctx.fill();
+        } else if(hat==='helmet'){
+          ctx.fillStyle = '#22b573';
+          ctx.beginPath(); ctx.arc(0, -13*u, 11.5*u, Math.PI, Math.PI*2); ctx.fill();
+          ctx.fillRect(-11.5*u, -14*u, 23*u, 3*u);
+        } else if(hat==='cap'){
+          ctx.fillStyle = '#274b9f';
+          ctx.beginPath(); ctx.arc(0, -13*u, 11.5*u, Math.PI, Math.PI*2); ctx.fill();
+          ctx.fillRect(-4*u, -15*u, 16*u, 3.4*u);
+        } else if(hat==='bun'){
+          ctx.fillStyle = hairCol;
+          ctx.beginPath(); ctx.arc(0, -13*u, 11.4*u, Math.PI*0.95, Math.PI*2.05); ctx.fill();
+          ctx.beginPath(); ctx.arc(0, -25*u, 5*u, 0, Math.PI*2); ctx.fill();
+        } else if(hat==='whitecap'){
+          ctx.fillStyle = '#f4f6f8';
+          ctx.beginPath(); ctx.arc(0, -13*u, 11.5*u, Math.PI, Math.PI*2); ctx.fill();
+          ctx.fillStyle = '#274b9f'; ctx.fillRect(-11.5*u, -14*u, 23*u, 3*u);
+        } else if(hat==='capo'){
+          ctx.fillStyle = '#ff7a1a';
+          ctx.beginPath(); ctx.arc(0, -13*u, 11.5*u, Math.PI, Math.PI*2); ctx.fill();
+          ctx.fillRect(-4*u, -15*u, 16*u, 3.4*u);
+        } else if(hat==='longhair'){
+          ctx.fillStyle = hairCol;
+          ctx.fillRect(-12.5*u, -14*u, 5*u, 27*u); ctx.fillRect(7.5*u, -14*u, 5*u, 27*u);
+          ctx.beginPath(); ctx.arc(0, -13.5*u, 11.4*u, Math.PI*0.98, Math.PI*2.02); ctx.fill();
+        } else {
+          ctx.fillStyle = hairCol;
+          ctx.beginPath(); ctx.arc(0, -13.5*u, 11.4*u, Math.PI*0.98, Math.PI*2.02); ctx.fill();
+        }
+        /* mắt + má hồng */
+        ctx.fillStyle = '#26221e';
+        ctx.beginPath(); ctx.arc(-4*u, -11*u, 1.4*u, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(4*u, -11*u, 1.4*u, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,110,130,.55)';
+        ctx.beginPath(); ctx.arc(-7.5*u, -8*u, 2.2*u, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(7.5*u, -8*u, 2.2*u, 0, Math.PI*2); ctx.fill();
+      }
+      function body(top, bottom){
+        ctx.fillStyle = top; rr(-10*u, -2*u, 20*u, 17*u, 6*u); ctx.fill();
+        ctx.fillStyle = bottom; rr(-10*u, 14*u, 20*u, 13*u, 4*u); ctx.fill();
+        ctx.fillStyle = '#3a2c20';
+        rr(-9*u, 26*u, 7*u, 5*u, 2*u); ctx.fill(); rr(2*u, 26*u, 7*u, 5*u, 2*u); ctx.fill();
+      }
+      if(id==='hocsinh'){
+        body('#ffffff', '#2f4fb2');
+        ctx.fillStyle = '#d92323'; /* khăn quàng đỏ */
+        ctx.beginPath(); ctx.moveTo(-4*u, 0); ctx.lineTo(4*u, 0); ctx.lineTo(0, 8*u); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#e8a13a'; rr(-13*u, 0, 5*u, 14*u, 2*u); ctx.fill(); /* quai cặp */
+        head(hair);
+      } else if(id==='pho'){
+        body('#0e9594', '#7a4a2b');
+        ctx.strokeStyle = '#8a5a2b'; ctx.lineWidth = 2.4*u; /* đòn gánh */
+        ctx.beginPath(); ctx.moveTo(-17*u, -4*u); ctx.quadraticCurveTo(0, -10*u, 17*u, -4*u); ctx.stroke();
+        ctx.fillStyle = '#c94f2e'; /* thúng phở */
+        ctx.beginPath(); ctx.arc(-17*u, 2*u, 5*u, 0, Math.PI); ctx.fill();
+        ctx.beginPath(); ctx.arc(17*u, 2*u, 5*u, 0, Math.PI); ctx.fill();
+        head(hair, 'nonla');
+      } else if(id==='xeom'){
+        body('#22b573', '#374151');
+        ctx.fillStyle = '#fff'; ctx.font = '900 ' + (9*u) + 'px sans-serif'; ctx.textAlign='center';
+        ctx.fillText('XE ÔM', 0, 10*u);
+        head(hair, 'helmet');
+      } else if(id==='baove'){
+        body('#274b9f', '#1f2a44');
+        ctx.fillStyle = '#ffd35c'; rr(5*u, 3*u, 5*u, 6*u, 1.5*u); ctx.fill(); /* phù hiệu */
+        head(hair, 'cap');
+      } else if(id==='vanphong'){
+        body('#33354d', '#8a2f4b');
+        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(-4*u, -2*u); ctx.lineTo(4*u, -2*u); ctx.lineTo(0, 9*u); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#ffb020'; rr(7*u, 8*u, 7*u, 9*u, 2*u); ctx.fill(); /* túi xách */
+        head('#4a2c17', 'bun');
+      } else if(id==='embe'){ /* mẹ + bé phía trước */
+        body('#e56b9f', '#5b4a8a');
+        head(hair);
+        /* bé */
+        ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(0, 12*u, 7*u, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#26221e';
+        ctx.beginPath(); ctx.arc(0, 10.5*u, 7.2*u, Math.PI, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#ffd35c'; rr(-7*u, 17*u, 14*u, 10*u, 4*u); ctx.fill();
+      } else if(id==='giaothong'){
+        body('#d7e94a', '#2e4a2e');
+        ctx.fillStyle = '#eef2f5'; ctx.fillRect(-10*u, 5*u, 20*u, 3.4*u); /* dải phản quang */
+        ctx.fillStyle = '#ff5470'; rr(-10*u, -1*u, 20*u, 2.6*u, 1*u); ctx.fill();
+        head(hair, 'whitecap');
+      } else if(id==='sinhvien'){
+        body('#ffffff', '#2f4fb2');
+        ctx.fillStyle = '#19c2a6'; rr(-13*u, 0, 5*u, 14*u, 2*u); ctx.fill(); /* quai cặp */
+        ctx.fillStyle = '#e56b9f'; rr(7*u, 6*u, 8*u, 11*u, 2*u); ctx.fill(); /* cuốn sách ôm trước ngực */
+        head('#1c1410', 'longhair');
+      } else if(id==='banhoa'){
+        body('#7a4a9e', '#3a2c20');
+        /* giỏ hoa trước bụng */
+        ctx.fillStyle = '#8a5a2b'; rr(-9*u, 13*u, 18*u, 9*u, 3*u); ctx.fill();
+        ctx.fillStyle = '#ff8fb5';
+        ctx.beginPath(); ctx.arc(-5*u, 12*u, 3*u, 0, Math.PI*2); ctx.arc(1*u, 10.5*u, 3.2*u, 0, Math.PI*2); ctx.arc(6*u, 12*u, 3*u, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#ffd35c';
+        ctx.beginPath(); ctx.arc(-1.5*u, 13*u, 2.4*u, 0, Math.PI*2); ctx.arc(4*u, 14*u, 2.2*u, 0, Math.PI*2); ctx.fill();
+        head(hair, 'nonla');
+      } else if(id==='xiclo'){
+        body('#5b8a3c', '#5a4632');
+        /* khăn rằn quàng cổ: ô caro đỏ / trắng */
+        for(var kx=0;kx<5;kx++) for(var ky=0;ky<2;ky++){
+          ctx.fillStyle = (kx+ky)%2 ? '#f2ede2' : '#c22f2f';
+          ctx.fillRect((-10+kx*4)*u, (ky*3.4)*u, 4*u, 3.4*u);
+        }
+        head(hair, 'nonla');
+      } else if(id==='aodai'){
+        /* áo dài: thân liền một dải dài tới chân, xẻ tà giữa */
+        ctx.fillStyle = '#8a2f6b';
+        ctx.beginPath();
+        ctx.moveTo(-9*u, -2*u); ctx.lineTo(9*u, -2*u); ctx.lineTo(13*u, 27*u); ctx.lineTo(-13*u, 27*u);
+        ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#f2ede2'; ctx.fillRect(-1*u, 6*u, 2*u, 21*u);
+        ctx.fillStyle = '#3a2c20';
+        rr(-9*u, 26*u, 7*u, 5*u, 2*u); ctx.fill(); rr(2*u, 26*u, 7*u, 5*u, 2*u); ctx.fill();
+        head('#241a12', 'longhair');
+      } else if(id==='shipper'){
+        ctx.fillStyle = '#ff8c1a'; rr(-15*u, -7*u, 30*u, 26*u, 4*u); ctx.fill(); /* thùng giao hàng sau lưng */
+        ctx.fillStyle = '#fff'; rr(-15*u, 2*u, 30*u, 4*u, 2*u); ctx.fill();
+        body('#ff7a1a', '#374151');
+        ctx.fillStyle = '#fff'; ctx.font = '900 ' + (8*u) + 'px sans-serif'; ctx.textAlign='center';
+        ctx.fillText('GIAO', 0, 10*u);
+        head(hair, 'capo');
+      } else { /* dự phòng: nhân vật trơn */
+        body('#888888', '#555555');
+        head(hair);
+      }
+      ctx.restore();
+    }
+
+    function draw(){
+      var sc = sceneFor(Math.max(0, Math.floor(camF)));
+      /* nền trời / mặt đất theo cảnh */
+      var g = ctx.createLinearGradient(0,0,0,H);
+      g.addColorStop(0, sc.skyTop); g.addColorStop(1, sc.sky);
+      ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+      var topRow = Math.floor(camF) - 1;
+      var rowsVisible = Math.ceil(H/ROW_H) + 3;
+      for(var i=0;i<rowsVisible;i++){
+        var idx = topRow + i;
+        var y = H - (idx - camF + 1) * ROW_H - ROW_H*0 ; /* hàng cao hơn = ở trên */
+        y = H - (idx - camF) * ROW_H - ROW_H;
+        if(idx < 0){
+          ctx.fillStyle = '#6b5136'; ctx.fillRect(0, y, W, ROW_H);
+          continue;
+        }
+        var row = getRow(idx);
+        if(row.safe){
+          ctx.fillStyle = sc.safeCol; ctx.fillRect(0, y, W, ROW_H);
+          ctx.fillStyle = 'rgba(0,0,0,.12)'; ctx.fillRect(0, y+ROW_H-4, W, 4);
+          /* trang trí vỉa hè theo cảnh */
+          var r1 = seededRand(idx*43+1);
+          if(sc === SCENES[0]){ /* chợ: sạp hàng */
+            if(r1 < 0.6){
+              var sx = seededRand(idx*47+2) * (W-70);
+              ctx.fillStyle = '#c94f2e'; rr(sx, y+8, 56, ROW_H-16, 5); ctx.fill();
+              ctx.fillStyle = '#ffd35c'; rr(sx-4, y+2, 64, 10, 5); ctx.fill();
+              ctx.fillStyle = '#7bc950';
+              ctx.beginPath(); ctx.arc(sx+14, y+ROW_H/2+4, 6, 0, Math.PI*2); ctx.arc(sx+30, y+ROW_H/2+6, 7, 0, Math.PI*2); ctx.arc(sx+44, y+ROW_H/2+4, 6, 0, Math.PI*2); ctx.fill();
+            }
+          } else if(sc === SCENES[1]){ /* đại lộ: cây + cột đèn */
+            if(r1 < 0.7){
+              var tx = seededRand(idx*47+2) * W;
+              ctx.fillStyle = '#5d7a3a'; ctx.beginPath(); ctx.arc(tx, y+ROW_H/2, 13, 0, Math.PI*2); ctx.fill();
+              ctx.fillStyle = '#7bc950'; ctx.beginPath(); ctx.arc(tx-6, y+ROW_H/2-5, 9, 0, Math.PI*2); ctx.fill();
+            }
+          } else { /* cầu: lan can */
+            ctx.fillStyle = 'rgba(255,255,255,.35)';
+            for(var bx=8; bx<W; bx+=34) ctx.fillRect(bx, y+6, 5, ROW_H-12);
+            ctx.fillRect(0, y+4, W, 4); ctx.fillRect(0, y+ROW_H-8, W, 4);
+          }
+        } else {
+          ctx.fillStyle = sc.road; ctx.fillRect(0, y, W, ROW_H);
+          /* vạch kẻ đường đứt đoạn chạy theo chiều xe */
+          ctx.fillStyle = 'rgba(255,255,255,.4)';
+          var off = (elapsed * row.speed * cellW * row.dir) % 46;
+          for(var dx=-46+off; dx<W+46; dx+=46) ctx.fillRect(dx, y+3, 24, 3);
+          ctx.fillStyle = 'rgba(255,213,92,.75)'; ctx.fillRect(0, y+ROW_H-3, W, 3);
+        }
+        /* xu */
+        if(row.coin >= 0){
+          var cxp = row.coin*cellW + cellW/2, cyp = y + ROW_H/2;
+          var bob = Math.sin(elapsed*4 + idx)*3;
+          ctx.save();
+          ctx.shadowColor = 'rgba(255,190,20,.9)'; ctx.shadowBlur = 14;
+          ctx.fillStyle = '#ffd35c';
+          ctx.beginPath(); ctx.arc(cxp, cyp+bob, 11, 0, Math.PI*2); ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = '#b8860b'; ctx.font = '900 13px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText('₫', cxp, cyp+bob+1);
+          ctx.restore();
+        }
+        /* xe */
+        for(var vi=0; vi<row.vehicles.length; vi++) drawVehicle(row.vehicles[vi], row, y);
+      }
+
+      /* nhân vật người chơi */
+      if(MODE!=='menu'){
+        var px = player.fx*cellW + cellW/2;
+        var py = H - (player.frow - camF) * ROW_H - ROW_H/2 + 8;
+        var hop = player.hopT < 1 ? player.hopT : 0;
+        if(player.dead){
+          ctx.save(); ctx.translate(px, py); ctx.rotate(0.9); ctx.translate(-px, -py);
+          drawCharacter(null, px, py, ROW_H*1.02, curChar, 0);
+          ctx.restore();
+        } else {
+          drawCharacter(null, px, py, ROW_H*1.02, curChar, hop);
+        }
+      }
+
+      /* dòng kẹt xe dâng từ dưới */
+      if(jamY > 0 && MODE==='play'){
+        var jt = H - jamY;
+        var jg = ctx.createLinearGradient(0, jt, 0, H);
+        jg.addColorStop(0, 'rgba(180,20,40,.25)'); jg.addColorStop(0.25, 'rgba(30,16,30,.96)'); jg.addColorStop(1, '#14101e');
+        ctx.fillStyle = jg; ctx.fillRect(0, jt, W, jamY);
+        /* xe buýt kẹt cứng + xe máy chen chúc ở mép dâng */
+        ctx.fillStyle = '#8e2434'; rr(10, jt+8, W*0.52, 40, 8); ctx.fill();
+        ctx.fillStyle = '#ffe45e'; ctx.fillRect(10, jt+8, W*0.52, 9);
+        ctx.fillStyle = '#fff'; ctx.font = '900 15px sans-serif'; ctx.textAlign='center';
+        ctx.fillText('🚌 KẸT XE!', 10 + W*0.26, jt+36);
+        for(var bi=0; bi<4; bi++){
+          var bx2 = W*0.6 + bi*cellW*0.9;
+          ctx.fillStyle = VEH_COLORS[bi%VEH_COLORS.length];
+          rr(bx2, jt+16+((bi%2)*8), cellW*0.72, 18, 6); ctx.fill();
+          ctx.fillStyle = '#f2c094'; ctx.beginPath(); ctx.arc(bx2+cellW*0.36, jt+14+((bi%2)*8), 6, 0, Math.PI*2); ctx.fill();
+        }
+      }
+
+      /* chữ bay */
+      ctx.textAlign = 'center';
+      for(var f=0; f<floats.length; f++){
+        var fl = floats[f];
+        var fx = fl.x*cellW + cellW/2;
+        var fy = H - (fl.y - camF) * ROW_H - ROW_H - fl.t*44;
+        ctx.globalAlpha = Math.max(0, 1 - fl.t/1.1);
+        ctx.font = '900 ' + (fl.text.indexOf('SUÝT')===0 ? 21 : 16) + 'px sans-serif';
+        ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,.55)';
+        ctx.strokeText(fl.text, fx, fy);
+        ctx.fillStyle = fl.col; ctx.fillText(fl.text, fx, fy);
+        ctx.globalAlpha = 1;
+      }
+
+      /* banner chuyển cảnh */
+      if(banner){
+        var a = banner.t < 0.25 ? banner.t/0.25 : (banner.t > 1.8 ? Math.max(0,(2.2-banner.t)/0.4) : 1);
+        ctx.globalAlpha = a;
+        ctx.fillStyle = 'rgba(10,12,28,.82)';
+        var bw = Math.min(W-40, 380);
+        rr((W-bw)/2, H*0.3, bw, 62, 16); ctx.fill();
+        ctx.fillStyle = '#ffd35c'; ctx.font = '900 21px sans-serif'; ctx.textAlign='center';
+        ctx.fillText(banner.text, W/2, H*0.3 + 40);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    /* ---------- Vòng lặp ---------- */
+    var lastTs = 0;
+    function loop(ts){
+      requestAnimationFrame(loop);
+      var dt = Math.min(0.05, (ts - lastTs)/1000 || 0.016);
+      lastTs = ts;
+      update(dt);
+      draw();
+    }
+
+    /* ---------- HUD / màn hình ---------- */
+    function updateHUD(){
+      document.getElementById('hudScore').textContent = score;
+      document.getElementById('hudCoins').textContent = bank;
+      var cc = document.getElementById('comboChip');
+      if(combo > 0){ cc.style.display = 'block'; document.getElementById('hudCombo').textContent = '×' + combo; }
+      else cc.style.display = 'none';
+    }
+    function refreshStartStats(){
+      document.getElementById('stBest').textContent = best;
+      document.getElementById('stCoins').textContent = bank;
+      document.getElementById('stStreak').textContent = streak.count;
+      var sm = document.getElementById('streakMsg');
+      if(streakToast){ sm.textContent = streakToast; sm.style.display = 'block'; }
+      updateTodayBadge();
+    }
+
+    /* ---------- Bộ sưu tập ---------- */
+    var colReturn = 'start';
+    function openCollection(from){
+      colReturn = from;
+      renderCollection('');
+      document.getElementById('startScr').classList.remove('on');
+      document.getElementById('overScr').classList.remove('on');
+      document.getElementById('collection').classList.add('on');
+    }
+    function closeCollection(){
+      document.getElementById('collection').classList.remove('on');
+      if(colReturn === 'over' && MODE==='over') document.getElementById('overScr').classList.add('on');
+      else if(MODE!=='play') document.getElementById('startScr').classList.add('on');
+    }
+    function renderCollection(msg){
+      document.getElementById('colCoins').textContent = bank;
+      document.getElementById('colMsg').textContent = msg || '';
+      var grid = document.getElementById('charGrid');
+      grid.innerHTML = '';
+      CHARS.forEach(function(ch){
+        var owned = unlocked.indexOf(ch.id) >= 0;
+        var cell = document.createElement('button');
+        cell.className = 'char-cell' + (owned?'':' locked') + (curChar===ch.id?' selected':'');
+        cell.setAttribute('aria-label', ch.name);
+        var c2 = document.createElement('canvas');
+        c2.width = 104; c2.height = 128;
+        cell.appendChild(c2);
+        var nm = document.createElement('div'); nm.className='nm'; nm.textContent = ch.name; cell.appendChild(nm);
+        var cost = document.createElement('div'); cost.className = 'cost' + (owned?' owned':'');
+        cost.textContent = owned ? (curChar===ch.id ? '✓ Đang dùng' : 'Đã mở — chạm để dùng') : ('🪙 ' + ch.cost + ' xu');
+        cell.appendChild(cost);
+        cell.addEventListener('click', function(){
+          if(owned){
+            curChar = ch.id; store.set('char', curChar);
+            renderCollection('Đã chọn ' + ch.name + '!');
+          } else if(bank >= ch.cost){
+            bank -= ch.cost; store.set('coins', bank);
+            unlocked.push(ch.id); store.set('unlocked', unlocked);
+            curChar = ch.id; store.set('char', curChar);
+            sfx('unlock');
+            renderCollection('🎉 Đã mở khóa ' + ch.name + '!');
+            refreshStartStats();
+          } else {
+            renderCollection('Chưa đủ xu — cần thêm ' + (ch.cost - bank) + ' xu nữa. Vào game nhặt xu nhé!');
+          }
+        });
+        grid.appendChild(cell);
+        /* vẽ nhân vật lên ô */
+        var g2 = c2.getContext('2d');
+        g2.setTransform(2,0,0,2,0,0);
+        var mainCtx = ctx; ctx = g2;
+        drawCharacter(null, 26, 34, 62, ch.id, 0);
+        ctx = mainCtx;
+      });
+    }
+
+    /* ---------- Màn hình Hôm nay ---------- */
+    function updateTodayBadge(){
+      var b = document.getElementById('todayBadge');
+      if(!b) return;
+      var c = claimableCount();
+      b.textContent = c;
+      b.classList.toggle('on', c > 0);
+    }
+    function openToday(){
+      renderToday();
+      document.getElementById('startScr').classList.remove('on');
+      document.getElementById('overScr').classList.remove('on');
+      document.getElementById('collection').classList.remove('on');
+      document.getElementById('todayScr').classList.add('on');
+    }
+    function closeToday(){
+      document.getElementById('todayScr').classList.remove('on');
+      if(MODE === 'over') document.getElementById('overScr').classList.add('on');
+      else if(MODE !== 'play') document.getElementById('startScr').classList.add('on');
+      refreshStartStats();
+    }
+    function renderToday(){
+      document.getElementById('todayDate').textContent = 'Ngày ' + fmtDate(TDAY) + '/' + TDAY.split('-')[0] + ' · làm mới lúc 0:00';
+      document.getElementById('tdBest').textContent = daily.best;
+      document.getElementById('tdPlays').textContent = daily.plays;
+      /* lịch sử thi ngày */
+      var hl = document.getElementById('histList');
+      var ks = Object.keys(daily.history).sort().reverse();
+      if(ks.length){
+        var h = '<div style="font-weight:800;font-size:13px;opacity:.8;margin-bottom:2px">📅 Lịch sử thi ngày</div>';
+        for(var i=0;i<Math.min(7, ks.length); i++){
+          h += '<div class="hist-row"><span>' + fmtDate(ks[i]) + '</span><b>' + daily.history[ks[i]] + ' điểm</b></div>';
+        }
+        hl.innerHTML = h;
+      } else {
+        hl.innerHTML = '';
+      }
+      /* nhiệm vụ ngày */
+      var ml = document.getElementById('missionList');
+      ml.innerHTML = '';
+      missions.list.forEach(function(m){
+        var def = MISSION_DEFS[m.type];
+        var prog = Math.min(m.target, missions.progress[m.type]||0);
+        var done = (missions.progress[m.type]||0) >= m.target;
+        var pct = Math.round(prog / m.target * 100);
+        var row = document.createElement('div');
+        row.className = 'mrow';
+        row.innerHTML =
+          '<div class="mtop"><span class="mname">' + def.icon + ' ' + def.label(m.target) + '</span><span class="mrew">+' + m.reward + ' xu</span></div>' +
+          '<div class="mbar"><div class="mfill" style="width:' + pct + '%"></div></div>' +
+          '<div class="mbot"><span class="mprog">' + prog + ' / ' + m.target + '</span></div>';
+        var btn = document.createElement('button');
+        btn.className = 'claim-btn' + (m.claimed ? ' done' : '');
+        btn.textContent = m.claimed ? '✓ Đã nhận' : (done ? 'Nhận thưởng' : 'Chưa xong');
+        btn.disabled = !done || m.claimed;
+        btn.addEventListener('click', function(){
+          if(m.claimed || (missions.progress[m.type]||0) < m.target) return;
+          m.claimed = true;
+          bank += m.reward; store.set('coins', bank); store.set('missions', missions);
+          sfx('unlock');
+          renderToday(); refreshStartStats();
+        });
+        row.querySelector('.mbot').appendChild(btn);
+        ml.appendChild(row);
+      });
+      /* streak + mốc thưởng */
+      document.getElementById('tdStreak').textContent = streak.count + ' ngày';
+      var mt = document.getElementById('msTrack');
+      mt.innerHTML = '';
+      STREAK_MILES.forEach(function(m){
+        var chip = document.createElement('span');
+        var got = streak.count >= m.d;
+        chip.className = 'ms-chip' + (got ? ' got' : '');
+        chip.textContent = (got ? '✓ ' : '') + m.d + ' ngày · +' + m.r + ' xu';
+        mt.appendChild(chip);
+      });
+      updateTodayBadge();
+    }
+
+    /* ---------- Sự kiện ---------- */
+    document.getElementById('playBtn').addEventListener('click', function(){ startGame('normal'); });
+    document.getElementById('againBtn').addEventListener('click', function(){ startGame(gameMode); });
+    document.getElementById('dailyBtn').addEventListener('click', function(){ startGame('daily'); });
+    document.getElementById('dailyBtn2').addEventListener('click', function(){ startGame('daily'); });
+    document.getElementById('todayBtn').addEventListener('click', openToday);
+    document.getElementById('todayBack').addEventListener('click', closeToday);
+    document.getElementById('homeBtn').addEventListener('click', function(){
+      MODE = 'menu';
+      document.getElementById('overScr').classList.remove('on');
+      document.getElementById('startScr').classList.add('on');
+      refreshStartStats();
+    });
+    document.getElementById('colBtn').addEventListener('click', function(){ openCollection('start'); });
+    document.getElementById('colBtn2').addEventListener('click', function(){ openCollection('over'); });
+    document.getElementById('colBack').addEventListener('click', closeCollection);
+    var muteBtn = document.getElementById('muteBtn');
+    function syncMute(){ muteBtn.textContent = muted ? '🔇' : '🔊'; }
+    muteBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      muted = !muted; store.set('muted', muted); syncMute();
+      if(muted) stopMusic(); else if(MODE==='play') startMusic();
+    });
+    syncMute();
+
+    document.getElementById('btnLeft').addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); sidestep(-1); });
+    document.getElementById('btnRight').addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); sidestep(1); });
+
+    /* chạm = lao lên; vuốt ngang = lách */
+    var tX = 0, tY = 0, tT = 0, swiped = false;
+    cv.addEventListener('pointerdown', function(e){
+      tX = e.clientX; tY = e.clientY; tT = performance.now(); swiped = false;
+      if(MODE==='play') audio();
+    });
+    cv.addEventListener('pointermove', function(e){
+      if(MODE!=='play' || swiped) return;
+      var dx = e.clientX - tX, dy = e.clientY - tY;
+      if(Math.abs(dx) > 34 && Math.abs(dx) > Math.abs(dy)*1.3){
+        sidestep(dx > 0 ? 1 : -1);
+        swiped = true; tX = e.clientX; tY = e.clientY;
+        setTimeout(function(){ swiped = false; }, 60);
+      }
+    });
+    cv.addEventListener('pointerup', function(e){
+      if(MODE!=='play') return;
+      var dx = e.clientX - tX, dy = e.clientY - tY;
+      if(Math.abs(dx) < 24 && Math.abs(dy) < 24 && performance.now()-tT < 400) hopForward();
+    });
+
+    window.addEventListener('keydown', function(e){
+      if(e.code === 'Space' || e.code === 'ArrowUp'){
+        e.preventDefault();
+        if(MODE==='play') hopForward();
+        else if(MODE==='menu' && !document.getElementById('collection').classList.contains('on') && !document.getElementById('todayScr').classList.contains('on')) startGame('normal');
+        else if(MODE==='over') startGame(gameMode);
+      }
+      else if(e.code === 'ArrowLeft'){ sidestep(-1); }
+      else if(e.code === 'ArrowRight'){ sidestep(1); }
+    });
+
+    document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
+    document.addEventListener('touchmove', function(e){ if(e.target === cv) e.preventDefault(); }, { passive:false });
+
+    /* ---------- Khởi động ---------- */
+    resize();
+    resetGame();
+    MODE = 'menu';
+    refreshStartStats();
+    updateHUD();
+    requestAnimationFrame(loop);
+    </script>
+  </body>
+</html>
