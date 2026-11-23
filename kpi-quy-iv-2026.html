@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Dashboard KPI Quý IV/2026 — Phường Tân Phú</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f4f7; --surface:#ffffff; --surface2:#eef1f5; --ink:#17212e; --muted:#5a6b80; --line:#dde3ea;
+  --red:#b4232a; --red-bg:#fdecec; --red-ink:#8f1d22;
+  --navy:#1b3a5c; --navy-bg:#e8eef5;
+  --amber:#9a6a00; --amber-bg:#fdf3d7; --amber-border:#e3c15c;
+  --green:#1d7a3a; --green-bg:#e6f4ea;
+  --shadow:0 1px 3px rgba(16,30,50,.08),0 4px 14px rgba(16,30,50,.05);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#11161e; --surface:#1b222d; --surface2:#232d3b; --ink:#e9edf3; --muted:#9fb0c3; --line:#2e3a4a;
+    --red:#e5534b; --red-bg:#3a2226; --red-ink:#ff9d97;
+    --navy:#7aa7d9; --navy-bg:#223349;
+    --amber:#e0b84f; --amber-bg:#3a3118; --amber-border:#6b5a22;
+    --green:#5cc97a; --green-bg:#1e3325;
+    --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Be Vietnam Pro",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15px}
+button,[role="button"],select,summary,input:not([type="checkbox"]){min-height:2.25rem}
+a{color:var(--navy)}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* ===== Layout ===== */
+.layout{display:flex;align-items:flex-start;max-width:1440px;margin:0 auto}
+.sidebar{position:sticky;top:0;height:100vh;width:264px;flex:0 0 264px;padding:20px 14px;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);z-index:20}
+.main{flex:1;min-width:0;padding:22px 26px 60px}
+.side-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 8px 8px}
+.side-label:first-child{margin-top:0}
+.nav-item{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:10px;padding:9px 10px;font:inherit;font-size:13.5px;font-weight:500;color:var(--ink);cursor:pointer;margin-bottom:2px}
+.nav-item:hover{background:var(--surface2)}
+.nav-item.active{background:var(--navy-bg);border-color:var(--line);font-weight:700}
+.nav-item .dot{width:9px;height:9px;border-radius:50%;flex:0 0 9px}
+.nav-item .cnt{margin-left:auto;font-size:11.5px;color:var(--muted);font-weight:600}
+.nav-item .alert-n{background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;margin-left:auto}
+.side-note{margin:16px 8px 0;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.side-note b{color:var(--ink)}
+
+/* ===== Hero ===== */
+.hero{background:var(--navy);color:#fff;border-radius:18px;padding:26px 28px;position:relative;overflow:hidden}
+.hero{background:linear-gradient(135deg,#16304e 0%,#1b3a5c 55%,#7a1f24 130%)}
+.hero h1{margin:0 0 6px;font-size:clamp(21px,3.2vw,30px);line-height:1.25;font-weight:800}
+.hero p{margin:0;opacity:.88;max-width:760px;font-size:14px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600}
+.chip.solid{background:#fff;color:#16304e;border-color:#fff}
+
+/* ===== KPI cards ===== */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.kpi .k-label{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.kpi .k-value{font-size:30px;font-weight:800;line-height:1.15;margin:4px 0 2px}
+.kpi .k-value small{font-size:15px;font-weight:600;color:var(--muted)}
+.kpi .k-sub{font-size:12.5px;color:var(--muted)}
+.kpi.red .k-value{color:var(--red)}
+.bar{height:9px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:10px}
+.bar>i{display:block;height:100%;border-radius:99px;background:var(--green)}
+.bar.amber>i{background:#d99a06}.bar.red>i{background:var(--red)}.bar.navy>i{background:var(--navy)}
+
+/* ===== Controls ===== */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 4px;position:sticky;top:0;z-index:15;background:var(--bg);padding:10px 0}
+.search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:0 12px}
+.search input{border:0;background:transparent;font:inherit;color:var(--ink);width:100%;outline:none;padding:9px 0}
+.toggle{display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink)}
+.toggle[aria-pressed="true"]{background:var(--red-bg);border-color:var(--red);color:var(--red-ink)}
+.result-line{font-size:13px;color:var(--muted);margin:6px 2px 0}
+
+/* ===== Sections ===== */
+section.group{margin-top:34px;scroll-margin-top:70px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:6px}
+.sec-head h2{margin:0;font-size:20px;font-weight:800}
+.sec-head .sec-sum{font-size:13px;color:var(--muted);font-weight:600}
+.sec-desc{font-size:13.5px;color:var(--muted);margin:8px 0 14px;max-width:900px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.unit{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.unit h3{margin:0;font-size:15.5px;line-height:1.35}
+.unit .u-stats{display:flex;gap:16px;flex-wrap:wrap}
+.u-stat .n{font-size:20px;font-weight:800;line-height:1.1}
+.u-stat .l{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.unit .u-note{font-size:13px;border-radius:9px;padding:9px 11px;line-height:1.5}
+.u-note.red{background:var(--red-bg);color:var(--red-ink)}
+.u-note.amber{background:var(--amber-bg);color:var(--amber)}
+.u-note.green{background:var(--green-bg);color:var(--green)}
+.u-note.plain{background:var(--surface2);color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px;width:fit-content}
+.badge.red{background:var(--red);color:#fff}
+.badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.badge.green{background:var(--green-bg);color:var(--green);border:1px solid currentColor}
+.unit .bar{margin-top:2px}
+
+/* ===== Tables ===== */
+.table-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--surface2);text-align:left;padding:11px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.person b{display:block;font-size:14px}
+.person .role{color:var(--navy);font-weight:600;font-size:12.5px}
+.person .unit-name{color:var(--muted);font-size:12px}
+.flag{display:inline-block;font-size:11.5px;font-weight:700;border-radius:6px;padding:1px 7px;margin:1px 2px 1px 0}
+.flag.red{background:var(--red-bg);color:var(--red-ink)}
+.flag.amber{background:var(--amber-bg);color:var(--amber)}
+.flag.gray{background:var(--surface2);color:var(--muted)}
+.footnote{font-size:12.5px;color:var(--muted);margin-top:10px}
+
+/* ===== School sub-tables ===== */
+details.sub{border-top:1px dashed var(--line);padding-top:8px}
+details.sub summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--navy);padding:6px 0;list-style:none}
+details.sub summary::-webkit-details-marker{display:none}
+details.sub summary::before{content:"▸ "}
+details.sub[open ] summary::before{content:"▾ "}
+.sub-table{width:100%;font-size:12.5px;margin-top:6px}
+.sub-table td,.sub-table th{padding:6px 8px}
+.sub-table th{background:transparent;text-transform:none;letter-spacing:0;font-size:12px}
+
+/* ===== Alert summary ===== */
+.alert-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.alert-card{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--amber-border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+.alert-card.red{border-left-color:var(--red)}
+.alert-card h4{margin:0 0 5px;font-size:14.5px}
+.alert-card p{margin:0;font-size:13px;color:var(--muted)}
+.alert-card .go{margin-top:9px;font-size:12.5px;font-weight:700;background:none;border:0;color:var(--navy);cursor:pointer;padding:4px 0;font:inherit}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.panel h3{margin:0 0 12px;font-size:16px}
+.axis-row{display:grid;grid-template-columns:150px 1fr 44px;gap:10px;align-items:center;margin-bottom:9px;font-size:13px}
+.axis-row .bar{margin:0}
+ol.rec{margin:0;padding-left:20px}
+ol.rec li{margin-bottom:10px;font-size:14px}
+ol.rec li b{display:block}
+.hidden{display:none !important}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--radius);padding:26px;text-align:center;color:var(--muted);margin-top:14px}
+footer{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--muted)}
+
+/* ===== Mobile ===== */
+@media (max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:sticky;top:0;height:auto;width:100%;flex:none;border-right:0;border-bottom:1px solid var(--line);padding:10px 12px;overflow-x:auto;overflow-y:hidden}
+  .sidebar .side-label,.sidebar .side-note{display:none}
+  .sidebar nav{display:flex;gap:6px;width:max-content}
+  .nav-item{white-space:nowrap;width:auto;margin:0}
+  .main{padding:16px 14px 50px;width:100%}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .two-col{grid-template-columns:1fr}
+  .controls{top:52px}
+  /* Leader table -> stacked cards */
+  table.leaders thead{display:none}
+  table.leaders,table.leaders tbody,table.leaders tr,table.leaders td{display:block;width:100%}
+  table.leaders tr{border-bottom:2px solid var(--line);padding:8px 4px}
+  table.leaders td{border-bottom:0;padding:5px 12px;text-align:left !important;white-space:normal}
+  table.leaders td::before{content:attr(data-label);display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  table.leaders td.person::before{display:none}
+}
+@media (max-width:520px){.kpi-grid{grid-template-columns:1fr}.kpi .k-value{font-size:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ============ SIDEBAR / MỤC LỤC ============ -->
+<aside class="sidebar" aria-label="Mục lục theo nhóm đơn vị">
+  <div class="side-label">Mục lục — lọc theo nhóm</div>
+  <nav id="toc">
+    <button class="nav-item active" data-filter="all"><span class="dot" style="background:var(--navy)"></span>Tất cả nhóm<span class="cnt">65 đv</span></button>
+    <button class="nav-item" data-filter="tong-quan"><span class="dot" style="background:#1d7a3a"></span>Tổng quan toàn phường</button>
+    <button class="nav-item" data-filter="nhom-01"><span class="dot" style="background:var(--red)"></span>Nhóm 01 — Lãnh đạo<span class="cnt">12 đ/c</span></button>
+    <button class="nav-item" data-filter="khoi-dang"><span class="dot" style="background:#b4232a"></span>Khối Đảng<span class="cnt">5 đv</span></button>
+    <button class="nav-item" data-filter="khoi-hdnd"><span class="dot" style="background:#c2410c"></span>Khối HĐND<span class="alert-n">1 đỏ</span></button>
+    <button class="nav-item" data-filter="khoi-mttq"><span class="dot" style="background:#0e7490"></span>Khối MTTQ<span class="cnt">1 đv</span></button>
+    <button class="nav-item" data-filter="khoi-ubnd"><span class="dot" style="background:#1b3a5c"></span>Khối UBND<span class="cnt">8 đv</span></button>
+    <button class="nav-item" data-filter="truong-hoc"><span class="dot" style="background:#4d7c0f"></span>Đơn vị trực thuộc — Trường học<span class="cnt">6 trường</span></button>
+    <button class="nav-item" data-filter="vu-trang"><span class="dot" style="background:#57534e"></span>Lực lượng vũ trang / Khác<span class="cnt">2 đv</span></button>
+    <button class="nav-item" data-filter="bao-dong"><span class="dot" style="background:var(--red)"></span>Báo động tổng hợp<span class="alert-n">6 nhóm</span></button>
+    <button class="nav-item" data-filter="de-xuat"><span class="dot" style="background:#9a6a00"></span>Đề xuất, kiến nghị</button>
+  </nav>
+  <div class="side-note">
+    <b>Cách đọc báo động</b><br>
+    🔴 <b>Đỏ:</b> chưa có SPCV hoặc chưa nhập danh mục đơn vị.<br>
+    🟡 <b>Vàng:</b> có cá nhân chỉ 01–02 nhiệm vụ, cá nhân ≥40 nhiệm vụ, hoặc còn nhiệm vụ tập thể chưa giao.<br>
+    🟢 <b>Xanh:</b> không báo động.
+  </div>
+  <div class="side-note">Nguồn: Báo cáo Ban Xây dựng Đảng + file xuất phần mềm KPI ngày <b>20/11/2026, 11:49</b>. Số nhiệm vụ là số ghi nhận đăng ký, chưa phải kết quả hoàn thành.</div>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+
+  <div class="hero">
+    <h1>Tiến độ đăng ký công việc trên Hệ thống KPI — Quý IV/2026</h1>
+    <p>Phường Tân Phú · Theo dõi theo 05 nhóm của Báo cáo Ban Xây dựng Đảng: Nhóm 01 (lãnh đạo) xem chi tiết từng người kèm chức vụ; các khối còn lại xem thống kê tổng theo đơn vị và báo động lưu ý.</p>
+    <div class="hero-meta">
+      <span class="chip solid">📅 Chốt số liệu: 20/11/2026</span>
+      <span class="chip">65 đơn vị · 677 tài khoản cá nhân</span>
+      <span class="chip">11.123 nhiệm vụ cá nhân · 1.225 nhiệm vụ tập thể</span>
+    </div>
+  </div>
+
+  <div class="controls" role="search">
+    <label class="search">🔎 <input id="q" type="search" placeholder="Tìm đơn vị, trường, tổ… (vd: Phượng Hồng, Kinh tế, Văn phòng)" aria-label="Tìm kiếm đơn vị"></label>
+    <button class="toggle" id="alertOnly" aria-pressed="false">⚠ Chỉ xem báo động</button>
+  </div>
+  <p class="result-line" id="resultLine"></p>
+
+  <!-- ===== TỔNG QUAN ===== -->
+  <section class="group" id="sec-tong-quan" data-group="tong-quan">
+    <div class="sec-head"><h2>I. Tổng quan toàn phường</h2><span class="sec-sum">65 đơn vị · 677 người dùng · kỳ đánh giá Quý IV/2026</span></div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="k-label">Cá nhân có SPCV</div><div class="k-value">99,85<small>%</small></div><div class="k-sub">676 / 677 người — còn <b>01</b> trường hợp chưa có SPCV</div><div class="bar"><i style="width:99.85%"></i></div></div>
+      <div class="kpi"><div class="k-label">Đơn vị đã nhập danh mục</div><div class="k-value">95,38<small>%</small></div><div class="k-sub">62 / 65 đơn vị — còn <b>03</b> đơn vị chưa nhập danh mục</div><div class="bar navy"><i style="width:95.38%"></i></div></div>
+      <div class="kpi"><div class="k-label">Đơn vị có cá nhân có SPCV</div><div class="k-value">64<small> / 65</small></div><div class="k-sub">Chỉ còn Ban Văn hóa – Xã hội HĐND chưa có cá nhân nào có SPCV</div><div class="bar"><i style="width:98.46%"></i></div></div>
+      <div class="kpi"><div class="k-label">Nhiệm vụ cá nhân đã đăng ký</div><div class="k-value">11.123</div><div class="k-sub">06 cá nhân chỉ có 01–02 nhiệm vụ · 10 cá nhân từ 40 nhiệm vụ trở lên</div></div>
+      <div class="kpi"><div class="k-label">Nhiệm vụ tập thể đã giao</div><div class="k-value">88,24<small>%</small></div><div class="k-sub">Đã giao 1.081 / 1.225 nhiệm vụ — còn <b>144</b> nhiệm vụ chưa giao (11,76%)</div><div class="bar amber"><i style="width:88.24%"></i></div></div>
+      <div class="kpi red"><div class="k-label">Điểm cần xử lý ngay</div><div class="k-value">01 <small>chưa SPCV</small></div><div class="k-sub">Đ/c Đào Thanh Quang — Phó Ban Văn hóa – Xã hội HĐND (đang học Cao cấp LLCT tập trung)</div></div>
+    </div>
+    <p class="footnote">Ghi chú phạm vi tính: file Excel xuất từ phần mềm ghi 678 người dùng, trong đó 675 người thuộc diện đánh giá và 674 người có SPCV trong diện đánh giá. Báo cáo của Ban Xây dựng Đảng tính theo 677 tài khoản cá nhân, 676 người có SPCV (99,85%). Dashboard dùng số của báo cáo làm chính ở mục Tổng quan này; <b>số người ở các mục khối bên dưới là số người thuộc diện đánh giá theo file Excel (cộng các khối = 675 người)</b> — chênh 02 người so với 677 tài khoản của báo cáo Word là do khác phạm vi đếm (tài khoản hệ thống so với diện đánh giá), không phải thiếu dữ liệu. Tổng nhiệm vụ của các khối cộng đúng 11.123.</p>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="panel">
+        <h3>144 nhiệm vụ tập thể chưa giao — theo đơn vị</h3>
+        <div class="axis-row"><span>Phòng Kinh tế, HT &amp; ĐT</span><span class="bar amber"><i style="width:100%"></i></span><b class="mono">47</b></div>
+        <div class="axis-row"><span>TH Hồ Văn Cường*</span><span class="bar amber"><i style="width:100%"></i></span><b class="mono">47</b></div>
+        <div class="axis-row"><span>TH Huỳnh Văn Chính*</span><span class="bar amber"><i style="width:57%"></i></span><b class="mono">27</b></div>
+        <div class="axis-row"><span>Công an phường</span><span class="bar amber"><i style="width:32%"></i></span><b class="mono">15</b></div>
+        <div class="axis-row"><span>MN Phượng Hồng*</span><span class="bar amber"><i style="width:15%"></i></span><b class="mono">7</b></div>
+        <div class="axis-row"><span>Ủy ban MTTQ phường</span><span class="bar amber"><i style="width:4%"></i></span><b class="mono">1</b></div>
+        <p class="footnote" style="margin-top:4px">* Số chưa giao của trường được ghi tại đơn vị trường trong báo cáo; phần thống kê nhiệm vụ cá nhân của trường học ở mục Đơn vị trực thuộc đã gộp trường + các tổ.</p>
+      </div>
+      <div class="panel">
+        <h3>Mục III — Danh mục sản phẩm của Ban Thường vụ</h3>
+        <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">Danh mục chuẩn <b style="color:var(--ink)">43 dòng công việc</b> thuộc 06 trục · 04 nội dung bổ sung ngày 10/11 (số 40–43) · <b style="color:var(--ink)">08 nội dung đã hoàn thành</b> (18,6%).</p>
+        <div class="axis-row"><span>Trục 1</span><span class="bar navy"><i style="width:46%"></i></span><b class="mono">06</b></div>
+        <div class="axis-row"><span>Trục 2</span><span class="bar navy"><i style="width:62%"></i></span><b class="mono">08</b></div>
+        <div class="axis-row"><span>Trục 3</span><span class="bar navy"><i style="width:46%"></i></span><b class="mono">06</b></div>
+        <div class="axis-row"><span>Trục 4</span><span class="bar navy"><i style="width:100%"></i></span><b class="mono">13</b></div>
+        <div class="axis-row"><span>Trục 5</span><span class="bar navy"><i style="width:38%"></i></span><b class="mono">05</b></div>
+        <div class="axis-row"><span>Trục 6</span><span class="bar navy"><i style="width:38%"></i></span><b class="mono">05</b></div>
+        <div class="axis-row" style="margin-top:6px"><span>Đã hoàn thành</span><span class="bar"><i style="width:18.6%"></i></span><b class="mono">8/43</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NHÓM 01 ===== -->
+  <section class="group" id="sec-nhom-01" data-group="nhom-01">
+    <div class="sec-head"><h2>II. Nhóm 01 — Lãnh đạo theo dõi chi tiết</h2><span class="sec-sum">12 đồng chí · Ủy viên BTV Đảng ủy, Phó Chủ tịch UBND, Phó Chủ tịch HĐND và Chánh Văn phòng Đảng ủy</span></div>
+    <p class="sec-desc">Chi tiết từng người kèm chức vụ theo Phụ lục 1 của báo cáo. Cột <b>Tổng</b> lấy theo file Excel chốt 20/11/2026; cột Được giao / Tự đăng ký, Hoàn thành, Chưa hoàn thành và Ghi chú lấy theo Phụ lục 1 (chốt 17/11/2026).</p>
+    <div class="table-wrap">
+      <table class="leaders">
+        <thead><tr>
+          <th style="min-width:210px">Họ và tên — Chức vụ — Đơn vị</th>
+          <th class="num">Tổng</th><th class="num">Được giao</th><th class="num">Tự đăng ký</th>
+          <th>Hoàn thành</th><th>Chưa hoàn thành</th><th style="min-width:170px">Ghi chú / Lưu ý</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="person"><b>Lê Thị Kim Hồng</b><span class="role">Bí thư Đảng ủy, Chủ tịch HĐND phường</span><br><span class="unit-name">Đảng ủy phường Tân Phú</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>42</b></td>
+            <td class="num" data-label="Được giao">—</td>
+            <td class="num" data-label="Tự đăng ký">42</td>
+            <td data-label="Hoàn thành">8</td>
+            <td data-label="Chưa hoàn thành">34</td>
+            <td data-label="Ghi chú"><span class="flag amber">34 nhiệm vụ chưa có sản phẩm minh chứng</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Võ Trương Bình</b><span class="role">Chủ tịch UBND phường</span><br><span class="unit-name">Ủy ban nhân dân phường</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>47</b></td>
+            <td class="num" data-label="Được giao">13</td>
+            <td class="num" data-label="Tự đăng ký">34</td>
+            <td data-label="Hoàn thành">Giao 0 · Tự 2</td>
+            <td data-label="Chưa hoàn thành">Giao 13 · Tự 32</td>
+            <td data-label="Ghi chú"><span class="flag gray">01 nhiệm vụ đã từ chối</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Trần Thị Hồng Cúc</b><span class="role">Phó Bí thư Thường trực Đảng ủy</span><br><span class="unit-name">Đảng ủy phường Tân Phú</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>16</b></td>
+            <td class="num" data-label="Được giao">11</td>
+            <td class="num" data-label="Tự đăng ký">5</td>
+            <td data-label="Hoàn thành">Giao 1 · Tự 1</td>
+            <td data-label="Chưa hoàn thành">Phần còn lại chưa hoàn thành</td>
+            <td data-label="Ghi chú"><span class="flag amber">Bị trả 01 nhiệm vụ</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Hoàng Quốc Liêm</b><span class="role">Ủy viên BTV Đảng ủy, Chủ tịch Ủy ban MTTQ Việt Nam phường</span><br><span class="unit-name">Ủy ban MTTQ Việt Nam phường</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>15</b></td>
+            <td class="num" data-label="Được giao">3 <span style="color:var(--muted);font-size:12px">(1 từ Bí thư + 2 từ Phó Bí thư)</span></td>
+            <td class="num" data-label="Tự đăng ký">12</td>
+            <td data-label="Hoàn thành">Giao 0 · Tự 0</td>
+            <td data-label="Chưa hoàn thành">Giao 3 · Tự 12</td>
+            <td data-label="Ghi chú">—</td>
+          </tr>
+          <tr>
+            <td class="person"><b>Nguyễn Hùng Vương</b><span class="role">Ủy viên BTV Đảng ủy, Chủ nhiệm Ủy ban Kiểm tra Đảng ủy</span><br><span class="unit-name">Ủy ban Kiểm tra Đảng ủy</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>15</b></td>
+            <td class="num" data-label="Được giao">3</td>
+            <td class="num" data-label="Tự đăng ký">12</td>
+            <td data-label="Hoàn thành">Giao 2</td>
+            <td data-label="Chưa hoàn thành">Giao 1 · Tự 12</td>
+            <td data-label="Ghi chú"><span class="flag amber">Bị trả 02 nội dung công việc</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Nguyễn Thị Quỳnh Như</b><span class="role">Ủy viên BTV Đảng ủy, Trưởng Ban Xây dựng Đảng</span><br><span class="unit-name">Ban Xây dựng Đảng Đảng ủy</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>21</b></td>
+            <td class="num" data-label="Được giao">14 <span style="color:var(--muted);font-size:12px">(11 từ Bí thư + 3 từ Phó Bí thư, theo PL1)</span></td>
+            <td class="num" data-label="Tự đăng ký">10 <span style="color:var(--muted);font-size:12px">(theo PL1)</span></td>
+            <td data-label="Hoàn thành">0</td>
+            <td data-label="Chưa hoàn thành">Giao 11 · Tự 10 <span style="color:var(--muted);font-size:12px">(theo PL1)</span></td>
+            <td data-label="Ghi chú"><span class="flag gray">Xem ghi chú lệch số dưới bảng</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Hoàng Phước Ánh</b><span class="role">Ủy viên BTV Đảng ủy, Chỉ huy trưởng Ban CHQS phường</span><br><span class="unit-name">Ban CHQS phường Tân Phú</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>10</b></td>
+            <td class="num" data-label="Được giao">1</td>
+            <td class="num" data-label="Tự đăng ký">9</td>
+            <td data-label="Hoàn thành">Giao 0 · Tự 4</td>
+            <td data-label="Chưa hoàn thành">Giao 1 · Tự 5</td>
+            <td data-label="Ghi chú"><span class="flag amber">03 nhiệm vụ bị từ chối</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Trần Đức Thuận</b><span class="role">Ủy viên BTV Đảng ủy, Trưởng Công an phường</span><br><span class="unit-name">Công an phường Tân Phú</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>32</b></td>
+            <td class="num" data-label="Được giao">11 <span style="color:var(--muted);font-size:12px">(3 từ Bí thư + 8 từ Chủ tịch UBND)</span></td>
+            <td class="num" data-label="Tự đăng ký">21</td>
+            <td data-label="Hoàn thành">Giao 2 · Tự 5</td>
+            <td data-label="Chưa hoàn thành">Giao 9 · Tự 16</td>
+            <td data-label="Ghi chú"><span class="flag amber">01 bị từ chối</span><span class="flag gray">01 đợi đánh giá</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Lê Thị Thu Vân</b><span class="role">Phó Chủ tịch UBND phường</span><br><span class="unit-name">Ủy ban nhân dân phường</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>16</b></td>
+            <td class="num" data-label="Được giao">15 <span style="color:var(--muted);font-size:12px">(5 Bí thư + 8 Chủ tịch UBND + 2 Phó Bí thư)</span></td>
+            <td class="num" data-label="Tự đăng ký">1</td>
+            <td data-label="Hoàn thành">Giao 1 · Tự 0</td>
+            <td data-label="Chưa hoàn thành">Giao 14 · Tự 1</td>
+            <td data-label="Ghi chú"><span class="flag gray">Chờ đánh giá 01 nhiệm vụ</span></td>
+          </tr>
+          <tr>
+            <td class="person"><b>Nguyễn Thành Trung</b><span class="role">Phó Chủ tịch UBND phường</span><br><span class="unit-name">Ủy ban nhân dân phường</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>9</b></td>
+            <td class="num" data-label="Được giao">9 <span style="color:var(--muted);font-size:12px">(từ Chủ tịch UBND)</span></td>
+            <td class="num" data-label="Tự đăng ký">0</td>
+            <td data-label="Hoàn thành">0</td>
+            <td data-label="Chưa hoàn thành">Giao 9</td>
+            <td data-label="Ghi chú">—</td>
+          </tr>
+          <tr>
+            <td class="person"><b>Phan Tiến Đức</b><span class="role">Phó Chủ tịch HĐND phường</span><br><span class="unit-name">Hội đồng nhân dân phường</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>6</b></td>
+            <td class="num" data-label="Được giao">1</td>
+            <td class="num" data-label="Tự đăng ký">5</td>
+            <td data-label="Hoàn thành">Giao 0 · Tự 2</td>
+            <td data-label="Chưa hoàn thành">Giao 1 · Tự 3</td>
+            <td data-label="Ghi chú">—</td>
+          </tr>
+          <tr>
+            <td class="person"><b>Phạm Đại Phương</b><span class="role">Chánh Văn phòng Đảng ủy</span><br><span class="unit-name">Văn phòng Đảng ủy phường</span></td>
+            <td class="num" data-label="Tổng nhiệm vụ"><b>32</b></td>
+            <td class="num" data-label="Được giao">11 <span style="color:var(--muted);font-size:12px">(2 từ Bí thư + 9 từ Phó Bí thư, theo PL1)</span></td>
+            <td class="num" data-label="Tự đăng ký">22 <span style="color:var(--muted);font-size:12px">(theo PL1)</span></td>
+            <td data-label="Hoàn thành">Giao 1 · Tự 12</td>
+            <td data-label="Chưa hoàn thành">Giao 10 · Tự 10</td>
+            <td data-label="Ghi chú"><span class="flag amber">02 nhiệm vụ bị từ chối kết quả</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote">⚠ Về chênh lệch số: Phụ lục 1 chốt ngày 17/11/2026, file Excel chốt ngày 20/11/2026 nên một vài tổng có lệch nhẹ — đ/c Nguyễn Thị Quỳnh Như: Excel ghi tổng 21 nhiệm vụ, trong khi chi tiết Phụ lục 1 (giao 14 + tự 10) cộng thành 24; đ/c Phạm Đại Phương: Excel ghi 32, Phụ lục 1 (giao 11 + tự 22) cộng thành 33. Dashboard giữ nguyên cả hai nguồn và ghi rõ nguồn ở từng cột, không tự điều chỉnh. Tổng theo dõi của nhóm trong báo cáo: 223 nhiệm vụ (không tính nhiệm vụ của Bí thư Đảng ủy ở phần phân bổ giao/tự của báo cáo).</p>
+  </section>
+
+  <!-- ===== KHỐI ĐẢNG ===== -->
+  <section class="group" id="sec-khoi-dang" data-group="khoi-dang">
+    <div class="sec-head"><h2>III. Khối Đảng</h2><span class="sec-sum">5 đơn vị gốc · 20 người · 291 nhiệm vụ · 100% có SPCV</span></div>
+    <p class="sec-desc">Các cơ quan tham mưu, giúp việc Đảng ủy và Trung tâm Chính trị. Chỉ thống kê tổng theo đơn vị + báo động lưu ý.</p>
+    <div class="cards">
+      <article class="unit" data-name="Đảng ủy phường Tân Phú Bí thư Phó Bí thư" data-alert="yellow">
+        <h3>Đảng ủy phường Tân Phú</h3>
+        <span class="badge amber">🟡 Lưu ý — lãnh đạo thuộc Nhóm 01</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">2</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">2/2</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">58</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Bí thư Lê Thị Kim Hồng có 42 nhiệm vụ và Phó Bí thư Thường trực Trần Thị Hồng Cúc có 16 nhiệm vụ — xem chi tiết tại Nhóm 01.</p>
+      </article>
+      <article class="unit" data-name="Ban Xây dựng Đảng Đảng ủy" data-alert="green">
+        <h3>Ban Xây dựng Đảng Đảng ủy</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">5</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">5/5</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">52</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Đơn vị đã nhập danh mục. Không có cá nhân chỉ 01–02 nhiệm vụ.</p>
+      </article>
+      <article class="unit" data-name="Văn phòng Đảng ủy Phạm Đại Phương" data-alert="yellow">
+        <h3>Văn phòng Đảng ủy</h3>
+        <span class="badge amber">🟡 Lưu ý — 01 cá nhân ≥30 nhiệm vụ</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">5</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">5/5</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">101</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Chánh Văn phòng Phạm Đại Phương có 32 nhiệm vụ — xem chi tiết tại Nhóm 01. (Báo cáo Word ghi tổng 100 nhiệm vụ; Excel chốt 20/11 ghi 101.)</p>
+      </article>
+      <article class="unit" data-name="Ủy ban Kiểm tra Đảng ủy UBKT" data-alert="green">
+        <h3>Ủy ban Kiểm tra Đảng ủy</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">5</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">5/5</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">57</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Đơn vị đã nhập danh mục. (Báo cáo Word ghi 58 nhiệm vụ; Excel chốt 20/11 ghi 57.)</p>
+      </article>
+      <article class="unit" data-name="Trung tâm Chính trị phường" data-alert="green">
+        <h3>Trung tâm Chính trị phường</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">3</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">3/3</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">23</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Đơn vị đã nhập danh mục. Không có cá nhân chỉ 01–02 nhiệm vụ.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== KHỐI HĐND ===== -->
+  <section class="group" id="sec-khoi-hdnd" data-group="khoi-hdnd">
+    <div class="sec-head"><h2>IV. Khối HĐND</h2><span class="sec-sum">3 đơn vị · 2/3 người có SPCV (66,67%) · 28 nhiệm vụ</span></div>
+    <p class="sec-desc">Khối duy nhất còn trường hợp chưa có SPCV và có 02 đơn vị chưa nhập danh mục — cần Thường trực HĐND chỉ đạo xử lý ngay.</p>
+    <div class="cards">
+      <article class="unit" data-name="Hội đồng nhân dân phường HĐND Phan Tiến Đức" data-alert="green">
+        <h3>Hội đồng nhân dân phường</h3>
+        <span class="badge green">🟢 Có SPCV đầy đủ</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">1</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">1/1</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">6</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Phó Chủ tịch HĐND Phan Tiến Đức — 6 nhiệm vụ, xem chi tiết tại Nhóm 01. Đơn vị đã nhập danh mục.</p>
+      </article>
+      <article class="unit" data-name="Ban Kinh tế Ngân sách HĐND Lê Hồ Ngọc Dung" data-alert="red">
+        <h3>Ban Kinh tế – Ngân sách HĐND</h3>
+        <span class="badge red">🔴 Chưa nhập danh mục đơn vị</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">1</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">1/1</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">22</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note red">Cá nhân đã có SPCV (Phó Trưởng ban Lê Hồ Ngọc Dung, 22 nhiệm vụ) nhưng <b>đơn vị chưa nhập Danh mục sản phẩm công việc</b> vào kỳ hiện tại — cần hoàn thiện và gửi duyệt đúng quy trình.</p>
+      </article>
+      <article class="unit" data-name="Ban Văn hóa Xã hội HĐND Đào Thanh Quang chưa có SPCV" data-alert="red">
+        <h3>Ban Văn hóa – Xã hội HĐND</h3>
+        <span class="badge red">🔴 Chưa có SPCV — duy nhất toàn phường</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">1</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">0/1</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">0</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">0%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar red"><i style="width:0%"></i></div>
+        <p class="u-note red"><b>Đ/c Đào Thanh Quang</b>, Phó Ban Văn hóa – Xã hội HĐND, chưa có SPCV — đang học Cao cấp lý luận chính trị hệ tập trung. Đề nghị xác minh ngay, phối hợp xử lý trên phần mềm hoặc đưa vào nhóm đối tượng không đánh giá Quý IV/2026. Đơn vị đồng thời <b>chưa nhập danh mục</b>.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== KHỐI MTTQ ===== -->
+  <section class="group" id="sec-khoi-mttq" data-group="khoi-mttq">
+    <div class="sec-head"><h2>V. Khối MTTQ</h2><span class="sec-sum">1 đơn vị · 10 người · 190 nhiệm vụ · 100% có SPCV</span></div>
+    <div class="cards">
+      <article class="unit" data-name="Ủy ban Mặt trận Tổ quốc Việt Nam MTTQ phường Lê Kim Lan Nguyễn Thị Ngọc Trang" data-alert="yellow">
+        <h3>Ủy ban MTTQ Việt Nam phường Tân Phú</h3>
+        <span class="badge amber">🟡 Lưu ý — 01 nhiệm vụ chưa giao · 02 cá nhân ≥30</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">10</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">10/10</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">190</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note amber">Còn <b>01 nhiệm vụ tập thể chưa giao</b>. Hai cá nhân có số nhiệm vụ cao trong nhóm: Lê Kim Lan — 36 nhiệm vụ; Nguyễn Thị Ngọc Trang, Phó Chủ tịch — 35 nhiệm vụ. Chủ tịch Ủy ban MTTQ Hoàng Quốc Liêm xem tại Nhóm 01.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== KHỐI UBND ===== -->
+  <section class="group" id="sec-khoi-ubnd" data-group="khoi-ubnd">
+    <div class="sec-head"><h2>VI. Khối UBND — Cơ quan chuyên môn, hành chính, sự nghiệp</h2><span class="sec-sum">8 đơn vị gốc · 118 người · 1.697 nhiệm vụ · 100% có SPCV</span></div>
+    <p class="sec-desc">Chỉ thống kê tổng theo đơn vị + báo động lưu ý. Khối này tập trung cả 06 trường hợp cá nhân chỉ 01–02 nhiệm vụ của toàn phường (03 ở Văn phòng HĐND và UBND, 03 ở trường học) và các cá nhân có số nhiệm vụ cao nhất.</p>
+    <div class="cards">
+      <article class="unit" data-name="Ủy ban nhân dân phường UBND Võ Trương Bình" data-alert="yellow">
+        <h3>Ủy ban nhân dân phường</h3>
+        <span class="badge amber">🟡 Lưu ý — lãnh đạo thuộc Nhóm 01</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">3</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">3/3</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">72</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Chủ tịch UBND Võ Trương Bình có 47 nhiệm vụ; hai Phó Chủ tịch Lê Thị Thu Vân (16) và Nguyễn Thành Trung (9) — xem chi tiết tại Nhóm 01.</p>
+      </article>
+      <article class="unit" data-name="Văn phòng HĐND và UBND Đặng Hoàng Ân Trần Thị Bích Liễu Võ Thị Như Trang Xương Thị Kim Dung" data-alert="yellow">
+        <h3>Văn phòng HĐND và UBND</h3>
+        <span class="badge amber">🟡 Báo động — 03 cá nhân chỉ 02 NV · 01 cá nhân 76 NV</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">19</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">19/19</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">193</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note amber"><b>03 cá nhân chỉ có 02 nhiệm vụ</b> (đều là Chuyên viên): Trần Thị Bích Liễu · Võ Thị Như Trang · Xương Thị Kim Dung — cần kiểm tra độ bao quát theo chức trách. Ngược lại, <b>Đặng Hoàng Ân, Chánh Văn phòng, có 76 nhiệm vụ</b> — cần rà soát chống trùng lặp, chia nhỏ.</p>
+      </article>
+      <article class="unit" data-name="Phòng Kinh tế Hạ tầng Đô thị Đỗ Thành Đạt Nguyễn Huy Hoàng" data-alert="yellow">
+        <h3>Phòng Kinh tế, Hạ tầng và Đô thị</h3>
+        <span class="badge amber">🟡 Báo động — 47 NV chưa giao · cá nhân cao nhất phường</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">26</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">26/26</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">612</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note amber">Còn <b>47 nhiệm vụ tập thể chưa giao</b> (nhiều nhất cùng TH Hồ Văn Cường). Cá nhân cao nhất toàn phường: <b>Đỗ Thành Đạt — 131 nhiệm vụ</b>, Nguyễn Huy Hoàng — 62 nhiệm vụ. Phòng có 05 cá nhân ≥40 nhiệm vụ và 08 cá nhân ≥30 nhiệm vụ — ưu tiên rà soát trùng lặp. (Phụ lục 4 của báo cáo Word ghi 539 nhiệm vụ; Excel chốt 20/11 cộng được 612.)</p>
+      </article>
+      <article class="unit" data-name="Phòng Văn hóa Xã hội Phí Thị Ngọc Yến" data-alert="yellow">
+        <h3>Phòng Văn hóa – Xã hội</h3>
+        <span class="badge amber">🟡 Lưu ý — Trưởng phòng 43 nhiệm vụ</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">14</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">14/14</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">221</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Trưởng phòng Phí Thị Ngọc Yến có 43 nhiệm vụ (thuộc nhóm ≥40 toàn phường). (Báo cáo Word ghi 216 nhiệm vụ; Excel chốt 20/11 ghi 221.)</p>
+      </article>
+      <article class="unit" data-name="Trung tâm Hành chính công" data-alert="green">
+        <h3>Trung tâm Hành chính công</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">7</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">7/7</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">74</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Đã nhập danh mục, 100% cá nhân có SPCV, không có trường hợp 01–02 nhiệm vụ.</p>
+      </article>
+      <article class="unit" data-name="Trung tâm cung ứng dịch vụ công" data-alert="green">
+        <h3>Trung tâm cung ứng dịch vụ công</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">9</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">9/9</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">101</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Đã nhập danh mục, 100% cá nhân có SPCV.</p>
+      </article>
+      <article class="unit" data-name="Ban Quản lý dự án đầu tư xây dựng BQLDA" data-alert="green">
+        <h3>Ban Quản lý dự án đầu tư xây dựng</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">11</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">11/11</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">97</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Đã nhập danh mục, 100% cá nhân có SPCV. Bình quân nhiệm vụ/người thấp nhất khối (8,8) nhưng không có trường hợp 01–02 nhiệm vụ.</p>
+      </article>
+      <article class="unit" data-name="Trạm Y tế phường" data-alert="green">
+        <h3>Trạm Y tế phường</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">29</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">29/29</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">327</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Đơn vị đông người nhất khối UBND, 100% có SPCV, không có trường hợp 01–02 nhiệm vụ.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== TRƯỜNG HỌC ===== -->
+  <section class="group" id="sec-truong-hoc" data-group="truong-hoc">
+    <div class="sec-head"><h2>VII. Đơn vị trực thuộc UBND — Trường học</h2><span class="sec-sum">6 trường (gộp trường + tổ trực thuộc) · 522 người · 8.875 nhiệm vụ · 100% có SPCV</span></div>
+    <p class="sec-desc">Mỗi trường hiển thị thống kê gộp của trường và các tổ trực thuộc. Bấm “Xem chi tiết từng tổ” để mở bảng con của từng tổ (số người / số nhiệm vụ cộng từ file Excel 20/11).</p>
+    <div class="cards">
+      <article class="unit" data-name="Trường Tiểu học Huỳnh Văn Chính Phạm Mộng Tuyền Trần Thị Hồng Thắm Nguyễn Thị Băng Tâm" data-alert="yellow">
+        <h3>Trường Tiểu học Huỳnh Văn Chính <span style="color:var(--muted);font-weight:600;font-size:12.5px">(+ 6 tổ)</span></h3>
+        <span class="badge amber">🟡 Báo động — 03 GV chỉ 01 NV · 27 NV chưa giao</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">127</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">127/127</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">1.910</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note amber"><b>03 giáo viên chỉ có 01 nhiệm vụ:</b> Phạm Mộng Tuyền và Trần Thị Hồng Thắm (Tổ chuyên môn 4), Nguyễn Thị Băng Tâm (Tổ chuyên môn 5) — cần hướng dẫn lập danh mục phù hợp chức trách. Trường còn <b>27 nhiệm vụ tập thể chưa giao</b>.</p>
+        <details class="sub"><summary>Xem chi tiết từng tổ trực thuộc</summary>
+          <table class="sub-table"><tr><th>Đơn vị / Tổ</th><th class="num">Người</th><th class="num">Nhiệm vụ</th></tr>
+          <tr><td>Trường (Ban giám hiệu, văn phòng trường)</td><td class="num">4</td><td class="num">91</td></tr>
+          <tr><td>Tổ chuyên môn 1</td><td class="num">15</td><td class="num">200</td></tr>
+          <tr><td>Tổ chuyên môn 2</td><td class="num">23</td><td class="num">359</td></tr>
+          <tr><td>Tổ chuyên môn 3</td><td class="num">24</td><td class="num">358</td></tr>
+          <tr><td>Tổ chuyên môn 4</td><td class="num">27</td><td class="num">377</td></tr>
+          <tr><td>Tổ chuyên môn 5</td><td class="num">26</td><td class="num">407</td></tr>
+          <tr><td>Tổ văn phòng</td><td class="num">8</td><td class="num">118</td></tr></table>
+        </details>
+      </article>
+
+      <article class="unit" data-name="Trường THCS Nguyễn Trãi Lê Minh Công" data-alert="yellow">
+        <h3>Trường THCS Nguyễn Trãi <span style="color:var(--muted);font-weight:600;font-size:12.5px">(+ 9 tổ)</span></h3>
+        <span class="badge amber">🟡 Lưu ý — 05 cá nhân ≥30 nhiệm vụ</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">115</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">115/115</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">2.017</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Trường có tổng nhiệm vụ cao nhất khối trường học. 05 cá nhân từ 30 nhiệm vụ trở lên, trong đó Hiệu trưởng Lê Minh Công có 44 nhiệm vụ. Không có cá nhân 01–02 nhiệm vụ.</p>
+        <details class="sub"><summary>Xem chi tiết từng tổ trực thuộc</summary>
+          <table class="sub-table"><tr><th>Đơn vị / Tổ</th><th class="num">Người</th><th class="num">Nhiệm vụ</th></tr>
+          <tr><td>Trường (Ban giám hiệu)</td><td class="num">3</td><td class="num">112</td></tr>
+          <tr><td>Tổ Toán</td><td class="num">18</td><td class="num">371</td></tr>
+          <tr><td>Tổ KHTN</td><td class="num">18</td><td class="num">284</td></tr>
+          <tr><td>Tổ Ngữ văn</td><td class="num">18</td><td class="num">238</td></tr>
+          <tr><td>Tổ Tiếng Anh</td><td class="num">13</td><td class="num">213</td></tr>
+          <tr><td>Tổ Công nghệ – Tin học</td><td class="num">9</td><td class="num">204</td></tr>
+          <tr><td>Tổ GDTC – Nghệ thuật</td><td class="num">10</td><td class="num">195</td></tr>
+          <tr><td>Tổ LSĐL</td><td class="num">11</td><td class="num">165</td></tr>
+          <tr><td>Tổ Văn phòng</td><td class="num">9</td><td class="num">127</td></tr>
+          <tr><td>Tổ GDCD – GDĐP – HĐTN,HN</td><td class="num">6</td><td class="num">108</td></tr></table>
+        </details>
+      </article>
+
+      <article class="unit" data-name="Trường THCS Hoàng Diệu" data-alert="yellow">
+        <h3>Trường THCS Hoàng Diệu <span style="color:var(--muted);font-weight:600;font-size:12.5px">(+ 7 tổ)</span></h3>
+        <span class="badge amber">🟡 Lưu ý — 02 cá nhân ≥30 ở trường</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">79</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">79/79</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">1.794</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Bình quân nhiệm vụ/người cao (22,7). Hai cá nhân từ 30 nhiệm vụ trở lên thuộc Ban giám hiệu/trường. Không có cá nhân 01–02 nhiệm vụ.</p>
+        <details class="sub"><summary>Xem chi tiết từng tổ trực thuộc</summary>
+          <table class="sub-table"><tr><th>Đơn vị / Tổ</th><th class="num">Người</th><th class="num">Nhiệm vụ</th></tr>
+          <tr><td>Trường (Ban giám hiệu)</td><td class="num">3</td><td class="num">94</td></tr>
+          <tr><td>Tổ Toán Tin</td><td class="num">16</td><td class="num">382</td></tr>
+          <tr><td>Tổ KHTN</td><td class="num">11</td><td class="num">268</td></tr>
+          <tr><td>Tổ Ngữ văn</td><td class="num">13</td><td class="num">254</td></tr>
+          <tr><td>Tổ SĐCD</td><td class="num">11</td><td class="num">252</td></tr>
+          <tr><td>Tổ VTM.CN</td><td class="num">11</td><td class="num">244</td></tr>
+          <tr><td>Tổ Tiếng Anh</td><td class="num">9</td><td class="num">196</td></tr>
+          <tr><td>Tổ Văn phòng</td><td class="num">5</td><td class="num">104</td></tr></table>
+        </details>
+      </article>
+
+      <article class="unit" data-name="Trường Tiểu học Hồ Văn Cường" data-alert="yellow">
+        <h3>Trường Tiểu học Hồ Văn Cường <span style="color:var(--muted);font-weight:600;font-size:12.5px">(+ 8 tổ)</span></h3>
+        <span class="badge amber">🟡 Lưu ý — 47 NV tập thể chưa giao</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">82</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">82/82</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">1.276</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note amber">Còn <b>47 nhiệm vụ tập thể chưa giao</b> — cùng mức cao nhất toàn phường với Phòng Kinh tế, Hạ tầng và Đô thị. Không có cá nhân 01–02 nhiệm vụ.</p>
+        <details class="sub"><summary>Xem chi tiết từng tổ trực thuộc</summary>
+          <table class="sub-table"><tr><th>Đơn vị / Tổ</th><th class="num">Người</th><th class="num">Nhiệm vụ</th></tr>
+          <tr><td>Trường (Ban giám hiệu)</td><td class="num">4</td><td class="num">93</td></tr>
+          <tr><td>Tổ 1</td><td class="num">13</td><td class="num">230</td></tr>
+          <tr><td>Tổ 2</td><td class="num">12</td><td class="num">180</td></tr>
+          <tr><td>Tổ 3</td><td class="num">10</td><td class="num">172</td></tr>
+          <tr><td>Tổ 4</td><td class="num">8</td><td class="num">132</td></tr>
+          <tr><td>Tổ 5</td><td class="num">10</td><td class="num">166</td></tr>
+          <tr><td>Tổ 6</td><td class="num">9</td><td class="num">123</td></tr>
+          <tr><td>Tổ 7</td><td class="num">7</td><td class="num">92</td></tr>
+          <tr><td>Tổ Văn phòng</td><td class="num">9</td><td class="num">88</td></tr></table>
+        </details>
+      </article>
+
+      <article class="unit" data-name="Trường Mầm non Hướng Dương" data-alert="green">
+        <h3>Trường Mầm non Hướng Dương <span style="color:var(--muted);font-weight:600;font-size:12.5px">(+ 5 tổ)</span></h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">50</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">50/50</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">953</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note green">Tất cả các tổ đều đã nhập danh mục, 100% cá nhân có SPCV, không có trường hợp 01–02 nhiệm vụ.</p>
+        <details class="sub"><summary>Xem chi tiết từng tổ trực thuộc</summary>
+          <table class="sub-table"><tr><th>Đơn vị / Tổ</th><th class="num">Người</th><th class="num">Nhiệm vụ</th></tr>
+          <tr><td>Trường (Ban giám hiệu)</td><td class="num">3</td><td class="num">67</td></tr>
+          <tr><td>Tổ Nhà trẻ</td><td class="num">14</td><td class="num">229</td></tr>
+          <tr><td>Tổ 3–4 tuổi</td><td class="num">11</td><td class="num">240</td></tr>
+          <tr><td>Tổ 4–5 tuổi</td><td class="num">9</td><td class="num">157</td></tr>
+          <tr><td>Tổ 5–6 tuổi</td><td class="num">11</td><td class="num">214</td></tr>
+          <tr><td>Tổ Văn phòng</td><td class="num">2</td><td class="num">46</td></tr></table>
+        </details>
+      </article>
+
+      <article class="unit" data-name="Trường Mầm non Phượng Hồng Tổ 4-5 tuổi chưa nhập danh mục" data-alert="red">
+        <h3>Trường Mầm non Phượng Hồng <span style="color:var(--muted);font-weight:600;font-size:12.5px">(+ 5 tổ)</span></h3>
+        <span class="badge red">🔴 01 tổ chưa nhập danh mục</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">69</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">69/69</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">925</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note red"><b>Tổ 4–5 tuổi chưa nhập Danh mục sản phẩm công việc</b> vào kỳ hiện tại (cá nhân trong tổ vẫn đã có SPCV). Trường còn <b>07 nhiệm vụ tập thể chưa giao</b>.</p>
+        <details class="sub"><summary>Xem chi tiết từng tổ trực thuộc</summary>
+          <table class="sub-table"><tr><th>Đơn vị / Tổ</th><th class="num">Người</th><th class="num">Nhiệm vụ</th></tr>
+          <tr><td>Trường (Ban giám hiệu)</td><td class="num">4</td><td class="num">96</td></tr>
+          <tr><td>Tổ nhà trẻ</td><td class="num">17</td><td class="num">184</td></tr>
+          <tr><td>Tổ 3–4 tuổi</td><td class="num">16</td><td class="num">220</td></tr>
+          <tr><td>Tổ 4–5 tuổi ⚠ chưa nhập danh mục</td><td class="num">13</td><td class="num">169</td></tr>
+          <tr><td>Tổ 5–6 tuổi</td><td class="num">16</td><td class="num">220</td></tr>
+          <tr><td>Tổ văn phòng</td><td class="num">3</td><td class="num">36</td></tr></table>
+        </details>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== VŨ TRANG ===== -->
+  <section class="group" id="sec-vu-trang" data-group="vu-trang">
+    <div class="sec-head"><h2>VIII. Lực lượng vũ trang / Khác</h2><span class="sec-sum">2 đơn vị · 2 người · 42 nhiệm vụ</span></div>
+    <div class="cards">
+      <article class="unit" data-name="Công an phường Trần Đức Thuận" data-alert="yellow">
+        <h3>Công an phường Tân Phú</h3>
+        <span class="badge amber">🟡 Lưu ý — 15 NV tập thể chưa giao</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">1</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">1/1</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">32</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note amber">Trưởng Công an Trần Đức Thuận — 32 nhiệm vụ, xem chi tiết tại Nhóm 01. Đơn vị còn <b>15 nhiệm vụ tập thể chưa giao</b>.</p>
+      </article>
+      <article class="unit" data-name="Ban CHQS phường Hoàng Phước Ánh Ban Chỉ huy Quân sự" data-alert="green">
+        <h3>Ban CHQS phường Tân Phú</h3>
+        <span class="badge green">🟢 Không báo động</span>
+        <div class="u-stats"><div class="u-stat"><div class="n">1</div><div class="l">Người dùng</div></div><div class="u-stat"><div class="n">1/1</div><div class="l">Có SPCV</div></div><div class="u-stat"><div class="n">10</div><div class="l">Nhiệm vụ</div></div><div class="u-stat"><div class="n">100%</div><div class="l">Tỷ lệ SPCV</div></div></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="u-note plain">Chỉ huy trưởng Hoàng Phước Ánh — 10 nhiệm vụ, xem chi tiết tại Nhóm 01. Đơn vị đã nhập danh mục.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== BÁO ĐỘNG TỔNG HỢP ===== -->
+  <section class="group" id="sec-bao-dong" data-group="bao-dong">
+    <div class="sec-head"><h2>IX. Báo động tổng hợp</h2><span class="sec-sum">Tổng hợp mọi lưu ý của các khối — bấm để nhảy tới nhóm liên quan</span></div>
+    <div class="alert-list">
+      <div class="alert-card red"><h4>🔴 01 cá nhân chưa có SPCV — Ban Văn hóa – Xã hội HĐND</h4><p>Đ/c Đào Thanh Quang, Phó Trưởng ban, đang học Cao cấp LLCT tập trung. Trường hợp thiếu duy nhất toàn phường. Cần xác minh ngay: xử lý trên phần mềm hoặc đưa vào nhóm không đánh giá Quý IV/2026.</p><button class="go" data-goto="khoi-hdnd">→ Xem Khối HĐND</button></div>
+      <div class="alert-card red"><h4>🔴 03 đơn vị chưa nhập danh mục</h4><p>Ban Kinh tế – Ngân sách HĐND · Ban Văn hóa – Xã hội HĐND · Tổ 4–5 tuổi Trường MN Phượng Hồng. Tỷ lệ toàn phường mới đạt 62/65 (95,38%) vì 03 đơn vị này.</p><button class="go" data-goto="khoi-hdnd">→ Xem Khối HĐND</button> <button class="go" data-goto="truong-hoc">→ Xem Trường học</button></div>
+      <div class="alert-card"><h4>🟡 06 cá nhân chỉ có 01–02 nhiệm vụ</h4><p>01 nhiệm vụ: Phạm Mộng Tuyền, Trần Thị Hồng Thắm (Tổ CM4 – TH Huỳnh Văn Chính), Nguyễn Thị Băng Tâm (Tổ CM5 – TH Huỳnh Văn Chính). 02 nhiệm vụ: Trần Thị Bích Liễu, Võ Thị Như Trang, Xương Thị Kim Dung (Văn phòng HĐND và UBND). Cần kiểm tra độ bao quát theo chức trách — không chạy theo số lượng hình thức.</p><button class="go" data-goto="khoi-ubnd">→ Xem Khối UBND</button> <button class="go" data-goto="truong-hoc">→ Xem Trường học</button></div>
+      <div class="alert-card"><h4>🟡 10 cá nhân từ 40 nhiệm vụ trở lên</h4><p>Đỗ Thành Đạt 131 · Đặng Hoàng Ân 76 · Nguyễn Huy Hoàng 62 · Võ Trương Bình 47 · Lê Minh Công 44 · Phí Thị Ngọc Yến 43 · Lê Thị Kim Hồng 42 · Dương Quốc Trưởng 41 · Nguyễn Đình Tân 40 · Vũ Thúc Quý Hoài 40. Cần rà soát chống trùng lặp, chia nhỏ nhiệm vụ.</p><button class="go" data-goto="khoi-ubnd">→ Xem Khối UBND</button></div>
+      <div class="alert-card"><h4>🟡 144 nhiệm vụ tập thể chưa giao (11,76%)</h4><p>Phòng Kinh tế, HT &amp; ĐT: 47 · TH Hồ Văn Cường: 47 · TH Huỳnh Văn Chính: 27 · Công an phường: 15 · MN Phượng Hồng: 07 · Ủy ban MTTQ: 01. Mục tiêu: 100% danh mục tập thể được giao.</p><button class="go" data-goto="tong-quan">→ Xem Tổng quan</button></div>
+      <div class="alert-card"><h4>🟡 Nhiệm vụ bị trả / từ chối / chờ đánh giá ở Nhóm 01</h4><p>Bị trả: Trần Thị Hồng Cúc 01, Nguyễn Hùng Vương 02 nội dung. Bị từ chối: Hoàng Phước Ánh 03, Trần Đức Thuận 01, Phạm Đại Phương 02 (từ chối kết quả). Đợi/chờ đánh giá: Trần Đức Thuận 01, Lê Thị Thu Vân 01. Bí thư Lê Thị Kim Hồng còn 34 nhiệm vụ chưa có sản phẩm minh chứng.</p><button class="go" data-goto="nhom-01">→ Xem Nhóm 01</button></div>
+    </div>
+  </section>
+
+  <!-- ===== ĐỀ XUẤT ===== -->
+  <section class="group" id="sec-de-xuat" data-group="de-xuat">
+    <div class="sec-head"><h2>X. Đề xuất, kiến nghị</h2><span class="sec-sum">Tóm tắt Mục IV — Báo cáo của Ban Xây dựng Đảng trình Thường trực Đảng ủy</span></div>
+    <div class="panel">
+      <ol class="rec">
+        <li><b>Xác minh ngay trường hợp Ban Văn hóa – Xã hội HĐND.</b> Đề nghị Thường trực HĐND chỉ đạo xác minh trường hợp chưa có SPCV; hoàn thiện danh mục của hai ban HĐND và xác nhận việc đăng ký, gửi duyệt đúng quy trình.</li>
+        <li><b>Rà soát cá nhân ở hai cực số lượng.</b> Thủ trưởng các đơn vị rà soát cá nhân tại 05 phụ lục của báo cáo, ưu tiên người chỉ có 01 nhiệm vụ và người từ 40 nhiệm vụ trở lên.</li>
+        <li><b>Đối chiếu nhiệm vụ với chức trách, chống trùng lặp.</b> Đối chiếu nhiệm vụ trong kho chung với phân công thực tế; kiểm tra độ khó, thời hạn, sản phẩm đầu ra. Số lượng cao phải gắn với chống trùng lặp, chia nhỏ; số lượng thấp phải gắn với độ bao quát — không chạy theo số lượng. Cập nhật tiến độ, minh chứng và phê duyệt hằng ngày.</li>
+        <li><b>UBND phường chỉ đạo đảm bảo 100% danh mục tập thể.</b> Giao UBND phường chỉ đạo cơ quan chuyên môn theo dõi, kiểm tra tiến độ tập thể và cá nhân, bảo đảm hệ thống ghi nhận 100% danh mục sản phẩm của tập thể; cập nhật danh sách cá nhân không tự đánh giá trong quý để chốt đúng đối tượng đánh giá KPI Quý IV/2026.</li>
+        <li><b>Thủ trưởng phê duyệt hằng ngày và chịu trách nhiệm.</b> Thủ trưởng các cơ quan, đơn vị hằng ngày vào hệ thống theo dõi, phê duyệt danh mục, đánh giá chất lượng sản phẩm thuộc thẩm quyền và chịu trách nhiệm hoàn toàn về kết quả, tiến độ của đơn vị mình. Ban Xây dựng Đảng phối hợp Tổ hỗ trợ và Văn phòng Đảng ủy tổng hợp kết quả xác minh, hướng dẫn các tập thể/cá nhân còn vướng và báo cáo kịp thời Thường trực Đảng ủy.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="empty hidden" id="emptyState">Không tìm thấy đơn vị nào khớp với điều kiện lọc hiện tại. Thử bỏ ô tìm kiếm hoặc tắt “Chỉ xem báo động”.</div>
+
+  <footer>
+    <b>Nguồn số liệu:</b> Báo cáo “Tiến độ đăng ký công việc trên Hệ thống KPI quý IV năm 2026” của Ban Xây dựng Đảng phường Tân Phú (số liệu đến ngày 20/11/2026, cập nhật báo cáo ngày 03/11) và file xuất từ phần mềm KPI ngày 20/11/2026 lúc 11:49:25 — kỳ (Chính thức) Đánh giá Quý IV/2026. Dashboard là bản snapshot tại thời điểm chốt số liệu 20/11/2026; số nhiệm vụ thể hiện tiến độ <i>đăng ký</i> trên hệ thống, không phải kết quả hoàn thành, trừ các cột Hoàn thành/Chưa hoàn thành của Nhóm 01 theo Phụ lục 1 (chốt 17/11/2026). Trưởng Ban Xây dựng Đảng ký báo cáo: Nguyễn Thị Quỳnh Như.
+  </footer>
+</main>
+</div>
+
+<script>
+(function(){
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.group'));
+  var units = Array.prototype.slice.call(document.querySelectorAll('.unit'));
+  var navItems = Array.prototype.slice.call(document.querySelectorAll('.nav-item'));
+  var q = document.getElementById('q');
+  var alertBtn = document.getElementById('alertOnly');
+  var resultLine = document.getElementById('resultLine');
+  var emptyState = document.getElementById('emptyState');
+  var activeGroup = 'all';
+  var alertOnly = false;
+
+  function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d'); }
+
+  function apply(){
+    var term = norm(q.value.trim());
+    var visibleUnits = 0, visibleSections = 0;
+    sections.forEach(function(sec){
+      var g = sec.getAttribute('data-group');
+      var groupMatch = (activeGroup==='all' || activeGroup===g);
+      if(!groupMatch){ sec.classList.add('hidden'); return; }
+      // For card sections, filter cards
+      var cards = sec.querySelectorAll('.unit');
+      var secVisible = true;
+      if(cards.length){
+        var anyVisible = false;
+        cards.forEach(function(card){
+          var nameMatch = !term || norm(card.getAttribute('data-name') + ' ' + card.textContent).indexOf(term) !== -1;
+          var alertMatch = !alertOnly || card.getAttribute('data-alert') !== 'green';
+          var show = nameMatch && alertMatch;
+          card.classList.toggle('hidden', !show);
+          if(show){ anyVisible = true; visibleUnits++; }
+        });
+        secVisible = anyVisible;
+      } else {
+        // Non-card sections (overview, nhom-01, bao-dong, de-xuat): hide when searching/alert-only narrows to cards
+        if(term || alertOnly){ secVisible = (g==='bao-dong' && alertOnly && !term) ? true : false; if(g==='nhom-01' && term){ secVisible = norm(sec.textContent).indexOf(term)!==-1; } }
+      }
+      sec.classList.toggle('hidden', !secVisible);
+      if(secVisible) visibleSections++;
+    });
+    var msg = '';
+    if(activeGroup!=='all'){ var lbl = document.querySelector('.nav-item[data-filter="'+activeGroup+'"]'); msg = 'Đang xem: ' + (lbl ? lbl.textContent.trim().replace(/\s+/g,' ') : activeGroup) + '. '; }
+    if(term) msg += 'Tìm kiếm: “' + q.value.trim() + '”. ';
+    if(alertOnly) msg += 'Chỉ hiển thị đơn vị có báo động (đỏ/vàng). ';
+    msg += visibleUnits ? ('Hiển thị ' + visibleUnits + ' thẻ đơn vị.') : '';
+    resultLine.textContent = msg;
+    emptyState.classList.toggle('hidden', !(visibleUnits===0 && (term||alertOnly)));
+  }
+
+  function setGroup(g, scroll){
+    activeGroup = g;
+    navItems.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-filter')===g); });
+    apply();
+    if(scroll && g!=='all'){
+      var sec = document.querySelector('section[data-group="'+g+'"]');
+      if(sec && !sec.classList.contains('hidden')){ sec.scrollIntoView({behavior:'smooth', block:'start'}); }
+      else { window.scrollTo({top:0, behavior:'smooth'}); }
+    } else if(scroll){ window.scrollTo({top:0, behavior:'smooth'}); }
+  }
+
+  navItems.forEach(function(btn){
+    btn.addEventListener('click', function(){ setGroup(btn.getAttribute('data-filter'), true); });
+  });
+  document.querySelectorAll('[data-goto]').forEach(function(btn){
+    btn.addEventListener('click', function(){ setGroup(btn.getAttribute('data-goto'), true); });
+  });
+  q.addEventListener('input', apply);
+  alertBtn.addEventListener('click', function(){
+    alertOnly = !alertOnly;
+    alertBtn.setAttribute('aria-pressed', alertOnly ? 'true' : 'false');
+    apply();
+  });
+  apply();
+})();
+</script>
+</body>
+</html>
