@@ -73,7 +73,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       .music-btn:active{ transform:scale(.93); }
 
       /* ---------- Picture picker ---------- */
-      .picker{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:6px 0 14px; }
+      .picker{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:6px 0 12px; }
       .pick{
         background:#fff; border-radius:20px; border:3px solid transparent;
         box-shadow:0 4px 0 rgba(34,48,74,.10), 0 10px 20px rgba(34,48,74,.08);
@@ -87,36 +87,47 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       .pick.sel{ border-color:var(--accent); transform:scale(1.05) rotate(-1.5deg); background:#fff5f6; }
       .pick .done-badge{ font-size:12px; height:14px; line-height:1; }
 
-      /* ---------- Stage: lớp vẽ dưới, lớp nét trên ---------- */
+      .pic-name{
+        text-align:center; font-size:clamp(22px,6vw,28px); font-weight:900;
+        margin:2px 0 10px; color:var(--ink);
+      }
+
+      /* ---------- Chuyển chế độ: Đổ màu / Cọ vẽ ---------- */
+      .modes{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:0 0 14px; }
+      .mode-btn{
+        min-height:72px; border-radius:22px; background:#fff;
+        box-shadow:0 5px 0 rgba(34,48,74,.12), 0 12px 22px rgba(34,48,74,.10);
+        font-size:22px; font-weight:900;
+        display:flex; align-items:center; justify-content:center; gap:8px;
+        border:4px solid transparent;
+        transition:transform .12s ease;
+      }
+      .mode-btn:active{ transform:scale(.95); }
+      .mode-btn.sel{ border-color:var(--accent); background:#fff5f6; transform:scale(1.03); }
+
+      /* ---------- Stage: SVG tranh + canvas cọ phủ trên ---------- */
       .stage-card{
         position:relative; background:var(--card); border-radius:var(--radius);
         box-shadow:var(--shadow); padding:12px; border:4px solid #fff;
       }
-      .stage{ position:relative; border-radius:18px; overflow:hidden;
-        background:
-          radial-gradient(circle at 85% 12%, #ffe9a8 0 20px, transparent 21px),
-          linear-gradient(180deg,#f4fbff, #ffffff);
-      }
+      .stage{ position:relative; border-radius:18px; overflow:hidden; background:#ffffff; }
+      .stage svg{ display:block; width:100%; height:auto; }
       .stage canvas{
-        display:block; width:100%; height:auto; position:relative; z-index:1;
-        touch-action:none; cursor:crosshair; user-select:none; -webkit-user-select:none;
+        position:absolute; inset:0; width:100%; height:100%;
+        touch-action:none; user-select:none; -webkit-user-select:none;
       }
-      .stage .lines{ position:absolute; inset:0; z-index:2; pointer-events:none; }
-      .stage .lines svg{ display:block; width:100%; height:100%; }
+      .stage.brush-mode canvas{ cursor:crosshair; }
+      .stage.fill-mode canvas{ pointer-events:none; }
+      .region{
+        fill:#ffffff;
+        stroke:#22304a; stroke-width:7;
+        stroke-linejoin:round; stroke-linecap:round;
+        cursor:pointer;
+      }
+      .stage.brush-mode .region{ cursor:default; }
+      .region.pop{ animation:regionPop .25s ease; }
+      @keyframes regionPop{ 0%{ } 40%{ stroke-width:11; } 100%{ } }
       .detail{ pointer-events:none; }
-
-      /* Linh vật mèo góc tranh */
-      .mascot{
-        position:absolute; right:6px; bottom:2px; width:76px; height:76px; z-index:4;
-        pointer-events:none; filter:drop-shadow(0 3px 3px rgba(34,48,74,.18));
-      }
-      .mascot .eye{ transform-box:fill-box; transform-origin:center; animation:blink 4.6s infinite; }
-      @keyframes blink{ 0%,91%,100%{ transform:scaleY(1); } 94%,97%{ transform:scaleY(.08); } }
-      .mascot .mouth-happy{ display:none; }
-      .stage.happy .mascot{ animation:bob .5s ease-in-out infinite alternate; }
-      .stage.happy .mascot .mouth-happy{ display:block; }
-      .stage.happy .mascot .mouth-calm{ display:none; }
-      @keyframes bob{ from{ transform:translateY(0) rotate(-2deg); } to{ transform:translateY(-4px) rotate(2deg); } }
 
       .progress{ display:flex; align-items:center; gap:10px; margin:12px 2px 0; }
       .progress .bar{ flex:1; height:18px; border-radius:99px; background:#e8eef7; overflow:hidden; box-shadow:inset 0 2px 4px rgba(34,48,74,.12); }
@@ -149,34 +160,31 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       .brush-opt:active{ transform:scale(.94); }
       .brush-opt.sel{ border-color:var(--accent); background:#fff5f6; }
 
-      /* ---------- Palette ---------- */
+      /* ---------- Palette: nút tròn TO ---------- */
       .palette{
         margin-top:14px; background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
-        padding:12px; display:grid; grid-template-columns:repeat(6,1fr); gap:10px;
+        padding:14px; display:grid; grid-template-columns:repeat(5,1fr); gap:12px;
       }
       .swatch{
-        aspect-ratio:1/1; width:100%; min-height:48px; border-radius:50%;
+        aspect-ratio:1/1; width:100%; min-width:48px; min-height:48px; border-radius:50%;
         border:4px solid rgba(34,48,74,.10);
         box-shadow:inset 0 -6px 0 rgba(0,0,0,.14), 0 3px 0 rgba(34,48,74,.12);
         transition:transform .12s ease;
         position:relative; overflow:hidden;
       }
       .swatch:active{ transform:scale(.9); }
-      .swatch.sel{ border-color:var(--ink); transform:scale(1.14) rotate(-4deg); z-index:1; }
-      .swatch.sel::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:22px; font-weight:900; text-shadow:0 2px 3px rgba(0,0,0,.45); }
-      .swatch.special{ font-size:20px; display:flex; align-items:center; justify-content:center; }
-      .swatch.rainbow-bg{ background:conic-gradient(#ff3b30,#ff9500,#ffcc00,#34c759,#007aff,#af52de,#ff3b30); }
-      .swatch.glitter-bg{ background:radial-gradient(circle at 30% 30%, #fff6c9, #ffd60a 55%, #f5b800); }
+      .swatch.sel{ border-color:var(--ink); transform:scale(1.22); z-index:1; box-shadow:0 0 0 5px #ffe066, inset 0 -6px 0 rgba(0,0,0,.14), 0 4px 0 rgba(34,48,74,.12); }
+      .swatch.sel::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; font-weight:900; text-shadow:0 2px 3px rgba(0,0,0,.45); }
 
       /* ---------- Tools ---------- */
       .tools{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px; }
       .tool{
-        min-height:64px; border-radius:20px; background:#fff; box-shadow:0 4px 0 rgba(34,48,74,.12), 0 10px 18px rgba(34,48,74,.08);
+        min-height:68px; border-radius:20px; background:#fff; box-shadow:0 4px 0 rgba(34,48,74,.12), 0 10px 18px rgba(34,48,74,.08);
         display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
-        font-size:14px; font-weight:800; padding:8px 2px;
+        font-size:15px; font-weight:800; padding:8px 2px;
         transition:transform .12s ease, opacity .15s ease;
       }
-      .tool .ic{ font-size:26px; line-height:1.1; }
+      .tool .ic{ font-size:27px; line-height:1.1; }
       .tool:active{ transform:scale(.93); }
       .tool.eraser.on{ background:#ffe1e7; box-shadow:0 4px 0 #ff6b81, 0 10px 18px rgba(34,48,74,.10); }
       .tool.save{ background:#dcf7e5; }
@@ -215,9 +223,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       .praise h2{ margin:8px 0 4px; font-size:32px; font-weight:900; color:#ff4757; }
       .praise p{ margin:0 0 18px; font-size:17px; font-weight:700; color:#5a6b8c; }
       .praise .row{ display:flex; gap:10px; }
-      .praise button{
-        flex:1; min-height:58px; border-radius:18px; font-size:17px; font-weight:900;
-      }
+      .praise button{ flex:1; min-height:58px; border-radius:18px; font-size:17px; font-weight:900; }
       .praise .again{ background:#eef3fb; }
       .praise .go-next{ background:var(--accent2); box-shadow:0 4px 0 #d98e00; }
       .praise button:active{ transform:scale(.95); }
@@ -233,8 +239,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       @media (prefers-reduced-motion: reduce){
         .spark,.confetti{ animation-duration:.01s; }
         .praise{ animation:none; }
-        .mascot .eye{ animation:none; }
-        .stage.happy .mascot{ animation:none; }
+        .region.pop{ animation:none; }
       }
     </style>
   </head>
@@ -250,34 +255,26 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 
       <nav class="picker" id="picker" aria-label="Chọn tranh"></nav>
 
+      <div class="pic-name" id="picName"></div>
+
+      <div class="modes" role="group" aria-label="Chọn cách tô">
+        <button class="mode-btn" id="modeFill">🪣 Đổ màu</button>
+        <button class="mode-btn" id="modeBrush">🖌️ Cọ vẽ</button>
+      </div>
+
       <section class="stage-card">
-        <div class="stage" id="stage">
-          <canvas id="paint" width="800" height="800" aria-label="Vùng tô màu"></canvas>
-          <div class="lines" id="lines"></div>
-          <svg class="mascot" id="mascot" viewBox="0 0 100 100" aria-hidden="true">
-            <polygon points="18,34 26,8 46,24" fill="#ffb020" stroke="#22304a" stroke-width="4" stroke-linejoin="round"/>
-            <polygon points="82,34 74,8 54,24" fill="#ffb020" stroke="#22304a" stroke-width="4" stroke-linejoin="round"/>
-            <polygon points="23,30 28,16 40,25" fill="#ff8fab"/>
-            <polygon points="77,30 72,16 60,25" fill="#ff8fab"/>
-            <circle cx="50" cy="56" r="36" fill="#ffd60a" stroke="#22304a" stroke-width="4"/>
-            <ellipse class="eye" cx="36" cy="50" rx="5" ry="7" fill="#22304a"/>
-            <ellipse class="eye" cx="64" cy="50" rx="5" ry="7" fill="#22304a"/>
-            <circle cx="27" cy="64" r="6" fill="#ff8fab" opacity=".75"/>
-            <circle cx="73" cy="64" r="6" fill="#ff8fab" opacity=".75"/>
-            <polygon points="45,60 55,60 50,66" fill="#ff6b81"/>
-            <path class="mouth-calm" d="M42 70 Q50 76 58 70" fill="none" stroke="#22304a" stroke-width="3.5" stroke-linecap="round"/>
-            <path class="mouth-happy" d="M40 68 Q50 82 60 68 Q50 74 40 68 Z" fill="#ff6b81" stroke="#22304a" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M6 56 L20 60 M8 70 L21 68 M94 56 L80 60 M92 70 L79 68" stroke="#22304a" stroke-width="3" stroke-linecap="round" fill="none"/>
-          </svg>
+        <div class="stage fill-mode" id="stage">
+          <div id="art"></div>
+          <canvas id="paint" width="800" height="800" aria-label="Lớp cọ vẽ tự do"></canvas>
         </div>
         <div class="progress">
           <div class="bar"><div class="fillbar" id="fillbar"></div></div>
-          <div class="txt" id="progTxt">Đã tô: 0%</div>
+          <div class="txt" id="progTxt">Đã tô: 0/0 vùng</div>
         </div>
         <button class="finish-btn" id="finishBtn">🏆 Hoàn thành!</button>
       </section>
 
-      <section class="brushes" aria-label="Chọn cỡ cọ">
+      <section class="brushes" id="brushes" aria-label="Chọn cỡ cọ">
         <span class="lbl">🖌️ Cọ:</span>
         <button class="brush-opt" data-brush="0" aria-label="Cọ nhỏ"><span class="dot" style="width:10px;height:10px"></span>Nhỏ</button>
         <button class="brush-opt" data-brush="1" aria-label="Cọ vừa"><span class="dot" style="width:18px;height:18px"></span>Vừa</button>
@@ -288,14 +285,14 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 
       <section class="tools">
         <button class="tool eraser" id="eraserBtn" aria-label="Tẩy"><span class="ic">🧽</span>Tẩy</button>
-        <button class="tool" id="undoBtn" aria-label="Hoàn tác nét vừa tô"><span class="ic">↩️</span>Hoàn tác</button>
-        <button class="tool" id="resetBtn" aria-label="Làm lại tranh"><span class="ic">↺</span>Làm lại</button>
-        <button class="tool save" id="saveBtn" aria-label="Lưu tranh"><span class="ic">💾</span>Lưu tranh</button>
+        <button class="tool" id="undoBtn" aria-label="Làm lại bước vừa tô"><span class="ic">↩️</span>Làm lại</button>
+        <button class="tool" id="resetBtn" aria-label="Xóa hết làm lại tranh"><span class="ic">↺</span>Xóa hết</button>
+        <button class="tool save" id="saveBtn" aria-label="Lưu tranh thành ảnh"><span class="ic">📸</span>Lưu tranh</button>
         <button class="tool" id="prevBtn" aria-label="Tranh trước"><span class="ic">⬅️</span>Trước</button>
         <button class="tool" id="nextBtn" aria-label="Tranh sau"><span class="ic">➡️</span>Sau</button>
       </section>
 
-      <p class="hint">👆 Chọn một màu, rồi quẹt ngón tay lên tranh để tô như bút sáp nhé!</p>
+      <p class="hint" id="hint">🪣 Chọn một màu, rồi chạm vào từng vùng trong tranh để đổ màu nhé!</p>
     </div>
 
     <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Khen bé">
@@ -310,24 +307,29 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       </div>
     </div>
 
-    <div class="toast" id="toast">Đã lưu tranh! 💾</div>
+    <div class="toast" id="toast">Đã lưu tranh! 📸</div>
 
     <script>
       "use strict";
       /* ============================================================
-         BÉ TÔ MÀU VUI — bé chọn màu rồi TỰ TÔ bằng cọ (kéo là vẽ)
-         2 lớp: canvas màu của bé ở dưới, nét đen SVG ở trên.
-         Không gửi dữ liệu đi đâu cả. Tranh dở lưu ngay trên máy bé.
+         BÉ TÔ MÀU VUI v3 — tranh SVG cho bé mẫu giáo
+         - ĐỔ MÀU: mỗi vùng là 1 path khép kín riêng, chạm là đổ đúng
+           vùng đó (không flood-fill pixel nên không bao giờ lem).
+         - CỌ VẼ: lớp canvas phủ trên cho bé lớn quẹt tự do.
+         - Tranh vẽ lại từ đầu: nét bo tròn, viền đen dày 7px trên
+           khung 800x800, mỗi tranh 8-11 vùng TO cho ngón tay bé.
          ============================================================ */
 
-      var STORE_KEY = "beToMauVui_v2";
+      var STORE_KEY = "beToMauVui_v3";
+      var INK = "#22304a";
+      var WHITE = "#FFFFFF";
 
-      /* 16 màu tươi + 2 cọ đặc biệt (cầu vồng, kim tuyến) */
+      /* 14 màu tươi cơ bản */
       var COLORS = [
         { c:"#FF3B30", n:"Đỏ" },
         { c:"#FF9500", n:"Cam" },
         { c:"#FFCC00", n:"Vàng" },
-        { c:"#A6E22E", n:"Xanh chuối" },
+        { c:"#7ED321", n:"Xanh non" },
         { c:"#34C759", n:"Xanh lá" },
         { c:"#00C7BE", n:"Xanh ngọc" },
         { c:"#5AC8FA", n:"Xanh trời" },
@@ -335,132 +337,185 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         { c:"#AF52DE", n:"Tím" },
         { c:"#FF2D55", n:"Hồng đậm" },
         { c:"#FF8FAB", n:"Hồng nhạt" },
-        { c:"#FFAB73", n:"Cam đào" },
-        { c:"#D291FF", n:"Tím nhạt" },
-        { c:"#A0522D", n:"Nâu" },
+        { c:"#B5651D", n:"Nâu" },
         { c:"#9AA5B1", n:"Xám" },
         { c:"#333333", n:"Đen" }
       ];
-      var BRUSH_SIZES = [18, 34, 54]; /* theo canvas 800px: nhỏ / vừa / to */
+      var BRUSH_SIZES = [20, 38, 60]; /* theo canvas 800px */
 
-      function R(inner){ return inner; } // region markup helper (readability)
-
-      /* ---------- 8 bức tranh: .region là vùng trong nét, .detail là chi tiết nét ---------- */
+      /* ---------- 8 tranh mẫu giáo: regions = vùng tô khép kín, details = nét cố định ---------- */
       var PICTURES = [
-        { id:"meo", name:"Mèo", emo:"🐱", svg: R(
-          '<path class="region" d="M298 298 Q362 282 352 208 Q346 176 318 184 Q302 189 311 216 Q320 252 282 266 Z"/>' +
-          '<polygon class="region" points="112,98 148,28 184,86"/>' +
-          '<polygon class="region" points="216,86 252,28 288,98"/>' +
-          '<ellipse class="region" cx="200" cy="298" rx="98" ry="68"/>' +
-          '<circle class="region" cx="200" cy="152" r="80"/>' +
-          '<ellipse class="region" cx="200" cy="312" rx="50" ry="40"/>' +
-          '<polygon class="region" points="184,166 216,166 200,184"/>' +
-          '<circle class="detail" cx="168" cy="140" r="9" fill="#22304a"/>' +
-          '<circle class="detail" cx="232" cy="140" r="9" fill="#22304a"/>' +
-          '<path class="detail" d="M188 190 Q200 200 212 190" fill="none" stroke="#22304a" stroke-width="4" stroke-linecap="round"/>' +
-          '<path class="detail" d="M96 158 L140 166 M100 186 L142 178 M304 158 L260 166 M300 186 L258 178" stroke="#22304a" stroke-width="4" stroke-linecap="round" fill="none"/>'
-        )},
-        { id:"cho", name:"Chó", emo:"🐶", svg: R(
-          '<ellipse class="region" cx="116" cy="142" rx="28" ry="56" transform="rotate(14 116 142)"/>' +
-          '<ellipse class="region" cx="284" cy="142" rx="28" ry="56" transform="rotate(-14 284 142)"/>' +
-          '<ellipse class="region" cx="200" cy="302" rx="102" ry="64"/>' +
-          '<circle class="region" cx="200" cy="156" r="82"/>' +
-          '<circle class="region" cx="248" cy="124" r="23"/>' +
-          '<ellipse class="region" cx="200" cy="188" rx="40" ry="27"/>' +
-          '<ellipse class="region" cx="200" cy="176" rx="15" ry="11"/>' +
-          '<circle class="region" cx="140" cy="318" r="17"/>' +
-          '<circle class="detail" cx="166" cy="146" r="9" fill="#22304a"/>' +
-          '<circle class="detail" cx="234" cy="146" r="9" fill="#22304a"/>' +
-          '<path class="detail" d="M200 187 L200 198 M200 198 Q188 208 178 200 M200 198 Q212 208 222 200" fill="none" stroke="#22304a" stroke-width="4" stroke-linecap="round"/>'
-        )},
-        { id:"ca", name:"Cá", emo:"🐠", svg: R(
-          '<polygon class="region" points="288,200 362,138 362,262"/>' +
-          '<path class="region" d="M38 200 Q120 108 232 114 Q312 118 322 200 Q312 282 232 286 Q120 292 38 200 Z"/>' +
-          '<path class="region" d="M138 122 Q182 76 228 116 Q184 138 138 122 Z"/>' +
-          '<path class="region" d="M148 280 Q184 318 218 282 Q184 264 148 280 Z"/>' +
-          '<path class="region" d="M168 128 Q190 200 168 272 Q200 268 208 200 Q200 132 168 128 Z"/>' +
-          '<circle class="region" cx="330" cy="86" r="17"/>' +
-          '<circle class="region" cx="362" cy="52" r="12"/>' +
-          '<circle class="region" cx="298" cy="48" r="10"/>' +
-          '<circle class="detail" cx="94" cy="180" r="11" fill="#22304a"/>' +
-          '<circle class="detail" cx="90" cy="176" r="4" fill="#fff"/>' +
-          '<path class="detail" d="M52 214 Q66 224 52 234" fill="none" stroke="#22304a" stroke-width="4" stroke-linecap="round"/>'
-        )},
-        { id:"chim", name:"Chim", emo:"🐦", svg: R(
-          '<polygon class="region" points="272,246 356,224 344,288 268,286"/>' +
-          '<polygon class="region" points="118,88 134,42 158,84"/>' +
-          '<ellipse class="region" cx="198" cy="242" rx="97" ry="80" transform="rotate(-14 198 242)"/>' +
-          '<circle class="region" cx="128" cy="142" r="60"/>' +
-          '<ellipse class="region" cx="172" cy="268" rx="46" ry="40"/>' +
-          '<ellipse class="region" cx="216" cy="242" rx="50" ry="30" transform="rotate(-22 216 242)"/>' +
-          '<polygon class="region" points="76,138 30,156 78,170"/>' +
-          '<circle class="detail" cx="112" cy="132" r="9" fill="#22304a"/>' +
-          '<circle class="detail" cx="109" cy="129" r="3.5" fill="#fff"/>' +
-          '<path class="detail" d="M168 322 L168 352 M214 320 L218 352 M156 352 L180 352 M206 352 L230 352" stroke="#22304a" stroke-width="5" stroke-linecap="round" fill="none"/>'
-        )},
-        { id:"tao", name:"Táo", emo:"🍎", svg: R(
-          '<path class="region" d="M192 122 Q196 68 218 50 L236 64 Q214 84 210 124 Z"/>' +
-          '<ellipse class="region" cx="262" cy="76" rx="46" ry="21" transform="rotate(-24 262 76)"/>' +
-          '<path class="region" d="M200 122 C162 82 92 108 86 190 C80 272 142 344 200 332 C258 344 320 272 314 190 C308 108 238 82 200 122 Z"/>' +
-          '<ellipse class="region" cx="138" cy="198" rx="17" ry="31" transform="rotate(14 138 198)"/>' +
-          '<circle class="region" cx="128" cy="262" r="16"/>' +
-          '<circle class="region" cx="272" cy="262" r="16"/>' +
-          '<path class="detail" d="M168 316 Q200 328 232 316" fill="none" stroke="#22304a" stroke-width="4" stroke-linecap="round" opacity=".35"/>'
-        )},
-        { id:"oto", name:"Ô tô", emo:"🚗", svg: R(
-          '<path class="region" d="M108 202 L140 128 Q150 112 176 112 L246 112 Q266 112 278 134 L296 202 Z"/>' +
-          '<rect class="region" x="52" y="196" width="296" height="72" rx="26"/>' +
-          '<path class="region" d="M148 190 L168 128 L200 128 L200 190 Z"/>' +
-          '<path class="region" d="M212 128 L244 128 L264 190 L212 190 Z"/>' +
-          '<circle class="region" cx="118" cy="272" r="31"/>' +
-          '<circle class="region" cx="282" cy="272" r="31"/>' +
-          '<circle class="region" cx="118" cy="272" r="13"/>' +
-          '<circle class="region" cx="282" cy="272" r="13"/>' +
-          '<circle class="region" cx="332" cy="226" r="11"/>' +
-          '<path class="detail" d="M206 210 L206 258" stroke="#22304a" stroke-width="4" stroke-linecap="round" fill="none"/>' +
-          '<circle class="detail" cx="222" cy="232" r="4.5" fill="#22304a"/>'
-        )},
-        { id:"hoa", name:"Hoa", emo:"🌸", svg: R(
-          '<path class="region" d="M190 238 L210 238 L208 372 L192 372 Z"/>' +
-          '<path class="region" d="M192 322 Q128 288 102 332 Q138 370 194 346 Z"/>' +
-          '<path class="region" d="M208 322 Q272 288 298 332 Q262 370 206 346 Z"/>' +
-          '<ellipse class="region" cx="200" cy="82" rx="29" ry="46"/>' +
-          '<ellipse class="region" cx="200" cy="82" rx="29" ry="46" transform="rotate(60 200 150)"/>' +
-          '<ellipse class="region" cx="200" cy="82" rx="29" ry="46" transform="rotate(120 200 150)"/>' +
-          '<ellipse class="region" cx="200" cy="82" rx="29" ry="46" transform="rotate(180 200 150)"/>' +
-          '<ellipse class="region" cx="200" cy="82" rx="29" ry="46" transform="rotate(240 200 150)"/>' +
-          '<ellipse class="region" cx="200" cy="82" rx="29" ry="46" transform="rotate(300 200 150)"/>' +
-          '<circle class="region" cx="200" cy="150" r="38"/>' +
-          '<circle class="detail" cx="186" cy="144" r="5" fill="#22304a"/>' +
-          '<circle class="detail" cx="214" cy="144" r="5" fill="#22304a"/>' +
-          '<path class="detail" d="M186 160 Q200 172 214 160" fill="none" stroke="#22304a" stroke-width="4" stroke-linecap="round"/>'
-        )},
-        { id:"nha", name:"Nhà", emo:"🏠", svg: R(
-          '<circle class="region" cx="52" cy="52" r="27"/>' +
-          '<rect class="region" x="256" y="58" width="36" height="64"/>' +
-          '<polygon class="region" points="200,52 344,162 56,162"/>' +
-          '<rect class="region" x="94" y="160" width="212" height="164"/>' +
-          '<rect class="region" x="118" y="192" width="46" height="46"/>' +
-          '<rect class="region" x="236" y="192" width="46" height="46"/>' +
-          '<path class="region" d="M174 324 L174 252 Q174 232 200 232 Q226 232 226 252 L226 324 Z"/>' +
-          '<path class="detail" d="M118 215 L164 215 M141 192 L141 238 M236 215 L282 215 M259 192 L259 238" stroke="#22304a" stroke-width="4" fill="none"/>' +
-          '<circle class="detail" cx="216" cy="282" r="5" fill="#22304a"/>' +
-          '<path class="detail" d="M30 52 L14 52 M52 30 L52 14 M74 52 L90 52" stroke="#22304a" stroke-width="4" stroke-linecap="round" fill="none"/>'
-        )}
+        { id:"tao", name:"Quả táo", emo:"🍎",
+          regions:[
+            '<ellipse cx="492" cy="178" rx="92" ry="42" transform="rotate(-25 492 178)"/>',
+            '<path d="M398 258 C398 195 418 152 458 118 L486 144 C456 170 446 208 449 258 Z"/>',
+            '<path d="M400 268 C348 216 214 238 199 382 C186 508 290 662 356 642 C381 634 419 634 444 642 C510 662 614 508 601 382 C586 238 452 216 400 268 Z"/>',
+            '<ellipse cx="296" cy="392" rx="30" ry="56" transform="rotate(15 296 392)"/>',
+            '<circle cx="616" cy="298" r="30"/>',
+            '<ellipse cx="652" cy="346" rx="28" ry="22"/>',
+            '<path d="M88 726 C96 672 116 640 134 706 C148 652 168 640 182 726 Z"/>',
+            '<path d="M618 726 C626 652 646 640 664 706 C676 672 696 672 712 726 Z"/>'
+          ],
+          details:[
+            '<circle cx="342" cy="432" r="11" fill="' + INK + '"/>',
+            '<circle cx="458" cy="432" r="11" fill="' + INK + '"/>',
+            '<path d="M368 478 Q400 502 432 478" fill="none" stroke="' + INK + '" stroke-width="7" stroke-linecap="round"/>',
+            '<circle cx="606" cy="290" r="5" fill="' + INK + '"/>',
+            '<path d="M640 330 Q652 338 664 330" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>'
+          ]
+        },
+        { id:"ca", name:"Con cá", emo:"🐠",
+          regions:[
+            '<path d="M556 400 L702 288 C724 378 724 422 702 512 Z"/>',
+            '<path d="M118 400 C218 268 424 238 560 400 C424 562 218 532 118 400 Z"/>',
+            '<path d="M298 288 C338 208 432 202 474 278 C424 252 350 258 298 288 Z"/>',
+            '<path d="M318 518 C358 578 432 572 458 514 C412 536 356 536 318 518 Z"/>',
+            '<path d="M302 272 C342 352 342 448 302 528 C266 458 266 342 302 272 Z"/>',
+            '<path d="M424 264 C458 352 458 448 424 536 C392 458 392 342 424 264 Z"/>',
+            '<circle cx="216" cy="362" r="31"/>',
+            '<circle cx="128" cy="168" r="27"/>',
+            '<circle cx="192" cy="106" r="20"/>',
+            '<circle cx="92" cy="96" r="15"/>'
+          ],
+          details:[
+            '<circle cx="216" cy="362" r="14" fill="' + INK + '"/>',
+            '<circle cx="221" cy="356" r="5" fill="#fff"/>',
+            '<path d="M118 428 Q140 444 118 462" fill="none" stroke="' + INK + '" stroke-width="7" stroke-linecap="round"/>'
+          ]
+        },
+        { id:"hoa", name:"Bông hoa", emo:"🌼",
+          regions:[
+            '<ellipse cx="400" cy="212" rx="64" ry="98"/>',
+            '<ellipse cx="400" cy="212" rx="64" ry="98" transform="rotate(60 400 330)"/>',
+            '<ellipse cx="400" cy="212" rx="64" ry="98" transform="rotate(120 400 330)"/>',
+            '<ellipse cx="400" cy="212" rx="64" ry="98" transform="rotate(180 400 330)"/>',
+            '<ellipse cx="400" cy="212" rx="64" ry="98" transform="rotate(240 400 330)"/>',
+            '<ellipse cx="400" cy="212" rx="64" ry="98" transform="rotate(300 400 330)"/>',
+            '<circle cx="400" cy="330" r="72"/>',
+            '<path d="M384 402 L416 402 L411 692 L389 692 Z"/>',
+            '<path d="M390 542 C298 500 238 532 222 594 C288 620 360 602 390 542 Z"/>',
+            '<path d="M410 584 C502 542 562 574 578 636 C512 662 440 644 410 584 Z"/>',
+            '<path d="M108 742 C180 690 260 726 340 700 C420 674 480 726 560 700 C630 678 690 706 740 742 Z"/>'
+          ],
+          details:[
+            '<circle cx="374" cy="318" r="8" fill="' + INK + '"/>',
+            '<circle cx="426" cy="318" r="8" fill="' + INK + '"/>',
+            '<path d="M376 348 Q400 368 424 348" fill="none" stroke="' + INK + '" stroke-width="6" stroke-linecap="round"/>',
+            '<circle cx="352" cy="342" r="10" fill="#FF8FAB" opacity=".7"/>',
+            '<circle cx="448" cy="342" r="10" fill="#FF8FAB" opacity=".7"/>'
+          ]
+        },
+        { id:"oto", name:"Ô tô", emo:"🚗",
+          regions:[
+            '<path d="M228 422 L290 282 C301 256 332 244 374 244 L472 244 C508 244 534 262 554 298 L592 422 Z"/>',
+            '<path d="M302 402 L346 286 L396 286 L396 402 Z"/>',
+            '<path d="M416 286 L466 286 C497 286 518 302 538 342 L558 402 L416 402 Z"/>',
+            '<rect x="138" y="412" width="524" height="132" rx="46"/>',
+            '<circle cx="256" cy="548" r="60"/>',
+            '<circle cx="256" cy="548" r="27"/>',
+            '<circle cx="546" cy="548" r="60"/>',
+            '<circle cx="546" cy="548" r="27"/>',
+            '<circle cx="636" cy="464" r="21"/>'
+          ],
+          details:[
+            '<path d="M420 452 L420 512" stroke="' + INK + '" stroke-width="6" stroke-linecap="round" fill="none"/>',
+            '<circle cx="436" cy="478" r="6" fill="' + INK + '"/>',
+            '<path d="M180 500 L214 500" stroke="' + INK + '" stroke-width="6" stroke-linecap="round" fill="none"/>'
+          ]
+        },
+        { id:"nha", name:"Ngôi nhà", emo:"🏠",
+          regions:[
+            '<rect x="518" y="176" width="62" height="118"/>',
+            '<polygon points="400,138 646,332 154,332"/>',
+            '<rect x="228" y="332" width="344" height="272"/>',
+            '<path d="M364 604 L364 462 C364 426 436 426 436 462 L436 604 Z"/>',
+            '<rect x="264" y="392" width="72" height="72" rx="12"/>',
+            '<rect x="464" y="392" width="72" height="72" rx="12"/>',
+            '<circle cx="128" cy="128" r="56"/>',
+            '<path d="M566 178 C540 178 524 156 532 134 C539 112 562 102 584 110 C596 82 634 70 662 84 C684 95 690 114 682 132 C708 130 724 148 715 166 C706 184 684 178 666 178 Z"/>',
+            '<path d="M56 690 C160 650 260 684 380 656 C500 630 600 684 744 648 L744 700 L56 700 Z"/>'
+          ],
+          details:[
+            '<path d="M264 428 L336 428 M300 392 L300 464 M464 428 L536 428 M500 392 L500 464" stroke="' + INK + '" stroke-width="6" fill="none"/>',
+            '<circle cx="420" cy="522" r="7" fill="' + INK + '"/>',
+            '<path d="M128 52 L128 30 M76 76 L60 60 M180 76 L196 60 M64 128 L42 128 M192 128 L214 128" stroke="' + INK + '" stroke-width="7" stroke-linecap="round" fill="none"/>'
+          ]
+        },
+        { id:"meo", name:"Con mèo", emo:"🐱",
+          regions:[
+            '<polygon points="252,238 284,106 388,186"/>',
+            '<polygon points="548,238 516,106 412,186"/>',
+            '<polygon points="277,206 293,144 352,186"/>',
+            '<polygon points="523,206 507,144 448,186"/>',
+            '<ellipse cx="400" cy="332" rx="188" ry="156"/>',
+            '<ellipse cx="400" cy="612" rx="152" ry="112"/>',
+            '<ellipse cx="400" cy="628" rx="86" ry="72"/>',
+            '<path d="M542 642 C642 642 694 560 668 478 C662 456 630 462 633 489 C640 566 600 602 538 596 Z"/>',
+            '<ellipse cx="332" cy="316" rx="27" ry="34"/>',
+            '<ellipse cx="468" cy="316" rx="27" ry="34"/>'
+          ],
+          details:[
+            '<ellipse cx="332" cy="322" rx="11" ry="20" fill="' + INK + '"/>',
+            '<ellipse cx="468" cy="322" rx="11" ry="20" fill="' + INK + '"/>',
+            '<polygon points="384,368 416,368 400,386" fill="#FF6B81"/>',
+            '<path d="M400 386 L400 398 M400 398 Q386 410 372 400 M400 398 Q414 410 428 400" fill="none" stroke="' + INK + '" stroke-width="6" stroke-linecap="round"/>',
+            '<path d="M120 330 L196 344 M126 372 L198 366 M680 330 L604 344 M674 372 L602 366" stroke="' + INK + '" stroke-width="6" stroke-linecap="round" fill="none"/>'
+          ]
+        },
+        { id:"mattroi", name:"Mặt trời và mây", emo:"🌞",
+          regions:[
+            '<path d="M108 700 L692 700 L628 700 A228 228 0 0 0 172 700 Z"/>',
+            '<path d="M172 700 L628 700 L568 700 A168 168 0 0 0 232 700 Z"/>',
+            '<path d="M232 700 L568 700 L512 700 A112 112 0 0 0 288 700 Z"/>',
+            '<path d="M118 700 C176 636 262 700 330 648 C380 610 452 640 486 700 Z"/>',
+            '<path d="M470 700 C520 622 622 700 684 640 C724 602 776 636 790 700 Z"/>',
+            '<path d="M400 96 L438 196 L400 168 L362 196 Z M400 664 L438 564 L400 592 L362 564 Z M96 380 L196 418 L168 380 L196 342 Z M704 380 L604 418 L632 380 L604 342 Z M185 165 L268 232 L228 238 L208 200 Z M615 165 L532 232 L572 238 L592 200 Z M185 595 L268 528 L228 522 L208 560 Z M615 595 L532 528 L572 522 L592 560 Z"/>',
+            '<circle cx="400" cy="380" r="128"/>'
+          ],
+          details:[
+            '<circle cx="356" cy="356" r="11" fill="' + INK + '"/>',
+            '<circle cx="444" cy="356" r="11" fill="' + INK + '"/>',
+            '<path d="M362 402 Q400 434 438 402" fill="none" stroke="' + INK + '" stroke-width="7" stroke-linecap="round"/>',
+            '<circle cx="318" cy="398" r="15" fill="#FF8FAB" opacity=".7"/>',
+            '<circle cx="482" cy="398" r="15" fill="#FF8FAB" opacity=".7"/>'
+          ]
+        },
+        { id:"thuyen", name:"Con thuyền", emo:"⛵",
+          regions:[
+            '<path d="M418 128 L418 432 L614 432 C562 318 502 216 418 128 Z"/>',
+            '<path d="M382 198 L382 432 L226 432 C268 338 324 262 382 198 Z"/>',
+            '<rect x="384" y="106" width="32" height="332"/>',
+            '<polygon points="416,108 486,134 416,166"/>',
+            '<path d="M176 472 L624 472 L558 592 C548 612 528 618 496 618 L304 618 C272 618 252 612 242 592 Z"/>',
+            '<path d="M202 522 L598 522 L576 562 L224 562 Z"/>',
+            '<path d="M52 668 C112 624 172 706 232 662 C292 618 352 706 412 662 C472 618 532 706 592 662 C652 618 712 706 772 662 L772 730 L52 730 Z"/>',
+            '<circle cx="118" cy="128" r="52"/>',
+            '<path d="M540 150 C566 128 606 132 622 154 C650 148 676 168 668 192 C660 212 560 214 544 188 C534 172 528 162 540 150 Z"/>'
+          ],
+          details:[
+            '<circle cx="330" cy="540" r="6" fill="' + INK + '"/>',
+            '<circle cx="400" cy="540" r="6" fill="' + INK + '"/>',
+            '<circle cx="470" cy="540" r="6" fill="' + INK + '"/>',
+            '<path d="M118 56 L118 36 M72 82 L58 68 M164 82 L178 68" stroke="' + INK + '" stroke-width="6" stroke-linecap="round" fill="none"/>'
+          ]
+        }
       ];
 
       /* ---------- Trạng thái + lưu trên máy ---------- */
       var state = {
-        pic: 0, colorIdx: 0, mode: "color", /* color | rainbow | glitter */
-        eraser: false, brush: 2, /* mặc định cọ TO cho tay bé */
-        paints: {},   /* id tranh -> dataURL lớp vẽ */
-        done: {},     /* id tranh -> true khi đã bấm Hoàn thành */
+        pic: 0, colorIdx: 0,
+        tool: "fill", /* fill | brush */
+        eraser: false, brush: 2,
+        fills: {},    /* id tranh -> { chỉ số vùng: mã màu } */
+        paints: {},   /* id tranh -> dataURL lớp cọ */
+        done: {},
         music: true
       };
       try {
         var saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
         if (saved && typeof saved === "object") {
           if (typeof saved.pic === "number") state.pic = Math.min(Math.max(saved.pic, 0), PICTURES.length - 1);
+          if (saved.fills) state.fills = saved.fills;
           if (saved.paints) state.paints = saved.paints;
           if (saved.done) state.done = saved.done;
           if (typeof saved.music === "boolean") state.music = saved.music;
@@ -470,13 +525,13 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 
       function persist() {
         try {
-          localStorage.setItem(STORE_KEY, JSON.stringify({ pic: state.pic, paints: state.paints, done: state.done, music: state.music, brush: state.brush }));
+          localStorage.setItem(STORE_KEY, JSON.stringify({ pic: state.pic, fills: state.fills, paints: state.paints, done: state.done, music: state.music, brush: state.brush }));
         } catch (e) {
-          /* đầy bộ nhớ: chỉ giữ tranh đang tô */
           try {
-            var keep = {}; var id = currentPic().id;
-            if (state.paints[id]) keep[id] = state.paints[id];
-            localStorage.setItem(STORE_KEY, JSON.stringify({ pic: state.pic, paints: keep, done: state.done, music: state.music, brush: state.brush }));
+            var keepF = {}, keepP = {}, id = currentPic().id;
+            if (state.fills[id]) keepF[id] = state.fills[id];
+            if (state.paints[id]) keepP[id] = state.paints[id];
+            localStorage.setItem(STORE_KEY, JSON.stringify({ pic: state.pic, fills: keepF, paints: keepP, done: state.done, music: state.music, brush: state.brush }));
           } catch (e2) {}
         }
       }
@@ -500,38 +555,14 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       }
       function popSound() {
         var ac = audio(); if (!ac) return;
-        tone(300, ac.currentTime, 0.12, "square", 0.08);
+        tone(520, ac.currentTime, 0.1, "triangle", 0.14);
+        tone(780, ac.currentTime + 0.05, 0.12, "triangle", 0.1);
       }
       function fanfare() {
         var ac = audio(); if (!ac) return;
         var notes = [523, 659, 784, 1047, 784, 1047, 1319];
         for (var i = 0; i < notes.length; i++) tone(notes[i], ac.currentTime + i * 0.13, 0.32, "triangle", 0.16);
       }
-      /* Tiếng cọ sột soạt rất nhẹ khi vẽ: noise qua lọc thấp, gain nhỏ */
-      var noiseSrc = null, noiseGain = null, noiseFilter = null;
-      function brushSoundStart() {
-        var ac = audio(); if (!ac) return;
-        if (!noiseSrc) {
-          var len = ac.sampleRate;
-          var buf = ac.createBuffer(1, len, ac.sampleRate);
-          var d = buf.getChannelData(0);
-          for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-          noiseSrc = ac.createBufferSource(); noiseSrc.buffer = buf; noiseSrc.loop = true;
-          noiseFilter = ac.createBiquadFilter(); noiseFilter.type = "lowpass"; noiseFilter.frequency.value = 700; noiseFilter.Q.value = 0.6;
-          noiseGain = ac.createGain(); noiseGain.gain.value = 0;
-          noiseSrc.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(ac.destination);
-          noiseSrc.start();
-        }
-        noiseGain.gain.cancelScheduledValues(ac.currentTime);
-        noiseGain.gain.setTargetAtTime(0.035, ac.currentTime, 0.05);
-      }
-      function brushSoundMove(speed) {
-        if (noiseFilter && actx) noiseFilter.frequency.setTargetAtTime(500 + Math.min(speed * 2.2, 900), actx.currentTime, 0.05);
-      }
-      function brushSoundStop() {
-        if (noiseGain && actx) noiseGain.gain.setTargetAtTime(0, actx.currentTime, 0.06);
-      }
-      /* Nhạc nền nhẹ: giai điệu vòng lặp đơn giản */
       var musicTimer = null, musicStep = 0;
       var MELODY = [523,587,659,784, 659,587,523,0, 440,523,587,659, 587,523,440,0, 523,587,659,784, 880,784,659,587, 659,587,523,0,0,0,0,0];
       function musicTick() {
@@ -541,21 +572,18 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         musicStep++;
         musicTimer = setTimeout(musicTick, 330);
       }
-      function startMusic() {
-        if (!state.music || musicTimer) return;
-        audio(); musicTick();
-      }
-      function stopMusic() {
-        if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; }
-      }
+      function startMusic() { if (!state.music || musicTimer) return; audio(); musicTick(); }
+      function stopMusic() { if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; } }
 
       /* ---------- DOM ---------- */
       var pickerEl = document.getElementById("picker");
+      var picNameEl = document.getElementById("picName");
       var stageEl = document.getElementById("stage");
-      var linesEl = document.getElementById("lines");
+      var artEl = document.getElementById("art");
       var canvas = document.getElementById("paint");
       var ctx = canvas.getContext("2d");
       var paletteEl = document.getElementById("palette");
+      var brushesEl = document.getElementById("brushes");
       var fillbarEl = document.getElementById("fillbar");
       var progTxtEl = document.getElementById("progTxt");
       var overlayEl = document.getElementById("overlay");
@@ -563,12 +591,20 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       var undoBtn = document.getElementById("undoBtn");
       var musicBtn = document.getElementById("musicBtn");
       var toastEl = document.getElementById("toast");
+      var hintEl = document.getElementById("hint");
+      var modeFillBtn = document.getElementById("modeFill");
+      var modeBrushBtn = document.getElementById("modeBrush");
 
       ctx.lineCap = "round"; ctx.lineJoin = "round";
 
       function currentPic() { return PICTURES[state.pic]; }
+      function picFills() {
+        var id = currentPic().id;
+        if (!state.fills[id]) state.fills[id] = {};
+        return state.fills[id];
+      }
 
-      /* ---------- Dựng bộ chọn tranh ---------- */
+      /* ---------- Bộ chọn tranh ---------- */
       function renderPicker() {
         pickerEl.innerHTML = "";
         PICTURES.forEach(function (p, i) {
@@ -594,41 +630,28 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         });
       }
 
-      /* ---------- Dựng bảng màu + cọ đặc biệt ---------- */
+      /* ---------- Bảng màu ---------- */
       function renderPalette() {
         paletteEl.innerHTML = "";
         COLORS.forEach(function (col, i) {
           var b = document.createElement("button");
-          b.className = "swatch" + (state.mode === "color" && i === state.colorIdx && !state.eraser ? " sel" : "");
+          b.className = "swatch" + (i === state.colorIdx && !state.eraser ? " sel" : "");
           b.style.background = col.c;
           b.setAttribute("aria-label", "Màu " + col.n);
-          b.addEventListener("click", function () { pickColor("color", i); });
+          b.addEventListener("click", function () {
+            state.colorIdx = i; state.eraser = false;
+            eraserBtn.classList.remove("on");
+            popSound(); startMusic(); renderPalette();
+          });
           paletteEl.appendChild(b);
         });
-        var rb = document.createElement("button");
-        rb.className = "swatch special rainbow-bg" + (state.mode === "rainbow" && !state.eraser ? " sel" : "");
-        rb.setAttribute("aria-label", "Cọ cầu vồng");
-        rb.title = "Cọ cầu vồng";
-        rb.addEventListener("click", function () { pickColor("rainbow", state.colorIdx); });
-        paletteEl.appendChild(rb);
-        var gb = document.createElement("button");
-        gb.className = "swatch special glitter-bg" + (state.mode === "glitter" && !state.eraser ? " sel" : "");
-        gb.setAttribute("aria-label", "Cọ kim tuyến");
-        gb.title = "Cọ kim tuyến";
-        gb.textContent = "✨";
-        gb.addEventListener("click", function () { pickColor("glitter", state.colorIdx); });
-        paletteEl.appendChild(gb);
-      }
-      function pickColor(mode, idx) {
-        state.mode = mode; state.colorIdx = idx; state.eraser = false;
-        eraserBtn.classList.remove("on");
-        popSound(); startMusic(); renderPalette();
       }
 
-      /* ---------- Chọn cỡ cọ ---------- */
+      /* ---------- Cỡ cọ ---------- */
       var brushOpts = document.querySelectorAll(".brush-opt");
       function renderBrushes() {
         brushOpts.forEach(function (b, i) { b.classList.toggle("sel", i === state.brush); });
+        brushesEl.style.display = state.tool === "brush" ? "flex" : "none";
       }
       brushOpts.forEach(function (b, i) {
         b.addEventListener("click", function () {
@@ -636,36 +659,55 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         });
       });
 
-      /* ---------- Lớp nét + lớp vẽ ---------- */
-      function linesSvgString(p, size) {
-        return '<svg viewBox="0 0 400 400" role="img" aria-label="Tranh ' + p.name + ' để tô màu"' +
-          (size ? ' width="' + size + '" height="' + size + '"' : "") +
-          '><g fill="none" stroke="#22304a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">' +
-          p.svg + "</g></svg>";
+      /* ---------- Chuyển chế độ Đổ màu / Cọ vẽ ---------- */
+      function renderMode() {
+        modeFillBtn.classList.toggle("sel", state.tool === "fill");
+        modeBrushBtn.classList.toggle("sel", state.tool === "brush");
+        stageEl.classList.toggle("fill-mode", state.tool === "fill");
+        stageEl.classList.toggle("brush-mode", state.tool === "brush");
+        hintEl.textContent = state.tool === "fill"
+          ? "🪣 Chọn một màu, rồi chạm vào từng vùng trong tranh để đổ màu nhé!"
+          : "🖌️ Chọn một màu, rồi quẹt ngón tay lên tranh để vẽ tự do nhé!";
+        renderBrushes();
+      }
+      modeFillBtn.addEventListener("click", function () { state.tool = "fill"; popSound(); renderMode(); });
+      modeBrushBtn.addEventListener("click", function () { state.tool = "brush"; popSound(); renderMode(); });
+
+      /* ---------- Dựng tranh SVG + khôi phục màu đã tô ---------- */
+      var regionEls = [];
+      function svgMarkup(p) {
+        var s = '<svg id="artSvg" viewBox="0 0 800 800" role="img" aria-label="Tranh ' + p.name + ' để tô màu" xmlns="http://www.w3.org/2000/svg">';
+        p.regions.forEach(function (r, i) {
+          s += r.replace(/^\s*<(\w+)/, '<$1 class="region" data-idx="' + i + '"');
+        });
+        p.details.forEach(function (d) {
+          s += d.replace(/^\s*<(\w+)/, '<$1 class="detail"');
+        });
+        s += "</svg>";
+        return s;
       }
       function loadPicture() {
         var p = currentPic();
-        linesEl.innerHTML = linesSvgString(p, 0);
+        picNameEl.textContent = p.emo + " " + p.name;
+        artEl.innerHTML = svgMarkup(p);
+        regionEls = Array.prototype.slice.call(artEl.querySelectorAll(".region"));
+        var fills = picFills();
+        regionEls.forEach(function (el, i) {
+          if (fills[i]) el.style.fill = fills[i];
+          el.addEventListener("click", function (ev) { onRegionTap(el, i, ev); });
+        });
         clearCanvas();
         var savedPaint = state.paints[p.id];
         if (savedPaint) {
           var img = new Image();
-          img.onload = function () { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); updateProgress(); };
+          img.onload = function () { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); };
           img.src = savedPaint;
         }
-        buildMask(p);
         updateProgress();
       }
-      function clearCanvas() {
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
+      function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
       function saveCurrentPaint() {
-        try {
-          var url = canvas.toDataURL("image/webp", 0.85);
-          if (url.indexOf("data:image/webp") !== 0) url = canvas.toDataURL("image/png");
-          state.paints[currentPic().id] = url;
-        } catch (e) {}
+        try { state.paints[currentPic().id] = canvas.toDataURL("image/png"); } catch (e) {}
       }
       var saveTimer = null;
       function scheduleSave() {
@@ -673,133 +715,100 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         saveTimer = setTimeout(function () { saveCurrentPaint(); persist(); }, 500);
       }
 
-      /* ---------- Mặt nạ vùng tranh: tính % đã tô (chỉ để động viên, không khóa khen) ---------- */
-      var maskData = null, maskTotal = 0;
-      var sampleCanvas = document.createElement("canvas"); sampleCanvas.width = 100; sampleCanvas.height = 100;
-      var sampleCtx = sampleCanvas.getContext("2d", { willReadFrequently: true });
-      var maskCanvas = document.createElement("canvas"); maskCanvas.width = 100; maskCanvas.height = 100;
-      var maskCtx = maskCanvas.getContext("2d", { willReadFrequently: true });
-      function buildMask(p) {
-        maskData = null; maskTotal = 0;
-        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100" height="100">' +
-          "<style>.detail{display:none}</style>" +
-          '<g fill="#000000" stroke="none">' + p.svg + "</g></svg>";
-        var url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
-        var img = new Image();
-        img.onload = function () {
-          maskCtx.clearRect(0, 0, 100, 100);
-          maskCtx.drawImage(img, 0, 0, 100, 100);
-          URL.revokeObjectURL(url);
-          try {
-            maskData = maskCtx.getImageData(0, 0, 100, 100).data;
-            maskTotal = 0;
-            for (var i = 3; i < maskData.length; i += 4) if (maskData[i] > 128) maskTotal++;
-          } catch (e) { maskData = null; }
-          updateProgress();
-        };
-        img.src = url;
+      /* ---------- ĐỔ MÀU: chạm vùng nào đổ đúng vùng đó ---------- */
+      var undoStack = [];
+      function syncUndo() { undoBtn.disabled = undoStack.length === 0; }
+      function onRegionTap(el, idx, ev) {
+        if (state.tool !== "fill") return;
+        var fills = picFills();
+        var prev = fills[idx] || null;
+        var next = state.eraser ? null : COLORS[state.colorIdx].c;
+        if (prev === next) return;
+        undoStack.push({ type: "fill", idx: idx, prev: prev });
+        if (undoStack.length > 40) undoStack.shift();
+        syncUndo();
+        if (next) { fills[idx] = next; el.style.fill = next; }
+        else { delete fills[idx]; el.style.fill = ""; }
+        el.classList.remove("pop"); void el.getBoundingClientRect(); el.classList.add("pop");
+        popSound(); startMusic();
+        if (ev) sparkle(ev, 3);
+        updateProgress();
+        persist();
+        checkAllFilled();
+      }
+      function filledCount() {
+        var fills = picFills(), n = 0;
+        regionEls.forEach(function (el, i) { if (fills[i]) n++; });
+        return n;
       }
       function updateProgress() {
-        var pct = 0;
-        if (maskData && maskTotal > 0) {
-          sampleCtx.fillStyle = "#FFFFFF"; sampleCtx.fillRect(0, 0, 100, 100);
-          sampleCtx.drawImage(canvas, 0, 0, 100, 100);
-          try {
-            var d = sampleCtx.getImageData(0, 0, 100, 100).data;
-            var n = 0;
-            for (var i = 0; i < d.length; i += 4) {
-              if (maskData[i + 3] > 128 && (d[i] < 242 || d[i + 1] < 242 || d[i + 2] < 242)) n++;
-            }
-            pct = Math.round((n / maskTotal) * 100);
-          } catch (e) {}
+        var total = currentPic().regions.length;
+        var n = filledCount();
+        progTxtEl.textContent = "Đã tô: " + n + "/" + total + " vùng";
+        fillbarEl.style.width = (total ? Math.round(n / total * 100) : 0) + "%";
+      }
+      var celebratedPic = {};
+      function checkAllFilled() {
+        var p = currentPic();
+        if (filledCount() === p.regions.length && !celebratedPic[p.id]) {
+          celebratedPic[p.id] = true;
+          state.done[p.id] = true; persist(); renderPickerDoneOnly();
+          celebrate();
         }
-        progTxtEl.textContent = "Đã tô: " + pct + "%";
-        fillbarEl.style.width = pct + "%";
       }
 
-      /* ---------- Cọ vẽ: kéo là tô ---------- */
-      var painting = false, lastPt = null, hue = 0, undoStack = [];
-      function syncUndo() { undoBtn.disabled = undoStack.length === 0; }
-      function strokeColor() {
-        if (state.eraser) return "#FFFFFF";
-        if (state.mode === "rainbow") return "hsl(" + (hue % 360) + ",92%,55%)";
-        return COLORS[state.colorIdx].c;
-      }
+      /* ---------- CỌ VẼ tự do (lớp canvas phủ trên) ---------- */
+      var painting = false, lastPt = null;
       function canvasPos(e) {
         var r = canvas.getBoundingClientRect();
-        return {
-          x: (e.clientX - r.left) * canvas.width / r.width,
-          y: (e.clientY - r.top) * canvas.height / r.height
-        };
+        return { x: (e.clientX - r.left) * canvas.width / r.width, y: (e.clientY - r.top) * canvas.height / r.height };
       }
       function drawDot(p) {
-        ctx.fillStyle = strokeColor();
+        ctx.globalCompositeOperation = state.eraser ? "destination-out" : "source-over";
+        ctx.fillStyle = COLORS[state.colorIdx].c;
         ctx.beginPath();
         ctx.arc(p.x, p.y, BRUSH_SIZES[state.brush] / 2, 0, Math.PI * 2);
         ctx.fill();
-        if (state.mode === "glitter" && !state.eraser) sprinkle(p.x, p.y, BRUSH_SIZES[state.brush] / 2);
+        ctx.globalCompositeOperation = "source-over";
       }
       function drawSeg(a, b) {
-        var size = BRUSH_SIZES[state.brush] * (state.eraser ? 1.35 : 1);
-        ctx.strokeStyle = strokeColor();
-        ctx.lineWidth = size;
-        if (state.mode === "glitter" && !state.eraser) ctx.globalAlpha = 0.88;
+        ctx.globalCompositeOperation = state.eraser ? "destination-out" : "source-over";
+        ctx.strokeStyle = COLORS[state.colorIdx].c;
+        ctx.lineWidth = BRUSH_SIZES[state.brush] * (state.eraser ? 1.3 : 1);
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        ctx.globalAlpha = 1;
-        if (state.mode === "glitter" && !state.eraser) sprinkle(b.x, b.y, size / 2);
+        ctx.globalCompositeOperation = "source-over";
       }
-      var GLITTER = ["#FFFFFF", "#FFE066", "#FFD60A", "#FFF3B0", "#F5B800"];
-      function sprinkle(x, y, r) {
-        for (var i = 0; i < 7; i++) {
-          var ang = Math.random() * Math.PI * 2, dist = Math.random() * r;
-          ctx.fillStyle = GLITTER[(Math.random() * GLITTER.length) | 0];
-          ctx.beginPath();
-          ctx.arc(x + Math.cos(ang) * dist, y + Math.sin(ang) * dist, 1.6 + Math.random() * 3.2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      var lastSparkAt = 0;
       canvas.addEventListener("pointerdown", function (e) {
+        if (state.tool !== "brush") return;
         e.preventDefault();
         audio(); startMusic();
         try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-        undoStack.push(canvas.toDataURL("image/png"));
-        if (undoStack.length > 25) undoStack.shift();
+        undoStack.push({ type: "brush", img: canvas.toDataURL("image/png") });
+        if (undoStack.length > 40) undoStack.shift();
         syncUndo();
         painting = true;
-        hue = Math.random() * 360;
         lastPt = canvasPos(e);
         drawDot(lastPt);
-        stageEl.classList.add("happy");
-        brushSoundStart();
-        sparkle(e, 4);
+        sparkle(e, 3);
       });
       canvas.addEventListener("pointermove", function (e) {
-        if (!painting) return;
+        if (!painting || state.tool !== "brush") return;
         var p = canvasPos(e);
         var dx = p.x - lastPt.x, dy = p.y - lastPt.y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 3) return;
-        hue += dist * 0.45;
+        if (Math.sqrt(dx * dx + dy * dy) < 4) return;
         drawSeg(lastPt, p);
-        brushSoundMove(dist);
         lastPt = p;
-        var now = Date.now();
-        if (now - lastSparkAt > 260) { lastSparkAt = now; sparkle(e, 3); updateProgress(); }
       });
       function endStroke() {
         if (!painting) return;
         painting = false; lastPt = null;
-        stageEl.classList.remove("happy");
-        brushSoundStop();
-        updateProgress();
         scheduleSave();
       }
       canvas.addEventListener("pointerup", endStroke);
       canvas.addEventListener("pointercancel", endStroke);
       canvas.addEventListener("contextmenu", function (e) { e.preventDefault(); });
 
-      /* ---------- Lấp lánh tại điểm chạm ---------- */
+      /* ---------- Lấp lánh + pháo giấy + khen ---------- */
       function sparkle(ev, count) {
         var rect = stageEl.getBoundingClientRect();
         var x = (ev.clientX || rect.left + rect.width / 2) - rect.left;
@@ -818,8 +827,6 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
           (function (node) { setTimeout(function () { node.remove(); }, 700); })(s);
         }
       }
-
-      /* ---------- Pháo giấy + khen ---------- */
       function confetti() {
         var colors = COLORS.map(function (c) { return c.c; });
         for (var i = 0; i < 70; i++) {
@@ -837,11 +844,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
           (function (node) { setTimeout(function () { node.remove(); }, 4200); })(d);
         }
       }
-      function celebrate() {
-        confetti(); fanfare();
-        stageEl.classList.add("happy");
-        overlayEl.classList.add("show");
-      }
+      function celebrate() { confetti(); fanfare(); overlayEl.classList.add("show"); }
 
       /* ---------- Công cụ ---------- */
       eraserBtn.addEventListener("click", function () {
@@ -851,23 +854,38 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       });
       undoBtn.addEventListener("click", function () {
         if (!undoStack.length || painting) return;
-        var url = undoStack.pop(); syncUndo();
-        var img = new Image();
-        img.onload = function () {
-          clearCanvas(); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          updateProgress(); scheduleSave();
-        };
-        img.src = url;
+        var act = undoStack.pop(); syncUndo();
+        if (act.type === "fill") {
+          var fills = picFills();
+          if (act.prev) { fills[act.idx] = act.prev; regionEls[act.idx].style.fill = act.prev; }
+          else { delete fills[act.idx]; regionEls[act.idx].style.fill = ""; }
+          updateProgress(); persist();
+        } else if (act.type === "reset") {
+          state.fills[currentPic().id] = act.fills;
+          var rf = picFills();
+          regionEls.forEach(function (el, i) { el.style.fill = rf[i] || ""; });
+          var rimg = new Image();
+          rimg.onload = function () { clearCanvas(); ctx.drawImage(rimg, 0, 0, canvas.width, canvas.height); scheduleSave(); };
+          rimg.src = act.img;
+          updateProgress(); persist();
+        } else {
+          var img = new Image();
+          img.onload = function () { clearCanvas(); ctx.drawImage(img, 0, 0, canvas.width, canvas.height); scheduleSave(); };
+          img.src = act.img;
+        }
         popSound();
       });
       document.getElementById("resetBtn").addEventListener("click", function () {
-        undoStack.push(canvas.toDataURL("image/png"));
-        if (undoStack.length > 25) undoStack.shift();
+        undoStack.push({ type: "reset", fills: JSON.parse(JSON.stringify(picFills())), img: canvas.toDataURL("image/png") });
+        if (undoStack.length > 40) undoStack.shift();
         syncUndo();
+        state.fills[currentPic().id] = {};
+        regionEls.forEach(function (el) { el.style.fill = ""; });
         clearCanvas();
         delete state.done[currentPic().id];
+        celebratedPic[currentPic().id] = false;
         popSound(); updateProgress(); scheduleSave(); renderPickerDoneOnly();
-        showToast("Đã làm lại tranh! 🎨");
+        showToast("Đã xóa hết, tô lại nhé! 🎨");
       });
       document.getElementById("finishBtn").addEventListener("click", function () {
         saveCurrentPaint();
@@ -886,27 +904,39 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       document.getElementById("nextBtn").addEventListener("click", function () { goPic(1); });
       document.getElementById("prevBtn").addEventListener("click", function () { goPic(-1); });
       document.getElementById("goNextBtn").addEventListener("click", function () {
-        overlayEl.classList.remove("show"); stageEl.classList.remove("happy"); goPic(1);
+        overlayEl.classList.remove("show"); goPic(1);
       });
       document.getElementById("againBtn").addEventListener("click", function () {
-        overlayEl.classList.remove("show"); stageEl.classList.remove("happy"); popSound();
+        overlayEl.classList.remove("show"); popSound();
       });
 
-      /* Lưu tranh thành ảnh PNG tải về máy: ghép lớp vẽ + lớp nét */
+      /* ---------- Lưu tranh PNG: render SVG + lớp cọ ra canvas ---------- */
       document.getElementById("saveBtn").addEventListener("click", function () {
         var p = currentPic();
-        var out = document.createElement("canvas");
-        out.width = 800; out.height = 800;
-        var octx = out.getContext("2d");
-        octx.fillStyle = "#FFFFFF"; octx.fillRect(0, 0, 800, 800);
-        octx.drawImage(canvas, 0, 0, 800, 800);
-        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800">' +
-          '<g fill="none" stroke="#22304a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">' + p.svg + "</g></svg>";
-        var url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
+        var svgEl = document.getElementById("artSvg");
+        if (!svgEl) return;
+        var clone = svgEl.cloneNode(true);
+        clone.setAttribute("width", "800"); clone.setAttribute("height", "800");
+        /* nhúng style vùng tô vào bản sao để render đúng màu + viền */
+        var styleEl = document.createElementNS("http://www.w3.org/2000/svg", "style");
+        styleEl.textContent = ".region{stroke:#22304a;stroke-width:7;stroke-linejoin:round;stroke-linecap:round}.detail{pointer-events:none}";
+        clone.insertBefore(styleEl, clone.firstChild);
+        /* vùng chưa tô: style.fill rỗng -> đặt trắng tường minh */
+        clone.querySelectorAll(".region").forEach(function (el) {
+          if (!el.style.fill) el.setAttribute("fill", "#FFFFFF");
+          else el.setAttribute("fill", el.style.fill);
+        });
+        var svgStr = new XMLSerializer().serializeToString(clone);
+        var url = URL.createObjectURL(new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" }));
         var img = new Image();
         img.onload = function () {
+          var out = document.createElement("canvas");
+          out.width = 800; out.height = 800;
+          var octx = out.getContext("2d");
+          octx.fillStyle = "#FFFFFF"; octx.fillRect(0, 0, 800, 800);
           octx.drawImage(img, 0, 0, 800, 800);
           URL.revokeObjectURL(url);
+          octx.drawImage(canvas, 0, 0, 800, 800);
           out.toBlob(function (blob) {
             if (!blob) return;
             var a = document.createElement("a");
@@ -914,7 +944,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
             a.download = "tranh-" + p.id + "-cua-be.png";
             document.body.appendChild(a); a.click(); a.remove();
             setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
-            showToast("Đã lưu tranh! 💾");
+            showToast("Đã lưu tranh! 📸");
           }, "image/png");
         };
         img.src = url;
@@ -939,7 +969,6 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 1800);
       }
 
-      /* Chạm đầu tiên: mở khoá âm thanh trên điện thoại */
       document.addEventListener("pointerdown", function once() {
         audio(); startMusic();
         document.removeEventListener("pointerdown", once);
@@ -948,9 +977,9 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       /* ---------- Khởi động ---------- */
       syncMusicBtn();
       syncUndo();
-      renderBrushes();
       renderPicker();
       renderPalette();
+      renderMode();
       loadPicture();
     </script>
   </body>
