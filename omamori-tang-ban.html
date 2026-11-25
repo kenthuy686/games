@@ -566,9 +566,7 @@ function giftURL(){ const base=location.origin+location.pathname; return base+'#
 function updateGiftLink(){
   const url=giftURL(); $('giftLink').value=url;
   const text=encodeURIComponent('🎁 Mình tặng bạn một chiếc Túi May Mắn tự tay làm — mở link để nhận túi và đọc lời chúc nhé: ');
-  $('btnZalo').href='https://zalo.me/share?url='+encodeURIComponent(url)+'&text='+text;
   $('btnFb').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url);
-  $('btnMsg').href='https://www.facebook.com/dialog/send?link='+encodeURIComponent(url)+'&app_id=966242223397117&redirect_uri='+encodeURIComponent(url);
   $('btnMail').href='mailto:?subject='+encodeURIComponent('🎁 Tặng bạn một chiếc Túi May Mắn')+'&body='+encodeURIComponent('Chào '+(state.to||'bạn')+',\n\nMình tự tay làm tặng bạn một chiếc Túi May Mắn kèm lời chúc. Mở link này để nhận túi nhé:\n'+url+'\n\n'+state.msg+'\n\n— '+(state.from||'Một người bạn'));
   renderQR(url);
 }
@@ -614,6 +612,23 @@ $('btnNativeShare').addEventListener('click', async ()=>{
   if(navigator.share){
     try{ await navigator.share({title:'Túi May Mắn Tặng Bạn', text:'🎁 Mình tặng bạn một chiếc Túi May Mắn tự tay làm — mở link để nhận túi và đọc lời chúc nhé!', url}); }catch(e){}
   } else { copyLink(); }
+});
+
+/* Chia sẻ Zalo/Messenger: mở khay chia sẻ của máy để vào thẳng app.
+   KHÔNG dùng zalo.me/share (đẩy người dùng vào trang đăng nhập Zalo web)
+   và KHÔNG dùng facebook.com/dialog/send (app_id mẫu, đã ngừng hỗ trợ trên điện thoại). */
+window.shareToApp = async function(url, text, appName){
+  if(navigator.share){
+    try{ await navigator.share({title:'Túi May Mắn Tặng Bạn', text:text, url}); return; }
+    catch(e){ if(e&&e.name==='AbortError') return; }
+  }
+  const done=()=>toast('🔗 Đã sao chép link — mở '+appName+' và dán vào để gửi nhé!');
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(done).catch(()=>toast('🔗 Link của bạn: '+url)); }
+  else { toast('🔗 Link của bạn: '+url); }
+};
+[['btnZalo','Zalo'],['btnMsg','Messenger']].forEach(([id,appName])=>{
+  const el=$(id); if(!el) return;
+  el.addEventListener('click', e=>{ e.preventDefault(); window.shareToApp(giftURL(),'🎁 Mình tặng bạn một chiếc Túi May Mắn tự tay làm — mở link để nhận túi và đọc lời chúc nhé!', appName); });
 });
 
 /* Nhận diện chế độ người nhận */
@@ -992,9 +1007,7 @@ function refURL(){ return location.origin+location.pathname+'?ref='+encodeURICom
 function updateRefLinks(){
   const url=refURL(); const el=$('refLink'); if(el) el.value=url;
   const text=encodeURIComponent('🎁 Mình đang làm Túi May Mắn 3D tặng bạn bè — mở link này làm một chiếc tặng người thương nhé: ');
-  $('refZalo').href='https://zalo.me/share?url='+encodeURIComponent(url)+'&text='+text;
   $('refFb').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url);
-  $('refMsg').href='https://www.facebook.com/dialog/send?link='+encodeURIComponent(url)+'&app_id=966242223397117&redirect_uri='+encodeURIComponent(url);
   $('refMail').href='mailto:?subject='+encodeURIComponent('🎁 Làm Túi May Mắn tặng bạn bè nè')+'&body='+encodeURIComponent('Chào bạn,\n\nMình gửi bạn trang làm Túi May Mắn 3D — tự tay làm một chiếc túi kèm lời chúc để tặng người thương, hay lắm:\n'+url+'\n\n— '+(account.name||'Một người bạn'));
 }
 function markRefShared(){ if(!progress.refShared){ progress.refShared=1; saveProgress(); award(); } }
@@ -1014,6 +1027,7 @@ $('btnSaveName').addEventListener('click', ()=>{
   toast('👤 Đã lưu tài khoản: '+name+' · Mã '+account.refCode);
 });
 ['refZalo','refFb','refMsg','refMail'].forEach(id=>{ const el=$(id); if(el) el.addEventListener('click', markRefShared); });
+[['refZalo','Zalo'],['refMsg','Messenger']].forEach(([id,appName])=>{ const el=$(id); if(el) el.addEventListener('click', e=>{ e.preventDefault(); if(window.shareToApp) window.shareToApp(refURL(),'🎁 Mình đang làm Túi May Mắn 3D tặng bạn bè — mở link này làm một chiếc tặng người thương nhé!', appName); }); });
 $('btnRefCopy').addEventListener('click', ()=>{
   markRefShared();
   const el=$('refLink'); el.select(); el.setSelectionRange(0,99999);
