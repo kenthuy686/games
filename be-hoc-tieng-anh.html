@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<title>Bé Học Tiếng Anh — Trò chơi lật thẻ ghi nhớ</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R0WP31V8S8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-R0WP31V8S8');
+</script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zi0g7dpb5n");
+</script>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;background:#FBF4E2;color:#1C2A38;}
+  main{max-width:640px;margin:0 auto;padding:20px 14px 40px;}
+  h1{font-size:24px;margin:0 0 4px;text-align:center;}
+  p.sub{color:#5D6C7B;margin:0 0 16px;text-align:center;font-size:14px;}
+  .levels{display:flex;gap:8px;justify-content:center;margin:0 0 12px;flex-wrap:wrap;}
+  .levels button{font:inherit;font-weight:700;font-size:15px;padding:10px 16px;border-radius:999px;border:2px solid #E3D5B4;background:#FFFDF4;color:#1C2A38;cursor:pointer;}
+  .levels button.active{background:#FFB703;border-color:#E09F00;color:#3A2A00;}
+  .hud{display:flex;gap:8px;justify-content:center;align-items:center;margin:0 0 14px;flex-wrap:wrap;}
+  .hud .pill{background:#FFFDF4;border:1px solid #E3D5B4;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;}
+  .hud button{font:inherit;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;border:2px solid #E3D5B4;background:#FFFDF4;color:#1C2A38;cursor:pointer;}
+  .board{display:grid;gap:8px;margin:0 auto;}
+  .card{perspective:600px;aspect-ratio:3/4;cursor:pointer;background:none;border:none;padding:0;font:inherit;}
+  .card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .35s ease;}
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+  .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:4px;text-align:center;overflow:hidden;}
+  .face.back{background:#4D96FF;border:2px solid #2B6CB0;color:#fff;font-size:clamp(18px,6vw,28px);}
+  .face.front{background:#FFFDF4;border:2px solid #E3D5B4;transform:rotateY(180deg);}
+  .face.front .pic{font-size:clamp(26px,9vw,44px);line-height:1;}
+  .face.front .word{font-weight:800;letter-spacing:.5px;font-size:clamp(11px,3.6vw,17px);color:#1C2A38;word-break:break-word;}
+  .card.matched{cursor:default;}
+  .card.matched .face.front{background:#D9F7C4;border-color:#7BC950;}
+  .card.matched .card-inner{animation:pop .3s ease;}
+  @keyframes pop{50%{transform:rotateY(180deg) scale(1.08);}}
+  .overlay{position:fixed;inset:0;background:rgba(28,42,56,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:10;}
+  .overlay.show{display:flex;}
+  .winbox{background:#FFFDF4;border-radius:18px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.25);}
+  .winbox h2{margin:0 0 6px;font-size:28px;}
+  .winbox .stars{font-size:40px;letter-spacing:4px;margin:6px 0;}
+  .winbox p{margin:0 0 18px;color:#5D6C7B;font-size:15px;}
+  .winbox button{font:inherit;font-weight:700;font-size:15px;padding:11px 18px;border-radius:999px;border:2px solid #E09F00;background:#FFB703;color:#3A2A00;cursor:pointer;margin:0 4px 8px;}
+  .winbox button.ghost{background:#FFFDF4;border-color:#E3D5B4;color:#1C2A38;}
+  a.home{display:block;text-align:center;margin-top:22px;color:#5D6C7B;font-size:14px;}
+</style>
+</head>
+<body>
+<main>
+  <h1>🃏 Bé Học Tiếng Anh</h1>
+  <p class="sub">Lật thẻ để ghép <b>từ tiếng Anh</b> với <b>hình đúng</b> nhé!</p>
+
+  <div class="levels" role="group" aria-label="Chọn cấp độ">
+    <button type="button" data-level="1" class="active">Cấp 1 · Dễ</button>
+    <button type="button" data-level="2">Cấp 2 · Vừa</button>
+    <button type="button" data-level="3">Cấp 3 · Khó</button>
+  </div>
+
+  <div class="hud">
+    <span class="pill">Lượt lật: <b id="moves">0</b></span>
+    <span class="pill">Đã ghép: <b id="found">0</b>/<b id="total">6</b> cặp</span>
+    <button type="button" id="restart">🔄 Chơi lại</button>
+  </div>
+
+  <div class="board" id="board" aria-live="polite"></div>
+
+  <a class="home" href="index.html">← Về trang chủ game</a>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="winbox">
+    <h2>🎉 Giỏi quá! 🎉</h2>
+    <div class="stars" id="winStars">⭐⭐⭐</div>
+    <p id="winText"></p>
+    <button type="button" id="againBtn">🔄 Chơi lại cấp này</button>
+    <button type="button" id="nextBtn">Lên cấp ➜</button>
+    <br>
+    <button type="button" id="closeBtn" class="ghost">Xem lại bàn thẻ</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var POOL = [
+    {w:"APPLE",  e:"🍎"}, {w:"BANANA", e:"🍌"}, {w:"CAT",    e:"🐱"},
+    {w:"DOG",    e:"🐶"}, {w:"FISH",   e:"🐟"}, {w:"BIRD",   e:"🐦"},
+    {w:"SUN",    e:"☀️"}, {w:"MOON",   e:"🌙"}, {w:"STAR",   e:"⭐"},
+    {w:"FLOWER", e:"🌸"}, {w:"CAR",    e:"🚗"}, {w:"BUS",    e:"🚌"},
+    {w:"BOOK",   e:"📖"}, {w:"CAKE",   e:"🎂"}, {w:"EGG",    e:"🥚"},
+    {w:"MILK",   e:"🥛"}, {w:"TREE",   e:"🌳"}, {w:"RAIN",   e:"🌧️"},
+    {w:"BALL",   e:"⚽"}, {w:"HOUSE",  e:"🏠"}, {w:"DUCK",   e:"🦆"},
+    {w:"FROG",   e:"🐸"}, {w:"BEAR",   e:"🐻"}, {w:"LION",   e:"🦁"}
+  ];
+  var LEVELS = {
+    1:{pairs:6,  cols:4},
+    2:{pairs:8,  cols:4},
+    3:{pairs:12, cols:6}
+  };
+
+  var board   = document.getElementById("board");
+  var movesEl = document.getElementById("moves");
+  var foundEl = document.getElementById("found");
+  var totalEl = document.getElementById("total");
+  var overlay = document.getElementById("overlay");
+  var winText = document.getElementById("winText");
+  var winStars= document.getElementById("winStars");
+  var nextBtn = document.getElementById("nextBtn");
+
+  var level = 1, moves = 0, found = 0, first = null, lock = false;
+
+  /* --- Simple WebAudio beeps (no external files) --- */
+  var actx = null;
+  function beep(freq, dur, delay, type){
+    try{
+      if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      if(actx.state === "suspended") actx.resume();
+      var t = actx.currentTime + (delay || 0);
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.15, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t); o.stop(t + dur);
+    }catch(e){ /* âm thanh chỉ là phụ trợ */ }
+  }
+  function sndFlip(){ beep(620, 0.08, 0, "triangle"); }
+  function sndMatch(){ beep(660, 0.1, 0); beep(880, 0.14, 0.1); }
+  function sndWin(){ beep(523,0.12,0); beep(659,0.12,0.12); beep(784,0.12,0.24); beep(1047,0.25,0.36); }
+
+  function shuffle(a){
+    for(var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function startGame(lv){
+    level = lv; moves = 0; found = 0; first = null; lock = false;
+    var cfg = LEVELS[lv];
+    movesEl.textContent = "0";
+    foundEl.textContent = "0";
+    totalEl.textContent = String(cfg.pairs);
+    overlay.classList.remove("show");
+
+    var chosen = shuffle(POOL.slice()).slice(0, cfg.pairs);
+    var deck = [];
+    chosen.forEach(function(item, idx){
+      deck.push({pair: idx, kind: "word", item: item});
+      deck.push({pair: idx, kind: "pic",  item: item});
+    });
+    shuffle(deck);
+
+    board.style.gridTemplateColumns = "repeat(" + cfg.cols + ", 1fr)";
+    board.innerHTML = "";
+    deck.forEach(function(c){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "card";
+      btn.setAttribute("aria-label", "Thẻ úp");
+      var front = c.kind === "word"
+        ? '<span class="word">' + c.item.w + '</span>'
+        : '<span class="pic" aria-hidden="true">' + c.item.e + '</span>';
+      btn.innerHTML =
+        '<span class="card-inner">' +
+          '<span class="face back">?</span>' +
+          '<span class="face front">' + front + '</span>' +
+        '</span>';
+      btn._pair = c.pair;
+      btn.addEventListener("click", function(){ onFlip(btn); });
+      board.appendChild(btn);
+    });
+
+    var btns = document.querySelectorAll(".levels button");
+    btns.forEach(function(b){
+      b.classList.toggle("active", Number(b.getAttribute("data-level")) === lv);
+    });
+  }
+
+  function onFlip(btn){
+    if(lock || btn.classList.contains("flipped")) return;
+    btn.classList.add("flipped");
+    sndFlip();
+    if(!first){ first = btn; return; }
+    moves++;
+    movesEl.textContent = String(moves);
+    var a = first; first = null;
+    if(a._pair === btn._pair){
+      a.classList.add("matched"); btn.classList.add("matched");
+      found++; foundEl.textContent = String(found);
+      sndMatch();
+      if(found === LEVELS[level].pairs) setTimeout(win, 450);
+    }else{
+      lock = true;
+      setTimeout(function(){
+        a.classList.remove("flipped"); btn.classList.remove("flipped");
+        lock = false;
+      }, 850);
+    }
+  }
+
+  function win(){
+    sndWin();
+    var pairs = LEVELS[level].pairs;
+    var stars = moves <= Math.ceil(pairs * 1.6) ? 3
+              : moves <= Math.ceil(pairs * 2.4) ? 2 : 1;
+    winStars.textContent = "⭐".repeat(stars) + "☆".repeat(3 - stars);
+    winText.textContent = "Con đã ghép hết " + pairs + " cặp ở Cấp " + level +
+      " trong " + moves + " lượt lật. " +
+      (stars === 3 ? "Trí nhớ siêu đỉnh!" : stars === 2 ? "Làm tốt lắm, cố thêm chút nữa nhé!" : "Chơi lại để lấy 3 sao nhé!");
+    nextBtn.style.display = level < 3 ? "" : "none";
+    nextBtn.textContent = "Lên Cấp " + (level + 1) + " ➜";
+    overlay.classList.add("show");
+  }
+
+  document.querySelectorAll(".levels button").forEach(function(b){
+    b.addEventListener("click", function(){ startGame(Number(b.getAttribute("data-level"))); });
+  });
+  document.getElementById("restart").addEventListener("click", function(){ startGame(level); });
+  document.getElementById("againBtn").addEventListener("click", function(){ startGame(level); });
+  document.getElementById("closeBtn").addEventListener("click", function(){ overlay.classList.remove("show"); });
+  nextBtn.addEventListener("click", function(){ if(level < 3) startGame(level + 1); });
+
+  startGame(1);
+})();
+</script>
+</body>
+</html>
