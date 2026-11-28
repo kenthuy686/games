@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Bắt Sao Băng — Game phản xạ</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R0WP31V8S8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-R0WP31V8S8');
+</script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zi0g7dpb5n");
+</script>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;background:#0B1026;color:#F5F7FF;text-align:center}
+  main{max-width:520px;margin:0 auto;padding:14px 12px 28px}
+  h1{font-size:24px;margin:6px 0 2px}
+  p.sub{color:#A9B4D8;margin:0 0 10px;font-size:14px}
+  #hud{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:15px;margin:8px 2px}
+  #hud span{background:#1A2247;border:1px solid #2E3A73;border-radius:10px;padding:6px 10px;flex:1}
+  canvas{display:block;width:100%;background:linear-gradient(#0B1026,#17204A 70%,#232B5C);border:1px solid #2E3A73;border-radius:14px;touch-action:none}
+  .overlay{background:#141B3D;border:1px solid #2E3A73;border-radius:14px;padding:16px;margin-top:12px}
+  button{background:#FFD34D;color:#231A00;border:0;border-radius:12px;padding:12px 22px;font-size:17px;font-weight:800;cursor:pointer}
+  button:active{transform:scale(.97)}
+  .hidden{display:none}
+  #msg{font-size:20px;font-weight:800;margin:0 0 6px}
+  .small{color:#A9B4D8;font-size:13px;line-height:1.5}
+</style>
+</head>
+<body>
+<main>
+  <h1>⭐ Bắt Sao Băng</h1>
+  <p class="sub">Kéo giỏ hứng sao rơi — sao vàng ăn combo, né bom!</p>
+  <div id="hud">
+    <span>Điểm: <b id="score">0</b></span>
+    <span>Combo: <b id="combo">×1</b></span>
+    <span>Mạng: <b id="lives">❤❤❤</b></span>
+    <span>Kỷ lục: <b id="best">0</b></span>
+  </div>
+  <canvas id="game" width="480" height="560" aria-label="Khu vực chơi Bắt Sao Băng"></canvas>
+  <div class="overlay" id="startBox">
+    <p id="msg">Sẵn sàng bắt sao chưa?</p>
+    <p class="small">Di chuyển: kéo chuột / chạm kéo trên màn hình, hoặc phím ← →.<br>
+    ⭐ Sao thường: +10 điểm &nbsp;·&nbsp; 🌟 Sao vàng: +30 điểm, tăng combo<br>
+    💣 Bom: mất 1 mạng, đứt combo &nbsp;·&nbsp; Bỏ lỡ sao: đứt combo<br>
+    Có 3 mạng — sao rơi nhanh dần theo thời gian. Chơi tới khi hết mạng!</p>
+    <button id="startBtn">▶ Chơi ngay</button>
+  </div>
+  <div class="overlay hidden" id="overBox">
+    <p id="overMsg">Hết mạng rồi!</p>
+    <p class="small" id="overDetail"></p>
+    <button id="againBtn">↻ Chơi lại</button>
+  </div>
+  <p class="small">Mẹo: bắt sao liên tiếp không trượt để giữ combo — combo càng cao điểm nhân càng lớn.</p>
+</main>
+<script>
+"use strict";
+var cv=document.getElementById("game"),ctx=cv.getContext("2d");
+var W=cv.width,H=cv.height;
+var BEST_KEY="batSaoBangBest";
+var best=parseInt(localStorage.getItem(BEST_KEY)||"0",10)||0;
+document.getElementById("best").textContent=best;
+var basket={x:W/2,w:84,h:20,y:H-42};
+var items=[],keys={},playing=false,last=0,spawnT=0,elapsed=0;
+var score=0,combo=0,lives=3,raf=0;
+var bgStars=[];
+for(var i=0;i<70;i++){bgStars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+0.4});}
+function mult(){return 1+Math.floor(combo/5);}
+function hearts(){var s="";for(var i=0;i<lives;i++)s+="❤";return s||"—";}
+function hud(){
+  document.getElementById("score").textContent=score;
+  document.getElementById("combo").textContent="×"+mult()+" ("+combo+")";
+  document.getElementById("lives").textContent=hearts();
+  document.getElementById("best").textContent=best;
+}
+function spawn(){
+  var r=Math.random(),type="star";
+  if(r<0.12)type="bomb";else if(r<0.30)type="gold";
+  var speed=120+elapsed*4+Math.random()*70;
+  items.push({x:24+Math.random()*(W-48),y:-24,vy:speed,type:type,rot:Math.random()*6.28,vr:(Math.random()-0.5)*2});
+}
+function reset(){
+  items=[];score=0;combo=0;lives=3;elapsed=0;spawnT=0;basket.x=W/2;hud();
+}
+function start(){
+  reset();playing=true;
+  document.getElementById("startBox").classList.add("hidden");
+  document.getElementById("overBox").classList.add("hidden");
+  last=performance.now();
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
+}
+function gameOver(){
+  playing=false;
+  if(score>best){best=score;localStorage.setItem(BEST_KEY,String(best));}
+  hud();
+  document.getElementById("overDetail").textContent="Điểm của bạn: "+score+" · Kỷ lục: "+best;
+  document.getElementById("overBox").classList.remove("hidden");
+}
+function drawStar(x,y,r,color){
+  ctx.save();ctx.translate(x,y);ctx.fillStyle=color;ctx.beginPath();
+  for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,rad=i%2?r*0.45:r;ctx.lineTo(Math.cos(a)*rad,Math.sin(a)*rad);}
+  ctx.closePath();ctx.fill();ctx.restore();
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle="#Cdd7FF";
+  for(var i=0;i<bgStars.length;i++){ctx.globalAlpha=0.5;ctx.beginPath();ctx.arc(bgStars[i].x,bgStars[i].y,bgStars[i].r,0,6.29);ctx.fill();}
+  ctx.globalAlpha=1;
+  for(var j=0;j<items.length;j++){
+    var it=items[j];ctx.save();ctx.translate(it.x,it.y);ctx.rotate(it.rot);
+    if(it.type==="bomb"){ctx.fillStyle="#222";ctx.beginPath();ctx.arc(0,0,15,0,6.29);ctx.fill();ctx.fillStyle="#FF6B6B";ctx.fillRect(-2,-24,4,9);ctx.fillStyle="#FFD34D";ctx.beginPath();ctx.arc(0,-27,4,0,6.29);ctx.fill();}
+    else if(it.type==="gold"){drawStar(0,0,19,"#FFD34D");}
+    else{drawStar(0,0,15,"#FFF3A6");}
+    ctx.restore();
+  }
+  // basket
+  ctx.fillStyle="#8A5A2B";ctx.beginPath();
+  var bx=basket.x-basket.w/2,by=basket.y;
+  ctx.moveTo(bx,by);ctx.lineTo(bx+basket.w,by);ctx.lineTo(bx+basket.w-10,by+26);ctx.lineTo(bx+10,by+26);ctx.closePath();ctx.fill();
+  ctx.fillStyle="#C98A44";ctx.fillRect(bx-3,by-5,basket.w+6,8);
+  ctx.font="26px sans-serif";ctx.textAlign="center";ctx.fillText("🧺",basket.x,by-10);
+}
+function loop(now){
+  if(!playing)return;
+  var dt=Math.min(0.033,(now-last)/1000);last=now;elapsed+=dt;
+  if(keys.left)basket.x-=420*dt;
+  if(keys.right)basket.x+=420*dt;
+  basket.x=Math.max(basket.w/2,Math.min(W-basket.w/2,basket.x));
+  spawnT-=dt;
+  var interval=Math.max(0.32,0.85-elapsed*0.008);
+  if(spawnT<=0){spawn();spawnT=interval*(0.6+Math.random()*0.7);}
+  for(var i=items.length-1;i>=0;i--){
+    var it=items[i];it.y+=it.vy*dt;it.rot+=it.vr*dt;
+    var caught=it.y>=basket.y-8&&it.y<=basket.y+22&&Math.abs(it.x-basket.x)<=basket.w/2+6;
+    if(caught){
+      items.splice(i,1);
+      if(it.type==="bomb"){lives--;combo=0;if(lives<=0){hud();draw();gameOver();return;}}
+      else{combo++;score+=(it.type==="gold"?30:10)*mult();}
+      hud();continue;
+    }
+    if(it.y>H+30){items.splice(i,1);if(it.type!=="bomb"){combo=0;hud();}}
+  }
+  draw();
+  raf=requestAnimationFrame(loop);
+}
+function pointerX(e){
+  var r=cv.getBoundingClientRect();
+  var cx=(e.touches?e.touches[0].clientX:e.clientX);
+  return (cx-r.left)*(W/r.width);
+}
+cv.addEventListener("pointerdown",function(e){basket.x=pointerX(e);});
+cv.addEventListener("pointermove",function(e){if(e.buttons||e.pointerType==="touch")basket.x=pointerX(e);});
+cv.addEventListener("touchmove",function(e){e.preventDefault();basket.x=pointerX(e);},{passive:false});
+document.addEventListener("keydown",function(e){
+  if(e.key==="ArrowLeft")keys.left=true;
+  if(e.key==="ArrowRight")keys.right=true;
+  if(["ArrowLeft","ArrowRight"," "].indexOf(e.key)>=0)e.preventDefault();
+});
+document.addEventListener("keyup",function(e){
+  if(e.key==="ArrowLeft")keys.left=false;
+  if(e.key==="ArrowRight")keys.right=false;
+});
+document.getElementById("startBtn").addEventListener("click",start);
+document.getElementById("againBtn").addEventListener("click",start);
+hud();draw();
+</script>
+</body>
+</html>

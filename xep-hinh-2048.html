@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Xếp Hình 2048 — Game trí tuệ</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R0WP31V8S8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-R0WP31V8S8');
+</script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zi0g7dpb5n");
+</script>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;background:#FAF8EF;color:#776E65;text-align:center}
+  main{max-width:480px;margin:0 auto;padding:16px 12px 32px}
+  h1{font-size:30px;margin:6px 0 2px;color:#776E65}
+  p.sub{color:#8F8578;margin:0 0 12px;font-size:14px;line-height:1.5}
+  #hud{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+  #hud span{background:#BBADA0;color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;min-width:110px}
+  #hud b{display:block;font-size:22px}
+  #board{background:#BBADA0;border-radius:12px;padding:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;touch-action:none;user-select:none;-webkit-user-select:none}
+  .cell{aspect-ratio:1;border-radius:8px;background:#CDC1B4;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;color:#776E65;transition:background .08s}
+  .v2{background:#EEE4DA}.v4{background:#EDE0C8}.v8{background:#F2B179;color:#fff}.v16{background:#F59563;color:#fff}
+  .v32{background:#F67C5F;color:#fff}.v64{background:#F65E3B;color:#fff}.v128{background:#EDCF72;color:#fff;font-size:22px}
+  .v256{background:#EDCC61;color:#fff;font-size:22px}.v512{background:#EDC850;color:#fff;font-size:22px}
+  .v1024{background:#EDC53F;color:#fff;font-size:19px}.v2048{background:#EDC22E;color:#fff;font-size:19px;box-shadow:0 0 18px #EDC22E}
+  .vsuper{background:#3C3A32;color:#fff;font-size:19px}
+  button{background:#8F7A66;color:#fff;border:0;border-radius:10px;padding:11px 20px;font-size:16px;font-weight:800;cursor:pointer;margin-top:12px}
+  button:active{transform:scale(.97)}
+  #msg{font-size:18px;font-weight:800;min-height:26px;margin:12px 0 0}
+  .win{color:#B8860B}.over{color:#C0392B}
+  .small{color:#8F8578;font-size:13px;line-height:1.5}
+</style>
+</head>
+<body>
+<main>
+  <h1>🔢 Xếp Hình 2048</h1>
+  <p class="sub">Trượt các ô số — hai ô giống nhau chạm nhau sẽ gộp thành một ô gấp đôi.<br>Gộp tới ô <b>2048</b> là thắng!</p>
+  <div id="hud">
+    <span>ĐIỂM<b id="score">0</b></span>
+    <span>KỶ LỤC<b id="best">0</b></span>
+  </div>
+  <div id="board" aria-label="Bàn cờ 2048"></div>
+  <p id="msg"></p>
+  <button id="newBtn">↻ Ván mới</button>
+  <p class="small">Cách chơi: phím mũi tên ↑ ↓ ← → trên máy tính, hoặc vuốt trên điện thoại.<br>Hết nước đi và bàn cờ đầy là thua.</p>
+</main>
+<script>
+"use strict";
+var N=4,grid=[],score=0,won=false,over=false;
+var BEST_KEY="xepHinh2048Best";
+var best=parseInt(localStorage.getItem(BEST_KEY)||"0",10)||0;
+var boardEl=document.getElementById("board");
+var cells=[];
+for(var i=0;i<N*N;i++){var d=document.createElement("div");d.className="cell";boardEl.appendChild(d);cells.push(d);}
+function emptyCells(){var e=[];for(var r=0;r<N;r++)for(var c=0;c<N;c++)if(!grid[r][c])e.push([r,c]);return e;}
+function addRandom(){
+  var e=emptyCells();if(!e.length)return;
+  var p=e[Math.floor(Math.random()*e.length)];
+  grid[p[0]][p[1]]=Math.random()<0.9?2:4;
+}
+function render(){
+  for(var r=0;r<N;r++)for(var c=0;c<N;c++){
+    var v=grid[r][c],el=cells[r*N+c];
+    el.textContent=v||"";
+    el.className="cell"+(v?" "+(v<=2048?"v"+v:"vsuper"):"");
+  }
+  document.getElementById("score").textContent=score;
+  document.getElementById("best").textContent=best;
+}
+function setMsg(t,cls){var m=document.getElementById("msg");m.textContent=t;m.className=cls||"";}
+function newGame(){
+  grid=[];for(var r=0;r<N;r++){grid.push([0,0,0,0]);}
+  score=0;won=false;over=false;setMsg("");
+  addRandom();addRandom();render();
+}
+function slide(row){
+  var arr=row.filter(function(v){return v;}),gained=0,out=[];
+  for(var i=0;i<arr.length;i++){
+    if(i+1<arr.length&&arr[i]===arr[i+1]){var nv=arr[i]*2;out.push(nv);gained+=nv;i++;}
+    else out.push(arr[i]);
+  }
+  while(out.length<N)out.push(0);
+  return {row:out,gained:gained};
+}
+function move(dir){
+  if(over)return;
+  var before=JSON.stringify(grid),gained=0,r,c;
+  if(dir==="left"||dir==="right"){
+    for(r=0;r<N;r++){
+      var row=grid[r].slice();if(dir==="right")row.reverse();
+      var s=slide(row);gained+=s.gained;
+      var nr=s.row;if(dir==="right")nr.reverse();grid[r]=nr;
+    }
+  }else{
+    for(c=0;c<N;c++){
+      var col=[];for(r=0;r<N;r++)col.push(grid[r][c]);
+      if(dir==="down")col.reverse();
+      var s2=slide(col);gained+=s2.gained;
+      var nc=s2.row;if(dir==="down")nc.reverse();
+      for(r=0;r<N;r++)grid[r][c]=nc[r];
+    }
+  }
+  if(JSON.stringify(grid)===before)return;
+  score+=gained;
+  if(score>best){best=score;localStorage.setItem(BEST_KEY,String(best));}
+  addRandom();render();
+  if(!won&&hasValue(2048)){won=true;setMsg("🎉 Thắng rồi! Bạn đã gộp được ô 2048 — cứ chơi tiếp để phá kỷ lục!","win");}
+  if(!canMove()){over=true;setMsg("😢 Hết nước đi — ván này kết thúc! Bấm “Ván mới” để chơi lại.","over");}
+}
+function hasValue(v){for(var r=0;r<N;r++)for(var c=0;c<N;c++)if(grid[r][c]===v)return true;return false;}
+function canMove(){
+  if(emptyCells().length)return true;
+  for(var r=0;r<N;r++)for(var c=0;c<N;c++){
+    if(c+1<N&&grid[r][c]===grid[r][c+1])return true;
+    if(r+1<N&&grid[r][c]===grid[r+1][c])return true;
+  }
+  return false;
+}
+document.addEventListener("keydown",function(e){
+  var map={ArrowLeft:"left",ArrowRight:"right",ArrowUp:"up",ArrowDown:"down"};
+  if(map[e.key]){e.preventDefault();move(map[e.key]);}
+});
+var tx=0,ty=0;
+boardEl.addEventListener("touchstart",function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+boardEl.addEventListener("touchend",function(e){
+  var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;
+  if(Math.abs(dx)>Math.abs(dy))move(dx>0?"right":"left");else move(dy>0?"down":"up");
+});
+boardEl.addEventListener("pointerdown",function(e){tx=e.clientX;ty=e.clientY;});
+boardEl.addEventListener("pointerup",function(e){
+  var dx=e.clientX-tx,dy=e.clientY-ty;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;
+  if(Math.abs(dx)>Math.abs(dy))move(dx>0?"right":"left");else move(dy>0?"down":"up");
+});
+document.getElementById("newBtn").addEventListener("click",newGame);
+newGame();
+</script>
+</body>
+</html>
