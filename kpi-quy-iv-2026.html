@@ -197,6 +197,17 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
 .deadline-box .dl-title{font-size:17px;font-weight:800;color:var(--red-ink);margin:0 0 4px}
 .deadline-box p{margin:0;font-size:13.5px}
 
+/* ===== Bảng khó khăn theo đơn vị — xếp chồng trên mobile ===== */
+@media (max-width:900px){
+  table.diff thead{display:none}
+  table.diff,table.diff tbody,table.diff tr,table.diff td{display:block;width:100%}
+  table.diff tr{border-bottom:2px solid var(--line);padding:8px 4px}
+  table.diff td{border-bottom:0;padding:5px 12px;text-align:left !important;white-space:normal}
+  table.diff td::before{content:attr(data-label);display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  table.diff td:first-child::before{display:none}
+  table.diff td:first-child{font-weight:700;font-size:14.5px}
+}
+
 /* ===== Mobile ===== */
 @media (max-width:900px){
   .layout{flex-direction:column}
@@ -230,7 +241,7 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
 
     <button class="nav-item active" data-filter="all"><span class="dot" style="background:var(--navy)"></span>Tất cả</button>
     <button class="nav-item" data-filter="tong-quan"><span class="dot" style="background:#1d7a3a"></span>Tổng quan toàn phường</button>
-    <button class="nav-item" data-filter="btv"><span class="dot" style="background:#b4232a"></span>Danh mục Ban Thường vụ<span class="cnt">30/43 ✓</span></button>
+    <button class="nav-item" data-filter="btv"><span class="dot" style="background:#b4232a"></span>Danh mục Ban Thường vụ<span class="cnt">40/43 ✓</span></button>
     <button class="nav-item" data-filter="nhom-01"><span class="dot" style="background:var(--red)"></span>Nhóm 01 — Lãnh đạo<span class="cnt">12 đ/c</span></button>
     <button class="nav-item" data-filter="khoi-dang"><span class="dot" style="background:#b4232a"></span>Khối Đảng<span class="cnt">5 đv</span></button>
     <button class="nav-sub" data-unit="u-dang-uy">Đảng ủy phường</button>
@@ -266,6 +277,7 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <button class="nav-sub" data-unit="u-chqs">Ban CHQS phường</button>
     <button class="nav-item" data-filter="bao-dong"><span class="dot" style="background:var(--red)"></span>Lưu ý tổng hợp<span class="alert-n">7 mục</span></button>
     <button class="nav-item" data-filter="de-xuat"><span class="dot" style="background:#9a6a00"></span>Đề xuất, kiến nghị</button>
+    <button class="nav-item" data-filter="kho-khan"><span class="dot" style="background:#c2410c"></span>Khó khăn, vướng mắc của các đơn vị<span class="cnt">25 đv</span></button>
   </nav>
   <div class="side-note">
     <b>Cách đọc mức lưu ý</b><br>
@@ -273,7 +285,7 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     🟡 <b>Vàng:</b> có cá nhân chỉ 01–02 nhiệm vụ, cá nhân ≥40 nhiệm vụ, hoặc còn nhiệm vụ tập thể chưa giao.<br>
     🟢 <b>Xanh:</b> không cần lưu ý.
   </div>
-  <div class="side-note">Nguồn: Báo cáo Ban Xây dựng Đảng + file xuất phần mềm KPI ngày <b>25/11/2026, 00:08</b> (số liệu đăng ký) và Báo cáo kết quả thực hiện ngày 25/11/2026; tiến độ danh mục Ban Thường vụ theo file “TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 179), cập nhật 00:15 ngày 27/11/2026.</div>
+  <div class="side-note">Nguồn: Báo cáo Ban Xây dựng Đảng + file xuất phần mềm KPI ngày <b>25/11/2026, 00:08</b> (số liệu đăng ký) và Báo cáo kết quả thực hiện ngày 25/11/2026; tiến độ danh mục Ban Thường vụ theo file “17.11 TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 273), cập nhật 17:46 ngày 28/11/2026.</div>
 </aside>
 
 <!-- ============ MAIN ============ -->
@@ -283,9 +295,9 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <h1>Tiến độ đăng ký công việc trên Hệ thống KPI — Quý IV/2026</h1>
     <p>Phường Tân Phú · Bảng chính gồm 03 phần: <b>Tổng quan</b> toàn phường, <b>Danh mục Ban Thường vụ</b> và <b>Nhóm 01</b> — nhiệm vụ cụ thể của từng đồng chí lãnh đạo, bấm mở từng người để xem ngay phần tồn đọng. Các khối Đảng, HĐND, MTTQ, UBND (cơ quan chuyên môn, hành chính và trường học, đơn vị sự nghiệp công lập) cùng Lực lượng vũ trang xem qua mục lục bên trái.</p>
     <div class="hero-meta">
-      <span class="chip solid">📅 Chốt số liệu phần mềm: 25/11/2026 · Danh mục BTV: 27/11/2026</span>
+      <span class="chip solid">📅 Chốt số liệu phần mềm: 25/11/2026 · Danh mục BTV: 28/11/2026</span>
       <span class="chip">65 đơn vị · 678 người dùng · 674 thuộc diện đánh giá</span>
-      <span class="chip">11.234 nhiệm vụ cá nhân · Danh mục Ban Thường vụ (tổng 43 nội dung): 30 đã hoàn thành (69,8%)</span>
+      <span class="chip">11.234 nhiệm vụ cá nhân · Danh mục Ban Thường vụ (tổng 43 nội dung): 40 đã hoàn thành (93,0%)</span>
     </div>
   </div>
 
@@ -304,7 +316,7 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
       <div class="kpi"><div class="k-label">Đơn vị có cá nhân có SPCV</div><div class="k-value">64<small> / 65</small></div><div class="k-sub">Ban Văn hóa – Xã hội HĐND không còn cá nhân thuộc diện đánh giá trong kỳ này</div><div class="bar"><i style="width:98.46%"></i></div></div>
       <div class="kpi"><div class="k-label">Nhiệm vụ cá nhân đã đăng ký</div><div class="k-value">11.234</div><div class="k-sub">Tăng <b>111</b> nhiệm vụ so với 11.123 ngày 20/11 · 04 cá nhân chỉ có 01–02 nhiệm vụ · 10 cá nhân từ 40 nhiệm vụ trở lên</div></div>
       <div class="kpi"><div class="k-label">Nhiệm vụ tập thể đã giao</div><div class="k-value">88,24<small>%</small></div><div class="k-sub">Đã giao 1.081 / 1.225 nhiệm vụ — còn <b>144</b> nhiệm vụ chưa giao (11,76%) <i>theo báo cáo 20/11, chưa có bản xuất mới</i></div><div class="bar amber"><i style="width:88.24%"></i></div></div>
-      <div class="kpi"><div class="k-label">Nội dung BTV đã hoàn thành</div><div class="k-value">30 <small>/ 43 (69,8%)</small></div><div class="k-sub">Tăng <b>17</b> nội dung so với 13 nội dung tại ngày 25/11. Còn <b>10</b> nội dung chưa hoàn thành và <b>03</b> nội dung hoàn thành một phần — hạn chung 15/12/2026. Xem bóc tách tại mục II và Nhóm 01</div><div class="bar"><i style="width:69.8%"></i></div></div>
+      <div class="kpi"><div class="k-label">Nội dung BTV đã hoàn thành</div><div class="k-value">40 <small>/ 43 (93,0%)</small></div><div class="k-sub">Tăng <b>10</b> nội dung so với 30/43 tại ngày 27/11/2026. Còn <b>01</b> nội dung chưa hoàn thành (TT 29) và <b>02</b> nội dung hoàn thành một phần (TT 14, TT 24) — hạn chung 15/12/2026. Xem bóc tách tại mục II và Nhóm 01</div><div class="bar"><i style="width:93%"></i></div></div>
     </div>
     <div class="panel" style="margin-top:14px;border-color:var(--green)">
       <h3 style="color:var(--green)">✅ Điểm đã khắc phục so với báo cáo 20/11</h3>
@@ -332,8 +344,8 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
 
   <!-- ===== DANH MỤC BAN THƯỜNG VỤ ===== -->
   <section class="group" id="sec-btv" data-group="btv">
-    <div class="sec-head"><h2>II. Danh mục Ban Thường vụ Đảng ủy</h2><span class="sec-sum">Tổng 43 nội dung · 06 trục · 30 đã hoàn thành (69,8%) · 03 hoàn thành một phần · 10 chưa hoàn thành</span></div>
-    <p class="sec-desc">Danh mục sản phẩm công việc của Ban Thường vụ Đảng ủy phường Quý IV/2026 (39 nội dung gốc + 04 nội dung bổ sung ngày 10/11 là số 40–43). Tiến độ theo cột TIẾN ĐỘ của file “TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 179), cập nhật 00:15 ngày 27/11/2026. <b>30 nội dung đã hoàn thành</b> — tăng 17 so với 13 nội dung tại ngày 25/11; 03 nội dung hoàn thành một phần (TT 7, TT 8, TT 24) và 10 nội dung chưa hoàn thành, tất cả đều có thời hạn 15/12/2026 — chưa tới hạn. Nhiệm vụ cụ thể và phần tồn đọng của từng đồng chí xem tại mục III — Nhóm 01.</p>
+    <div class="sec-head"><h2>II. Danh mục Ban Thường vụ Đảng ủy</h2><span class="sec-sum">Tổng 43 nội dung · 06 trục · 40 đã hoàn thành (93,0%) · 02 hoàn thành một phần · 01 chưa hoàn thành</span></div>
+    <p class="sec-desc">Danh mục sản phẩm công việc của Ban Thường vụ Đảng ủy phường Quý IV/2026 (39 nội dung gốc + 04 nội dung bổ sung ngày 10/11 là số 40–43). Tiến độ theo cột TIẾN ĐỘ của file “17.11 TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 273), cập nhật 17:46 ngày 28/11/2026. <b>40 nội dung đã hoàn thành</b> — tăng 10 so với 30 nội dung tại ngày 27/11; 02 nội dung hoàn thành một phần (TT 14, TT 24) và 01 nội dung chưa hoàn thành (TT 29), tất cả đều có thời hạn 15/12/2026 — chưa tới hạn. Nhiệm vụ cụ thể và phần tồn đọng của từng đồng chí xem tại mục III — Nhóm 01.</p>
     <div class="two-col">
       <div class="panel">
         <h3>43 nội dung theo 06 trục</h3>
@@ -343,17 +355,17 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
         <div class="axis-row"><span>Trục 4</span><span class="bar navy"><i style="width:100%"></i></span><b class="mono">13</b></div>
         <div class="axis-row"><span>Trục 5</span><span class="bar navy"><i style="width:38%"></i></span><b class="mono">05</b></div>
         <div class="axis-row"><span>Trục 6</span><span class="bar navy"><i style="width:38%"></i></span><b class="mono">05</b></div>
-        <div class="axis-row" style="margin-top:8px"><span>Đã hoàn thành</span><span class="bar"><i style="width:69.8%"></i></span><b class="mono">30/43</b></div>
-        <p class="footnote" style="margin-top:6px">30 nội dung đã hoàn thành: TT 1, 2, 3, 4, 5, 6, 9, 10, 11, 13, 15, 16, 17, 18, 20, 21, 22, 28, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43. Nội dung hoàn thành một phần: TT 7 (đã cập nhật mục 2 của đ/c Bình, phần còn lại chưa xong), TT 8 (đã có minh chứng của đ/c Bình, còn phần đ/c Liêm và đ/c Đức), TT 24 (phần đ/c Cúc đã xong, còn phần đ/c Bình).</p>
+        <div class="axis-row" style="margin-top:8px"><span>Đã hoàn thành</span><span class="bar"><i style="width:93%"></i></span><b class="mono">40/43</b></div>
+        <p class="footnote" style="margin-top:6px">40 nội dung đã hoàn thành: TT 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43. Nội dung hoàn thành một phần: TT 14 (phần đ/c Thuận đã cập nhật, còn phần đ/c Cúc), TT 24 (phần đ/c Cúc đã xong, còn phần đ/c Bình). Nội dung chưa hoàn thành: TT 29 (đ/c Cúc, chưa có tiến độ).</p>
       </div>
       <div class="panel" style="border-color:var(--amber-border)">
         <h3>📌 Phân biệt hai con số dễ nhầm: 42 và 43</h3>
-        <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px"><b style="color:var(--ink)">43 là tổng kho danh mục chung của Ban Thường vụ</b>, không phải số nhiệm vụ của riêng Bí thư. Trong kho này, phần phân công trực tiếp của đ/c Bí thư Lê Thị Kim Hồng là 07 nội dung (đã hoàn thành 05: TT 6, TT 28, TT 40, TT 41, TT 42; hoàn thành một phần 01: TT 7).</p>
+        <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px"><b style="color:var(--ink)">43 là tổng kho danh mục chung của Ban Thường vụ</b>, không phải số nhiệm vụ của riêng Bí thư. Trong kho này, phần phân công trực tiếp của đ/c Bí thư Lê Thị Kim Hồng là 07 nội dung — đã hoàn thành cả 07: TT 6, TT 7, TT 19, TT 28, TT 40, TT 41, TT 42.</p>
         <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px">Nhiệm vụ cá nhân trực tiếp của đ/c Bí thư trên phần mềm KPI là <b style="color:var(--ink)">42 nhiệm vụ</b> — một phạm vi khác, xem tại thẻ đ/c Bí thư ở mục III.</p>
-        <p style="font-size:13.5px;color:var(--muted);margin:0">Nội dung <b style="color:var(--ink)">số 43</b> trong kho BTV được giao trực tiếp cho đ/c Trần Thị Hồng Cúc phụ trách, không qua tài khoản Bí thư và không tính vào 42 nhiệm vụ cá nhân của Bí thư. TT 43 <b style="color:var(--green)">đã hoàn thành</b> (cập nhật 27/11/2026).</p>
+        <p style="font-size:13.5px;color:var(--muted);margin:0">Nội dung <b style="color:var(--ink)">số 43</b> trong kho BTV được giao trực tiếp cho đ/c Trần Thị Hồng Cúc phụ trách, không qua tài khoản Bí thư và không tính vào 42 nhiệm vụ cá nhân của Bí thư. TT 43 <b style="color:var(--green)">đã hoàn thành</b> (theo cập nhật 28/11/2026).</p>
       </div>
     </div>
-    <h3 style="margin:22px 0 4px;font-size:17px">Bóc tách theo người phụ trách — cộng dồn 43 nội dung: 30 hoàn thành · 03 một phần · 10 chưa</h3>
+    <h3 style="margin:22px 0 4px;font-size:17px">Bóc tách theo người phụ trách — cộng dồn 43 nội dung: 40 hoàn thành · 02 một phần · 01 chưa</h3>
     <p class="sec-desc">Bấm vào tên từng đồng chí tại mục III — Nhóm 01 để mở danh sách nhiệm vụ cụ thể và xem ngay phần tồn đọng của người đó.</p>
     <div class="table-wrap">
       <table class="leaders">
@@ -366,23 +378,23 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
           <tr>
             <td class="person"><b>Lê Thị Kim Hồng</b><span class="role">Bí thư Đảng ủy, Chủ tịch HĐND phường</span></td>
             <td class="num" data-label="Phân công">7</td>
-            <td class="num" data-label="Hoàn thành"><b>5</b></td>
-            <td class="num" data-label="Hoàn thành một phần">1 — TT 7 (đã cập nhật mục 2 của đ/c Bình, phần còn lại chưa xong)</td>
-            <td data-label="Chưa hoàn thành">1 nội dung: TT 19 · <span style="color:var(--muted)">Đã hoàn thành 5 nội dung: TT 6, TT 28, TT 40, TT 41, TT 42</span></td>
+            <td class="num" data-label="Hoàn thành"><b>7</b></td>
+            <td class="num" data-label="Hoàn thành một phần">—</td>
+            <td data-label="Chưa hoàn thành">Không còn — đã hoàn thành cả 7 nội dung: TT 6, TT 7, TT 19, TT 28, TT 40, TT 41, TT 42</td>
           </tr>
           <tr>
             <td class="person"><b>Trần Thị Hồng Cúc</b><span class="role">Phó Bí thư Thường trực Đảng ủy</span></td>
             <td class="num" data-label="Phân công">9</td>
-            <td class="num" data-label="Hoàn thành"><b>5</b></td>
-            <td class="num" data-label="Hoàn thành một phần">—</td>
-            <td data-label="Chưa hoàn thành">4 nội dung: TT 14 (đã tách — đ/c Cúc phụ trách nội dung 2, 3; chưa có tiến độ), TT 25, TT 27, TT 29 · <span style="color:var(--muted)">Đã hoàn thành 5 nội dung: TT 15, TT 16, TT 17, TT 18, TT 43 — TT 43 thuộc kho danh mục Ban Thường vụ (tổng 43 nội dung), giao trực tiếp cho đ/c Cúc phụ trách, không qua tài khoản Bí thư và không tính vào 42 nhiệm vụ cá nhân của Bí thư</span></td>
+            <td class="num" data-label="Hoàn thành"><b>7</b></td>
+            <td class="num" data-label="Hoàn thành một phần">1 — TT 14 (phần nội dung 2, 3 của đ/c Cúc; phần đ/c Thuận đã cập nhật)</td>
+            <td data-label="Chưa hoàn thành">1 nội dung: TT 29 (chưa có tiến độ) · <span style="color:var(--muted)">Đã hoàn thành 7 nội dung: TT 15, TT 16, TT 17, TT 18, TT 25, TT 27, TT 43 — TT 43 thuộc kho danh mục Ban Thường vụ (tổng 43 nội dung), giao trực tiếp cho đ/c Cúc phụ trách, không qua tài khoản Bí thư và không tính vào 42 nhiệm vụ cá nhân của Bí thư</span></td>
           </tr>
           <tr>
             <td class="person"><b>Võ Trương Bình</b><span class="role">Chủ tịch UBND phường</span></td>
             <td class="num" data-label="Phân công">10</td>
-            <td class="num" data-label="Hoàn thành"><b>7</b></td>
+            <td class="num" data-label="Hoàn thành"><b>9</b></td>
             <td class="num" data-label="Hoàn thành một phần">1 — TT 24 (phần đ/c Cúc đã xong, còn phần đ/c Bình — Nghị quyết 26, 27)</td>
-            <td data-label="Chưa hoàn thành">2 nội dung: TT 12, TT 35 · <span style="color:var(--muted)">Đã hoàn thành 7 nội dung: TT 1, TT 2, TT 3, TT 4, TT 5, TT 13, TT 37</span></td>
+            <td data-label="Chưa hoàn thành">Không còn nội dung chưa hoàn thành hẳn · <span style="color:var(--muted)">Đã hoàn thành 9 nội dung: TT 1, TT 2, TT 3, TT 4, TT 5, TT 12, TT 13, TT 35, TT 37</span></td>
           </tr>
           <tr>
             <td class="person"><b>Nguyễn Hùng Vương</b><span class="role">Chủ nhiệm Ủy ban Kiểm tra Đảng ủy</span></td>
@@ -394,9 +406,9 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
           <tr>
             <td class="person"><b>Nguyễn Thị Quỳnh Như</b><span class="role">Trưởng Ban Xây dựng Đảng</span></td>
             <td class="num" data-label="Phân công">7</td>
-            <td class="num" data-label="Hoàn thành"><b>5</b></td>
+            <td class="num" data-label="Hoàn thành"><b>7</b></td>
             <td class="num" data-label="Hoàn thành một phần">—</td>
-            <td data-label="Chưa hoàn thành">2 nội dung: TT 23, TT 26 (đang ở bước lấy công văn)</td>
+            <td data-label="Chưa hoàn thành">Không còn — đã hoàn thành cả 7 nội dung: TT 9, TT 20, TT 21, TT 22, TT 23, TT 26, TT 39</td>
           </tr>
           <tr>
             <td class="person"><b>Hoàng Phước Ánh</b><span class="role">Chỉ huy trưởng Ban CHQS phường</span></td>
@@ -408,16 +420,16 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
           <tr>
             <td class="person"><b>Trần Đức Thuận</b><span class="role">Trưởng Công an phường</span></td>
             <td class="num" data-label="Phân công">2</td>
-            <td class="num" data-label="Hoàn thành"><b>1</b></td>
+            <td class="num" data-label="Hoàn thành"><b>2</b></td>
             <td class="num" data-label="Hoàn thành một phần">—</td>
-            <td data-label="Chưa hoàn thành">1 nội dung: TT 36. Đồng thời phụ trách nội dung 1, 4 của TT 14 đã tách (chưa có tiến độ)</td>
+            <td data-label="Chưa hoàn thành">Không còn — đã hoàn thành cả 2 nội dung: TT 36, TT 38. Phần nội dung 1, 4 của TT 14 (tính trong phân công của đ/c Cúc) cũng đã cập nhật</td>
           </tr>
           <tr>
             <td class="person"><b>Phan Tiến Đức</b><span class="role">Phó Chủ tịch HĐND phường</span></td>
             <td class="num" data-label="Phân công">1</td>
-            <td class="num" data-label="Hoàn thành"><b>0</b></td>
-            <td class="num" data-label="Hoàn thành một phần">1 — TT 8 (đã có minh chứng của đ/c Bình, còn phần đ/c Liêm và đ/c Đức)</td>
-            <td data-label="Chưa hoàn thành">Không còn nội dung chưa hoàn thành hẳn — TT 8 đang hoàn thành một phần</td>
+            <td class="num" data-label="Hoàn thành"><b>1</b></td>
+            <td class="num" data-label="Hoàn thành một phần">—</td>
+            <td data-label="Chưa hoàn thành">Không còn — đã hoàn thành TT 8</td>
           </tr>
           <tr>
             <td class="person"><b>Lê Thị Thu Vân</b><span class="role">Phó Chủ tịch UBND phường</span></td>
@@ -429,51 +441,47 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
           <tr>
             <td class="person"><b>Tổng cộng — Danh mục Ban Thường vụ</b><span class="role">43 nội dung · 06 trục</span></td>
             <td class="num" data-label="Phân công"><b>43</b></td>
-            <td class="num" data-label="Hoàn thành"><b>30</b></td>
-            <td class="num" data-label="Hoàn thành một phần"><b>3</b></td>
-            <td data-label="Chưa hoàn thành"><b>10</b> nội dung — hạn chung 15/12/2026 (chưa tới hạn)</td>
+            <td class="num" data-label="Hoàn thành"><b>40</b></td>
+            <td class="num" data-label="Hoàn thành một phần"><b>2</b></td>
+            <td data-label="Chưa hoàn thành"><b>1</b> nội dung — hạn chung 15/12/2026 (chưa tới hạn)</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="bar" style="max-width:520px;margin-top:12px"><i style="width:69.8%"></i></div>
-    <p class="footnote">Tiến độ hoàn thành danh mục Ban Thường vụ: 30/43 nội dung = 69,8% (tăng 17 nội dung so với 13/43 tại ngày 25/11/2026). Nguồn: file “TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 179), cập nhật 00:15 ngày 27/11/2026.</p>
+    <div class="bar" style="max-width:520px;margin-top:12px"><i style="width:93%"></i></div>
+    <p class="footnote">Tiến độ hoàn thành danh mục Ban Thường vụ: 40/43 nội dung = 93,0% (tăng 10 nội dung so với 30/43 tại ngày 27/11/2026). Nguồn: file “17.11 TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 273), cập nhật 17:46 ngày 28/11/2026.</p>
   </section>
 
   <!-- ===== NHÓM 01 ===== -->
   <section class="group" id="sec-nhom-01" data-group="nhom-01">
     <div class="sec-head"><h2>III. Nhóm 01 — Lãnh đạo: nhiệm vụ cụ thể từng đồng chí</h2><span class="sec-sum">12 đồng chí · Bấm vào từng đồng chí để mở nhiệm vụ — phần tồn đọng hiện ngay đầu thẻ</span></div>
-    <p class="sec-desc">Cách theo dõi như bộ lọc trên Drive: bấm vào tên từng đồng chí để mở ra (i) tổng nhiệm vụ cá nhân của người đó trên phần mềm KPI, (ii) danh sách nhiệm vụ được phân công trong danh mục Ban Thường vụ kèm số TT, thời hạn và trạng thái, (iii) phần <b>tồn đọng</b> (chưa hoàn thành) tách riêng ngay đầu thẻ để Thường trực thấy ngay còn tồn nội dung nào. Tiến độ danh mục BTV theo file “TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 179), cập nhật 00:15 ngày 27/11/2026.</p>
+    <p class="sec-desc">Cách theo dõi như bộ lọc trên Drive: bấm vào tên từng đồng chí để mở ra (i) tổng nhiệm vụ cá nhân của người đó trên phần mềm KPI, (ii) danh sách nhiệm vụ được phân công trong danh mục Ban Thường vụ kèm số TT, thời hạn và trạng thái, (iii) phần <b>tồn đọng</b> (chưa hoàn thành) tách riêng ngay đầu thẻ để Thường trực thấy ngay còn tồn nội dung nào. Tiến độ danh mục BTV theo file “17.11 TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 273), cập nhật 17:46 ngày 28/11/2026.</p>
     <div class="panel" style="border-color:var(--amber-border);background:var(--amber-bg)">
       <h3 style="margin-bottom:8px">📌 Đọc đúng hai phạm vi số liệu — tránh nhầm giữa 42 và 43</h3>
-      <p style="margin:0 0 8px;font-size:14px"><b>Danh mục Ban Thường vụ (kho chung của BTV): tổng 43 nội dung, đã hoàn thành 30 nội dung (69,8%)</b> — tăng 17 so với 13 nội dung tại ngày 25/11. Con số 30/43 này thuộc về cả danh mục do đồng chí Bí thư chủ trì, được ghi ngay đầu thẻ đ/c Bí thư bên dưới.</p>
-      <p style="margin:0;font-size:14px"><b>Nhiệm vụ cá nhân trên phần mềm KPI là phạm vi riêng của từng người:</b> đ/c Bí thư Lê Thị Kim Hồng có <b>42 nhiệm vụ cá nhân</b>. Nội dung <b>số 43</b> trong kho BTV được giao trực tiếp cho đ/c Trần Thị Hồng Cúc phụ trách, không qua tài khoản Bí thư và không tính vào 42 nhiệm vụ cá nhân của Bí thư. TT 43 đã hoàn thành (cập nhật 27/11/2026).</p>
+      <p style="margin:0 0 8px;font-size:14px"><b>Danh mục Ban Thường vụ (kho chung của BTV): tổng 43 nội dung, đã hoàn thành 40 nội dung (93,0%)</b> — tăng 10 so với 30 nội dung tại ngày 27/11/2026. Con số 40/43 này thuộc về cả danh mục do đồng chí Bí thư chủ trì, được ghi ngay đầu thẻ đ/c Bí thư bên dưới.</p>
+      <p style="margin:0;font-size:14px"><b>Nhiệm vụ cá nhân trên phần mềm KPI là phạm vi riêng của từng người:</b> đ/c Bí thư Lê Thị Kim Hồng có <b>42 nhiệm vụ cá nhân</b>. Nội dung <b>số 43</b> trong kho BTV được giao trực tiếp cho đ/c Trần Thị Hồng Cúc phụ trách, không qua tài khoản Bí thư và không tính vào 42 nhiệm vụ cá nhân của Bí thư. TT 43 đã hoàn thành (theo cập nhật 28/11/2026).</p>
     </div>
     <div class="totals-strip" style="margin-top:14px">
       <span class="p-chip">Phân công BTV cộng dồn: 43 nội dung</span>
-      <span class="p-chip ok">✓ Đã hoàn thành: 30</span>
-      <span class="p-chip warn">◐ Hoàn thành một phần: 3 (TT 7, TT 8, TT 24)</span>
-      <span class="p-chip warn">Tồn đọng: 10</span>
+      <span class="p-chip ok">✓ Đã hoàn thành: 40</span>
+      <span class="p-chip warn">◐ Hoàn thành một phần: 2 (TT 14, TT 24)</span>
+      <span class="p-chip warn">Tồn đọng: 1 (TT 29)</span>
     </div>
 
     <details class="person-card" id="p-bi-thu">
       <summary>
         <span class="p-who"><b>Lê Thị Kim Hồng</b><span class="role">Bí thư Đảng ủy, Chủ tịch HĐND phường — Đảng ủy phường Tân Phú</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 42</span><span class="p-chip">Phân công BTV: 7</span><span class="p-chip ok">✓ Đã HT: 5</span><span class="p-chip warn">◐ Một phần: 1</span><span class="p-chip warn">Tồn: 1</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 42</span><span class="p-chip">Phân công BTV: 7</span><span class="p-chip ok">✓ Đã HT: 7/7</span></span>
       </summary>
       <div class="p-body">
-        <div class="btv-lead">⭐ <b>Danh mục Ban Thường vụ (đồng chí Bí thư chủ trì): 30/43 ĐÃ HOÀN THÀNH</b> (69,8%) · 03 hoàn thành một phần · 10 chưa hoàn thành. Đây là tiến độ của cả kho danh mục BTV, không phải số hoàn thành cá nhân của đ/c Bí thư.</div>
+        <div class="btv-lead">⭐ <b>Danh mục Ban Thường vụ (đồng chí Bí thư chủ trì): 40/43 ĐÃ HOÀN THÀNH</b> (93,0%) · 02 hoàn thành một phần · 01 chưa hoàn thành — tăng 10 nội dung so với 30/43 tại ngày 27/11/2026. Đây là tiến độ của cả kho danh mục BTV, không phải số hoàn thành cá nhân của đ/c Bí thư.</div>
         <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>42 nhiệm vụ</b> (tự đăng ký 42) — phạm vi riêng của đ/c Bí thư, tách biệt với kho 43 nội dung của Ban Thường vụ ở trên.</p>
-        <h4>⚠ Tồn đọng — chưa hoàn thành / hoàn thành một phần (2)</h4>
-        <ul class="tasks backlog">
-          <li><span class="tt">TT 7</span><span>Vai trò đại biểu HĐND Thành phố, tiếp xúc cử tri <span style="color:var(--muted)">(đã cập nhật mục 2 của đ/c Bình, phần còn lại chưa xong)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
-          <li><span class="tt">TT 19</span><span>Chủ trì họp Thường trực, BTV, BCH Đảng bộ <span style="color:var(--muted)">— giao đ/c Phương thực hiện</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-        </ul>
+        <p class="p-meta">Phần phân công trực tiếp của đ/c Bí thư trong danh mục BTV: <b>đã hoàn thành cả 07 nội dung</b> (TT 6, 7, 19, 28, 40, 41, 42) — không còn nội dung tồn đọng.</p>
         <h4>Toàn bộ nhiệm vụ được phân công trong danh mục BTV (7)</h4>
         <ul class="tasks">
           <li><span class="tt">TT 6</span><span>Tiếp công dân 1 tháng 1 lần, xử lý phản ánh, kiến nghị, khiếu nại, tố cáo <span style="color:var(--muted)">— đ/c Bình phối hợp xử lý</span></span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
-          <li><span class="tt">TT 7</span><span>Vai trò đại biểu HĐND Thành phố, tiếp xúc cử tri <span style="color:var(--muted)">(đã cập nhật mục 2 của đ/c Bình, phần còn lại chưa xong)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
-          <li><span class="tt">TT 19</span><span>Chủ trì họp Thường trực, BTV, BCH Đảng bộ <span style="color:var(--muted)">— giao đ/c Phương thực hiện</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 7</span><span>Vai trò đại biểu HĐND Thành phố, tiếp xúc cử tri</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
+          <li><span class="tt">TT 19</span><span>Chủ trì họp Thường trực, BTV, BCH Đảng bộ <span style="color:var(--muted)">— giao đ/c Phương thực hiện</span></span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 28</span><span>Nội chính, phòng chống tham nhũng, lãng phí, tiêu cực</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 40</span><span>Tham mưu BTV 04 kế hoạch/chương trình hành động của Thành ủy</span><span class="due">Hạn: 30/11/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 41</span><span>Phương án kết thúc hoạt động, chuyển giao chức năng Trung tâm Chính trị + rà soát vị trí việc làm</span><span class="due">Hạn: 15/11/2026</span><span class="st ok">Đã hoàn thành</span></li>
@@ -485,27 +493,25 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <details class="person-card" id="p-pho-bi-thu">
       <summary>
         <span class="p-who"><b>Trần Thị Hồng Cúc</b><span class="role">Phó Bí thư Thường trực Đảng ủy — Đảng ủy phường Tân Phú</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 16</span><span class="p-chip">Phân công BTV: 9</span><span class="p-chip ok">✓ Đã HT: 5</span><span class="p-chip warn">Tồn: 4</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 16</span><span class="p-chip">Phân công BTV: 9</span><span class="p-chip ok">✓ Đã HT: 7</span><span class="p-chip warn">◐ Một phần: 1</span><span class="p-chip warn">Tồn: 1</span></span>
       </summary>
       <div class="p-body">
-        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>16 nhiệm vụ</b> (được giao 11 · tự đăng ký 5). Đ/c Cúc phụ trách trực tiếp nội dung <b>TT 43</b> từ kho danh mục BTV — nội dung này <b>đã hoàn thành</b> (cập nhật 27/11/2026).</p>
-        <h4>⚠ Tồn đọng — chưa hoàn thành (4)</h4>
+        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>16 nhiệm vụ</b> (được giao 11 · tự đăng ký 5). Đ/c Cúc phụ trách trực tiếp nội dung <b>TT 43</b> từ kho danh mục BTV — nội dung này <b>đã hoàn thành</b> (theo cập nhật 28/11/2026). Đ/c Cúc đã hoàn thành 7/9 nội dung được phân công; còn TT 14 hoàn thành một phần (phần nội dung 2, 3) và TT 29 chưa hoàn thành.</p>
+        <h4>⚠ Tồn đọng — chưa hoàn thành / hoàn thành một phần (2)</h4>
         <ul class="tasks backlog">
-          <li><span class="tt">TT 14</span><span>Chương trình Nghị quyết 57 năm 2027 + chuyển đổi số — đã tách: đ/c Cúc phụ trách nội dung (2), (3); đ/c Thuận nội dung (1), (4) <span style="color:var(--muted)">(chưa có tiến độ)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 25</span><span>Chỉ thị 50-CT/TW về sinh hoạt chi bộ</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 27</span><span>Dân vận, dân chủ cơ sở, dân tộc, tôn giáo, thành lập Hội quần chúng</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 29</span><span>Sơ kết, tổng kết công tác xây dựng Đảng</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 14</span><span>Chương trình Nghị quyết 57 năm 2027 + chuyển đổi số — đã tách: đ/c Cúc phụ trách nội dung (2), (3); đ/c Thuận nội dung (1), (4) <span style="color:var(--muted)">(phần đ/c Thuận đã cập nhật, còn phần đ/c Cúc)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
+          <li><span class="tt">TT 29</span><span>Sơ kết, tổng kết công tác xây dựng Đảng <span style="color:var(--muted)">(chưa có tiến độ)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
         </ul>
         <h4>Toàn bộ nhiệm vụ được phân công trong danh mục BTV (9)</h4>
         <ul class="tasks">
-          <li><span class="tt">TT 14</span><span>Chương trình Nghị quyết 57 năm 2027 + chuyển đổi số — đã tách: đ/c Cúc phụ trách nội dung (2), (3); đ/c Thuận nội dung (1), (4) <span style="color:var(--muted)">(chưa có tiến độ)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 14</span><span>Chương trình Nghị quyết 57 năm 2027 + chuyển đổi số — đã tách: đ/c Cúc phụ trách nội dung (2), (3); đ/c Thuận nội dung (1), (4) <span style="color:var(--muted)">(phần đ/c Thuận đã cập nhật, còn phần đ/c Cúc)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
           <li><span class="tt">TT 15</span><span>Chỉnh lý, số hóa hồ sơ đảng viên, cán bộ</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 16</span><span>Phong trào Bình dân học vụ số <span style="color:var(--muted)">— đ/c Vân phối hợp</span></span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 17</span><span>Trang bị máy tính cho 41 khu phố</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 18</span><span>Hệ thống điều hành tác nghiệp, chữ ký số, Báo cáo số iCPV</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
-          <li><span class="tt">TT 25</span><span>Chỉ thị 50-CT/TW về sinh hoạt chi bộ</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 27</span><span>Dân vận, dân chủ cơ sở, dân tộc, tôn giáo, thành lập Hội quần chúng</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 29</span><span>Sơ kết, tổng kết công tác xây dựng Đảng</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 25</span><span>Chỉ thị 50-CT/TW về sinh hoạt chi bộ</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
+          <li><span class="tt">TT 27</span><span>Dân vận, dân chủ cơ sở, dân tộc, tôn giáo, thành lập Hội quần chúng</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
+          <li><span class="tt">TT 29</span><span>Sơ kết, tổng kết công tác xây dựng Đảng <span style="color:var(--muted)">(chưa có tiến độ)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
           <li><span class="tt">TT 43</span><span>Ngày hội Đại đoàn kết toàn dân tộc + Tuần Văn hóa – Đại đoàn kết <span style="color:var(--muted)">— giao trực tiếp từ kho BTV xuống đ/c Cúc</span></span><span class="due">Hạn: 20/11/2026</span><span class="st ok">Đã hoàn thành</span></li>
         </ul>
       </div>
@@ -514,15 +520,13 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <details class="person-card" id="p-chu-tich-ubnd">
       <summary>
         <span class="p-who"><b>Võ Trương Bình</b><span class="role">Chủ tịch UBND phường — Ủy ban nhân dân phường</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 47</span><span class="p-chip">Phân công BTV: 10</span><span class="p-chip ok">✓ Đã HT: 7</span><span class="p-chip warn">◐ Một phần: 1</span><span class="p-chip warn">Tồn: 2</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 47</span><span class="p-chip">Phân công BTV: 10</span><span class="p-chip ok">✓ Đã HT: 9</span><span class="p-chip warn">◐ Một phần: 1</span></span>
       </summary>
       <div class="p-body">
-        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>47 nhiệm vụ</b> (được giao 13 · tự đăng ký 34). Đ/c Bình đã hoàn thành 07/10 nội dung danh mục BTV được phân công — tăng mạnh so với 0 nội dung tại ngày 25/11; còn 02 nội dung chưa hoàn thành và 01 nội dung hoàn thành một phần (TT 24 — còn phần Nghị quyết 26, 27).</p>
-        <h4>⚠ Tồn đọng — chưa hoàn thành / hoàn thành một phần (3)</h4>
+        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>47 nhiệm vụ</b> (được giao 13 · tự đăng ký 34). Đ/c Bình đã hoàn thành 09/10 nội dung danh mục BTV được phân công; không còn nội dung chưa hoàn thành hẳn, còn 01 nội dung hoàn thành một phần (TT 24 — còn phần Nghị quyết 26, 27).</p>
+        <h4>◐ Hoàn thành một phần (1)</h4>
         <ul class="tasks backlog">
-          <li><span class="tt">TT 12</span><span>Cải cách hành chính, xây dựng trạm công dân số</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
           <li><span class="tt">TT 24</span><span>Cụ thể hóa văn bản cấp trên — phần đ/c Bình (NQ 26, NQ 27) chưa cập nhật <span style="color:var(--muted)">(phần đ/c Cúc đã xong)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
-          <li><span class="tt">TT 35</span><span>Bảo đảm an ninh chính trị, trật tự an toàn xã hội, phòng chống tội phạm</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
         </ul>
         <h4>Toàn bộ nhiệm vụ được phân công trong danh mục BTV (10)</h4>
         <ul class="tasks">
@@ -531,10 +535,10 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
           <li><span class="tt">TT 3</span><span>Phối hợp Sở ngành khảo sát quy hoạch, mở rộng đường Âu Cơ, trồng cây xanh</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 4</span><span>Khởi công công trình vốn bổ sung có mục tiêu 2026, duy tu đường, hẻm</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 5</span><span>Quản lý tài sản công, đất đai, trật tự xây dựng, đô thị, môi trường</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
-          <li><span class="tt">TT 12</span><span>Cải cách hành chính, xây dựng trạm công dân số</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 12</span><span>Cải cách hành chính, xây dựng trạm công dân số</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 13</span><span>Chỉ thị 22-CT/TU về thi hành Luật Phát triển đô thị</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 24</span><span>Cụ thể hóa văn bản cấp trên — phần đ/c Bình (NQ 26, NQ 27) chưa cập nhật <span style="color:var(--muted)">(phần đ/c Cúc đã xong)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
-          <li><span class="tt">TT 35</span><span>Bảo đảm an ninh chính trị, trật tự an toàn xã hội, phòng chống tội phạm</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 35</span><span>Bảo đảm an ninh chính trị, trật tự an toàn xã hội, phòng chống tội phạm</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 37</span><span>Không xảy ra cháy, nổ, nhất là tại chung cư</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
         </ul>
       </div>
@@ -543,12 +547,12 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <details class="person-card" id="p-chu-tich-mttq">
       <summary>
         <span class="p-who"><b>Hoàng Quốc Liêm</b><span class="role">Ủy viên BTV Đảng ủy, Chủ tịch Ủy ban MTTQ Việt Nam phường — Ủy ban MTTQ Việt Nam phường</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 15</span><span class="p-chip">Phân công BTV trực tiếp: 0</span><span class="p-chip warn">Phối hợp: TT 8 (nội dung 3) — chưa có minh chứng</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 15</span><span class="p-chip">Phân công BTV trực tiếp: 0</span><span class="p-chip ok">Phối hợp: TT 8 (nội dung 3) — đã hoàn thành</span></span>
       </summary>
       <div class="p-body">
         <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>15 nhiệm vụ</b> (được giao 3 · tự đăng ký 12).</p>
         <h4>Danh mục Ban Thường vụ</h4>
-        <p class="p-meta">Đ/c Liêm <b>chưa có nội dung phân công trực tiếp</b> trong danh mục BTV; tham gia phối hợp nội dung (3) — tiếp xúc cử tri — của TT 8 (thuộc phân công của đ/c Phan Tiến Đức). TT 8 đã hoàn thành một phần: đã có minh chứng của đ/c Bình, phần của đ/c Liêm <b>chưa có minh chứng</b> (hạn 15/12/2026). Không có nội dung tồn đọng thuộc phân công trực tiếp.</p>
+        <p class="p-meta">Đ/c Liêm <b>chưa có nội dung phân công trực tiếp</b> trong danh mục BTV; tham gia phối hợp nội dung (3) — tiếp xúc cử tri — của TT 8 (thuộc phân công của đ/c Phan Tiến Đức). TT 8 <b>đã hoàn thành</b> (theo cập nhật 28/11/2026). Không có nội dung tồn đọng thuộc phân công trực tiếp.</p>
       </div>
     </details>
 
@@ -570,23 +574,18 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <details class="person-card" id="p-truong-ban-xdd">
       <summary>
         <span class="p-who"><b>Nguyễn Thị Quỳnh Như</b><span class="role">Ủy viên BTV Đảng ủy, Trưởng Ban Xây dựng Đảng — Ban Xây dựng Đảng Đảng ủy</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 21</span><span class="p-chip">Phân công BTV: 7</span><span class="p-chip ok">✓ Đã HT: 5</span><span class="p-chip warn">Tồn: 2</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 21</span><span class="p-chip">Phân công BTV: 7</span><span class="p-chip ok">✓ Đã HT: 7/7</span></span>
       </summary>
       <div class="p-body">
-        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>21 nhiệm vụ</b>. Đ/c Như đã hoàn thành 5/7 nội dung danh mục BTV được phân công; còn TT 23 và TT 26 (TT 26 đang ở bước lấy công văn).</p>
-        <h4>⚠ Tồn đọng — chưa hoàn thành (2)</h4>
-        <ul class="tasks backlog">
-          <li><span class="tt">TT 23</span><span>Tạo nguồn, kết nạp đảng viên mới đạt chỉ tiêu</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 26</span><span>Đánh giá KPI đơn vị, 100% cán bộ đúng tiến độ <span style="color:var(--muted)">(đang ở bước lấy công văn)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-        </ul>
+        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>21 nhiệm vụ</b>. Đ/c Như đã hoàn thành cả 7/7 nội dung danh mục BTV được phân công (TT 9, 20, 21, 22, 23, 26, 39) — không còn nội dung tồn đọng.</p>
         <h4>Toàn bộ nhiệm vụ được phân công trong danh mục BTV (7)</h4>
         <ul class="tasks">
           <li><span class="tt">TT 9</span><span>Rà soát Quy chế làm việc Đảng ủy, phân công UVBTV/UVBCH</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 20</span><span>Rà soát, kiện toàn nhân sự, kiểm điểm, phân tích chất lượng TCD, đảng viên 2026</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 21</span><span>Chỉ thị 07-CT/TW học tập Hồ Chí Minh + Không gian văn hóa Hồ Chí Minh</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 22</span><span>Trao Huy hiệu Đảng đợt 07/11, thăm tặng quà đảng viên khó khăn</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
-          <li><span class="tt">TT 23</span><span>Tạo nguồn, kết nạp đảng viên mới đạt chỉ tiêu</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 26</span><span>Đánh giá KPI đơn vị, 100% cán bộ đúng tiến độ <span style="color:var(--muted)">(đang ở bước lấy công văn)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 23</span><span>Tạo nguồn, kết nạp đảng viên mới đạt chỉ tiêu</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
+          <li><span class="tt">TT 26</span><span>Đánh giá KPI đơn vị, 100% cán bộ đúng tiến độ</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 39</span><span>Phê duyệt hồ sơ CBCCVC trên phân hệ cơ sở dữ liệu cán bộ</span><span class="due">Hạn: 09/11/2026</span><span class="st ok">Đã hoàn thành</span></li>
         </ul>
       </div>
@@ -609,18 +608,14 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <details class="person-card" id="p-truong-cong-an">
       <summary>
         <span class="p-who"><b>Trần Đức Thuận</b><span class="role">Ủy viên BTV Đảng ủy, Trưởng Công an phường — Công an phường Tân Phú</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 32</span><span class="p-chip">Phân công BTV: 2</span><span class="p-chip ok">✓ Đã HT: 1</span><span class="p-chip warn">Tồn: 1 (+ TT 14 phần 1, 4)</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 32</span><span class="p-chip">Phân công BTV: 2</span><span class="p-chip ok">✓ Đã HT: 2/2</span><span class="p-chip ok">TT 14 (phần 1, 4): đã cập nhật</span></span>
       </summary>
       <div class="p-body">
-        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>32 nhiệm vụ</b> (được giao 11 · tự đăng ký 21). Ngoài 02 nội dung phân công trực tiếp, đ/c Thuận còn phụ trách nội dung (1), (4) của TT 14 đã tách.</p>
-        <h4>⚠ Tồn đọng — chưa hoàn thành (1 + phần phối hợp)</h4>
-        <ul class="tasks backlog">
-          <li><span class="tt">TT 36</span><span>Chỉ tiêu phòng, chống ma túy theo NQ 22-NQ/ĐU</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-          <li><span class="tt">TT 14</span><span>Chương trình Nghị quyết 57 năm 2027 + chuyển đổi số — đ/c Thuận phụ trách nội dung (1), (4) của nội dung đã tách <span style="color:var(--muted)">(tính trong phân công của đ/c Cúc; chưa có tiến độ)</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-        </ul>
+        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>32 nhiệm vụ</b> (được giao 11 · tự đăng ký 21). Đ/c Thuận đã hoàn thành cả 02 nội dung phân công trực tiếp (TT 36, TT 38); phần nội dung (1), (4) của TT 14 đã tách do đ/c Thuận phụ trách cũng đã cập nhật — TT 14 còn phần của đ/c Cúc nên đang ở trạng thái hoàn thành một phần.</p>
+        <p class="p-meta">Không còn nội dung tồn đọng thuộc phần đ/c Thuận phụ trách.</p>
         <h4>Toàn bộ nhiệm vụ được phân công trong danh mục BTV (2)</h4>
         <ul class="tasks">
-          <li><span class="tt">TT 36</span><span>Chỉ tiêu phòng, chống ma túy theo NQ 22-NQ/ĐU</span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 36</span><span>Chỉ tiêu phòng, chống ma túy theo NQ 22-NQ/ĐU</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 38</span><span>Bảo vệ bí mật nhà nước, an toàn thông tin, không gian mạng</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
         </ul>
       </div>
@@ -629,17 +624,14 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <details class="person-card" id="p-pho-ct-hdnd">
       <summary>
         <span class="p-who"><b>Phan Tiến Đức</b><span class="role">Phó Chủ tịch HĐND phường — Hội đồng nhân dân phường</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 6</span><span class="p-chip">Phân công BTV: 1</span><span class="p-chip warn">◐ Một phần: 1 (TT 8)</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 6</span><span class="p-chip">Phân công BTV: 1</span><span class="p-chip ok">✓ Đã HT: 1/1 (TT 8)</span></span>
       </summary>
       <div class="p-body">
         <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>6 nhiệm vụ</b> (được giao 1 · tự đăng ký 5).</p>
-        <h4>◐ Hoàn thành một phần (1)</h4>
-        <ul class="tasks backlog">
-          <li><span class="tt">TT 8</span><span>Hoạt động HĐND phường 2026: kỳ họp cuối năm, họp Thường trực, tiếp xúc cử tri, giám sát, tổng kết <span style="color:var(--muted)">— đã có minh chứng của đ/c Bình; phần của đ/c Đức và đ/c Liêm chưa có minh chứng</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
-        </ul>
+        <p class="p-meta">Nội dung BTV duy nhất được phân công (TT 8) đã hoàn thành — không còn nội dung tồn đọng.</p>
         <h4>Toàn bộ nhiệm vụ được phân công trong danh mục BTV (1)</h4>
         <ul class="tasks">
-          <li><span class="tt">TT 8</span><span>Hoạt động HĐND phường 2026: kỳ họp cuối năm, họp Thường trực, tiếp xúc cử tri, giám sát, tổng kết <span style="color:var(--muted)">— đã có minh chứng của đ/c Bình; phần của đ/c Đức và đ/c Liêm chưa có minh chứng</span></span><span class="due">Hạn: 15/12/2026</span><span class="st part">Hoàn thành một phần</span></li>
+          <li><span class="tt">TT 8</span><span>Hoạt động HĐND phường 2026: kỳ họp cuối năm, họp Thường trực, tiếp xúc cử tri, giám sát, tổng kết</span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
         </ul>
       </div>
     </details>
@@ -676,23 +668,19 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <details class="person-card" id="p-chanh-vp">
       <summary>
         <span class="p-who"><b>Phạm Đại Phương</b><span class="role">Chánh Văn phòng Đảng ủy — Văn phòng Đảng ủy phường</span></span>
-        <span class="p-chips"><span class="p-chip">NV cá nhân: 32</span><span class="p-chip">Được giao thực hiện: 2</span><span class="p-chip ok">✓ Đã HT: 1 (TT 28)</span><span class="p-chip warn">Tồn: 1 (TT 19)</span></span>
+        <span class="p-chips"><span class="p-chip">NV cá nhân: 32</span><span class="p-chip">Được giao thực hiện: 2</span><span class="p-chip ok">✓ Đã HT: 2 (TT 19, TT 28)</span></span>
       </summary>
       <div class="p-body">
-        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>32 nhiệm vụ</b>. Đ/c Phương được giao thực hiện 02 nội dung thuộc phân công của đ/c Bí thư trong danh mục BTV.</p>
-        <h4>⚠ Tồn đọng — chưa hoàn thành (1)</h4>
-        <ul class="tasks backlog">
-          <li><span class="tt">TT 19</span><span>Chủ trì họp Thường trực, BTV, BCH Đảng bộ <span style="color:var(--muted)">— thuộc phân công của đ/c Bí thư, giao đ/c Phương thực hiện</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
-        </ul>
+        <p class="p-meta">Tổng nhiệm vụ cá nhân trên phần mềm KPI: <b>32 nhiệm vụ</b>. Đ/c Phương được giao thực hiện 02 nội dung thuộc phân công của đ/c Bí thư trong danh mục BTV — đã hoàn thành cả 02 nội dung (TT 19, TT 28).</p>
         <h4>Toàn bộ nội dung được giao thực hiện trong danh mục BTV (2)</h4>
         <ul class="tasks">
-          <li><span class="tt">TT 19</span><span>Chủ trì họp Thường trực, BTV, BCH Đảng bộ <span style="color:var(--muted)">— thuộc phân công của đ/c Bí thư, giao đ/c Phương thực hiện</span></span><span class="due">Hạn: 15/12/2026</span><span class="st warn">Chưa hoàn thành</span></li>
+          <li><span class="tt">TT 19</span><span>Chủ trì họp Thường trực, BTV, BCH Đảng bộ <span style="color:var(--muted)">— thuộc phân công của đ/c Bí thư, giao đ/c Phương thực hiện</span></span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
           <li><span class="tt">TT 28</span><span>Nội chính, phòng chống tham nhũng, lãng phí, tiêu cực <span style="color:var(--muted)">— thuộc phân công của đ/c Bí thư</span></span><span class="due">Hạn: 15/12/2026</span><span class="st ok">Đã hoàn thành</span></li>
         </ul>
       </div>
     </details>
 
-    <p class="footnote">Cộng kiểm chứng: phân công BTV theo người phụ trách (theo thứ tự hệ thống chính trị: đ/c Hồng, đ/c Cúc, đ/c Bình, đ/c Vương, đ/c Như, đ/c Ánh, đ/c Thuận, đ/c Đức, đ/c Vân) 7 + 9 + 10 + 2 + 7 + 1 + 2 + 1 + 4 = <b>43 nội dung</b>; đã hoàn thành 5 + 5 + 7 + 2 + 5 + 1 + 1 + 0 + 4 = <b>30 nội dung</b>; hoàn thành một phần 03 (TT 7, TT 8, TT 24); chưa hoàn thành <b>10 nội dung</b>. Nguồn tiến độ: file “TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 179), cập nhật 00:15 ngày 27/11/2026. Tổng nhiệm vụ cá nhân của từng đồng chí theo bản xuất phần mềm KPI ngày 25/11/2026, không đổi so với 20/11.</p>
+    <p class="footnote">Cộng kiểm chứng: phân công BTV theo người phụ trách (theo thứ tự hệ thống chính trị: đ/c Hồng, đ/c Cúc, đ/c Bình, đ/c Vương, đ/c Như, đ/c Ánh, đ/c Thuận, đ/c Đức, đ/c Vân) 7 + 9 + 10 + 2 + 7 + 1 + 2 + 1 + 4 = <b>43 nội dung</b>; đã hoàn thành 7 + 7 + 9 + 2 + 7 + 1 + 2 + 1 + 4 = <b>40 nội dung</b>; hoàn thành một phần 02 (TT 14, TT 24); chưa hoàn thành <b>01 nội dung</b> (TT 29). Nguồn tiến độ: file “17.11 TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 273), cập nhật 17:46 ngày 28/11/2026. Tổng nhiệm vụ cá nhân của từng đồng chí theo bản xuất phần mềm KPI ngày 25/11/2026, không đổi so với 20/11.</p>
   </section>
 
   <!-- ===== KHỐI ĐẢNG ===== -->
@@ -993,7 +981,7 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <div class="alert-list">
       <div class="alert-card" style="border-left-color:var(--green)"><h4>🟢 03 điểm đã khắc phục so với 20/11</h4><p>(1) Đ/c Đào Thanh Quang (Ban VH–XH HĐND) đã chuyển sang nhóm không thuộc diện đánh giá — diện đánh giá đạt 674/674 người có SPCV (100%). (2) Tổ 4–5 tuổi Trường MN Phượng Hồng đã nhập danh mục. (3) Phạm Mộng Tuyền tăng 01→18 nhiệm vụ, Trần Thị Hồng Thắm tăng 01→10 nhiệm vụ.</p><button class="go" data-goto="tong-quan">→ Xem Tổng quan</button></div>
       <div class="alert-card red"><h4>🔴 02 đơn vị chưa nhập danh mục</h4><p>Ban Kinh tế – Ngân sách HĐND · Ban Văn hóa – Xã hội HĐND. Tỷ lệ toàn phường đạt 63/65 (96,92%); cả 02 đơn vị còn thiếu đều thuộc Khối HĐND.</p><button class="go" data-goto="khoi-hdnd">→ Xem Khối HĐND</button></div>
-      <div class="alert-card"><h4>🟡 Danh mục BTV còn 10 nội dung chưa hoàn thành, 03 hoàn thành một phần</h4><p>Còn 10 nội dung chưa hoàn thành (TT 12, 14, 19, 23, 25, 26, 27, 29, 35, 36) và 03 nội dung hoàn thành một phần (TT 7, TT 8, TT 24) — hạn chung 15/12/2026, chưa tới hạn. Tiến độ BTV đã đạt 30/43 hoàn thành (69,8%), tăng 17 nội dung so với ngày 25/11; TT 43 đã hoàn thành.</p><button class="go" data-goto="nhom-01">→ Xem bóc tách Nhóm 01</button></div>
+      <div class="alert-card"><h4>🟡 Danh mục BTV còn 01 nội dung chưa hoàn thành, 02 hoàn thành một phần</h4><p>Còn 01 nội dung chưa hoàn thành (TT 29 — đ/c Cúc, chưa có tiến độ) và 02 nội dung hoàn thành một phần (TT 14 — phần đ/c Thuận đã cập nhật, còn phần đ/c Cúc; TT 24 — phần đ/c Cúc đã xong, còn phần đ/c Bình) — hạn chung 15/12/2026, chưa tới hạn. Tiến độ BTV đã đạt 40/43 hoàn thành (93,0%), tăng 10 nội dung so với 30/43 tại ngày 27/11/2026.</p><button class="go" data-goto="nhom-01">→ Xem bóc tách Nhóm 01</button></div>
       <div class="alert-card"><h4>🟡 04 cá nhân chỉ có 02 nhiệm vụ</h4><p>Nguyễn Thị Băng Tâm (Tổ chuyên môn 5 – TH Huỳnh Văn Chính) · Trần Thị Bích Liễu · Võ Thị Như Trang · Xương Thị Kim Dung (đều Chuyên viên, Văn phòng HĐND và UBND). Giảm từ 06 người ngày 20/11. Cần kiểm tra độ bao quát theo chức trách — không chạy theo số lượng hình thức.</p><button class="go" data-goto="khoi-ubnd">→ Xem Khối UBND</button> <button class="go" data-goto="truong-hoc">→ Xem Trường học</button></div>
       <div class="alert-card"><h4>🟡 10 cá nhân từ 40 nhiệm vụ trở lên</h4><p>Đỗ Thành Đạt 153 · Đặng Hoàng Ân 77 · Nguyễn Huy Hoàng 63 · Võ Trương Bình 47 · Lê Minh Công 44 · Phí Thị Ngọc Yến 43 · Lê Thị Kim Hồng 42 · Vũ Thúc Quý Hoài 42 · Dương Quốc Trưởng 41 · Nguyễn Đình Tân 40. Cần rà soát chống trùng lặp, chia nhỏ nhiệm vụ.</p><button class="go" data-goto="khoi-ubnd">→ Xem Khối UBND</button></div>
       <div class="alert-card"><h4>🟡 144 nhiệm vụ tập thể chưa giao (11,76%) — theo báo cáo 20/11</h4><p>Phòng Kinh tế, HT &amp; ĐT: 47 · TH Hồ Văn Cường: 47 · TH Huỳnh Văn Chính: 27 · Công an phường: 15 · MN Phượng Hồng: 07 · Ủy ban MTTQ: 01. Số này chưa có bản xuất mới tại kỳ 25/11. Mục tiêu: 100% danh mục tập thể được giao.</p><button class="go" data-goto="tong-quan">→ Xem Tổng quan</button></div>
@@ -1011,7 +999,7 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     <div class="panel">
       <ol class="rec">
         <li><b>Thường trực HĐND chỉ đạo hai ban HĐND hoàn thiện danh mục đơn vị.</b> Ban Kinh tế – Ngân sách HĐND và Ban Văn hóa – Xã hội HĐND hoàn thiện danh mục sản phẩm công việc của đơn vị, xác nhận việc đăng ký và gửi duyệt đúng quy trình (trường hợp cá nhân chưa có SPCV tại Ban Văn hóa – Xã hội đã được xử lý bằng cách chuyển sang nhóm không thuộc diện đánh giá).</li>
-        <li><b>Các đồng chí phụ trách danh mục BTV đẩy nhanh 10 nội dung chưa hoàn thành và hoàn thiện 03 nội dung đang hoàn thành một phần.</b> Trong đó có <b>phần còn lại của TT 24</b> (phần đ/c Võ Trương Bình — NQ 26, NQ 27) cùng phần còn lại của TT 7 và TT 8. Tất cả các nội dung này đều có hạn 15/12/2026, cần chủ động tiến độ, không chờ tới hạn.</li>
+        <li><b>Các đồng chí phụ trách danh mục BTV đẩy nhanh 01 nội dung chưa hoàn thành và hoàn thiện 02 nội dung đang hoàn thành một phần.</b> Nội dung chưa hoàn thành là <b>TT 29</b> (đ/c Trần Thị Hồng Cúc); hai nội dung một phần gồm <b>phần còn lại của TT 14</b> (phần đ/c Cúc) và <b>phần còn lại của TT 24</b> (phần đ/c Võ Trương Bình — NQ 26, NQ 27). Tất cả các nội dung này đều có hạn 15/12/2026, cần chủ động tiến độ, không chờ tới hạn.</li>
         <li><b>Thủ trưởng đơn vị rà soát cá nhân ở hai cực số lượng.</b> Rà soát 04 cá nhân chỉ có 02 nhiệm vụ (kiểm tra độ bao quát theo chức trách) và 10 cá nhân từ 40 nhiệm vụ trở lên (rà soát chống trùng lặp, chia nhỏ nhiệm vụ); đối chiếu nhiệm vụ với phân công thực tế, độ khó, thời hạn và sản phẩm đầu ra — không chạy theo số lượng hình thức.</li>
         <li><b>UBND phường bảo đảm 100% danh mục tập thể được giao.</b> Chỉ đạo cơ quan chuyên môn theo dõi, kiểm tra tiến độ tập thể và cá nhân, bảo đảm hệ thống ghi nhận 100% danh mục sản phẩm của tập thể (hiện còn 144 nhiệm vụ tập thể chưa giao theo báo cáo 20/11); cập nhật danh sách cá nhân không tự đánh giá trong quý để chốt đúng đối tượng đánh giá KPI Quý IV/2026.</li>
         <li><b>Thủ trưởng phê duyệt hằng ngày và chịu trách nhiệm.</b> Thủ trưởng các cơ quan, đơn vị hằng ngày vào hệ thống theo dõi, phê duyệt danh mục, đánh giá chất lượng sản phẩm thuộc thẩm quyền và chịu trách nhiệm hoàn toàn về kết quả, tiến độ của đơn vị mình.</li>
@@ -1020,10 +1008,66 @@ ul.tasks.backlog li{border-color:var(--amber-border);background:var(--amber-bg)}
     </div>
   </section>
 
+  <!-- ===== KHÓ KHĂN, VƯỚNG MẮC CỦA CÁC ĐƠN VỊ ===== -->
+  <section class="group" id="sec-kho-khan" data-group="kho-khan">
+    <div class="sec-head"><h2>XII. Khó khăn, vướng mắc của các đơn vị</h2><span class="sec-sum">Tổng hợp từ biểu mẫu báo cáo tiến độ KPI hằng ngày Quý IV/2026 · 25 đơn vị cha · số liệu đơn vị mốc 25/11/2026</span></div>
+    <p class="sec-desc">Phần này tổng hợp cột Vướng mắc của 25 đơn vị cha (sheet Don_vi), Nhóm 01 (sheet Nhom_1) và mục Lưu ý, Kiểm tra bắt buộc (sheet Tong_hop) trong biểu mẫu báo cáo tiến độ KPI hằng ngày Quý IV/2026 trên Google Drive — gồm tổng hợp theo 06 nhóm vấn đề và bảng chi tiết theo từng đơn vị.</p>
+
+    <h3 style="margin:18px 0 10px;font-size:16.5px">Tổng hợp theo nhóm vấn đề</h3>
+    <div class="alert-list">
+      <div class="alert-card red"><h4>A. Chưa có dữ liệu minh chứng và đánh giá — khó khăn lớn nhất toàn hệ thống</h4><p>25/25 đơn vị cha ở trạng thái “Chưa đủ số liệu”; cột nhiệm vụ đủ minh chứng và nhiệm vụ đã được đánh giá chưa có số tại mọi đơn vị; Nhóm 01 có 0/12 đồng chí hoàn tất đánh giá.</p></div>
+      <div class="alert-card red"><h4>B. Chưa nhập Danh mục sản phẩm công việc: 02 đơn vị</h4><p>Ban Kinh tế – Ngân sách HĐND và Ban Văn hóa – Xã hội HĐND. Toàn hệ thống đạt 63/65 đơn vị đã nhập.</p></div>
+      <div class="alert-card"><h4>C. Nhiệm vụ tập thể chưa phân giao <span style="font-weight:600;color:var(--muted)">(theo báo cáo 20/11/2026, tổng 144 nhiệm vụ)</span></h4><p>Phòng Kinh tế, Hạ tầng và Đô thị: 47 · Trường TH Hồ Văn Cường: 47 · Công an phường: 15 · Trường MN Phượng Hồng: 07 · Ủy ban MTTQ: 01.</p></div>
+      <div class="alert-card"><h4>D. Cá nhân có quá ít nhiệm vụ (01–02 nhiệm vụ): 04 người</h4><p>Nguyễn Thị Băng Tâm (TH Huỳnh Văn Chính, 02 nhiệm vụ) và 03 chuyên viên Văn phòng HĐND và UBND (Trần Thị Bích Liễu, Võ Thị Như Trang, Xương Thị Kim Dung, mỗi người 02 nhiệm vụ); cần kiểm tra độ bao quát theo chức trách.</p></div>
+      <div class="alert-card"><h4>E. Cá nhân có số nhiệm vụ cao, cần rà soát trùng lặp và cân đối</h4><p>10 người từ 40 nhiệm vụ trở lên; cao nhất Đỗ Thành Đạt (Phòng Kinh tế, Hạ tầng và Đô thị) 153 nhiệm vụ; Phòng Kinh tế, Hạ tầng và Đô thị có 05 người từ 40 và 08 người từ 30 nhiệm vụ trở lên; THCS Nguyễn Trãi có 05 người từ 30 trở lên; bình quân THCS Hoàng Diệu cao 22,7 nhiệm vụ/người.</p></div>
+      <div class="alert-card"><h4>F. Kiểm tra bắt buộc phục vụ kiểm điểm cuối năm</h4><p>Rà soát tài khoản không còn tổ chức, nhóm không thuộc diện đánh giá và luồng kiểm điểm cuối năm, thủ trưởng đơn vị xác nhận; vướng mắc phát sinh ghi tại cột J sheet Don_vi của biểu mẫu hằng ngày. Chế độ báo cáo: trước 17 giờ hằng ngày; đơn vị hoàn thành 100% có xác nhận thì không báo cáo lặp lại, chỉ cập nhật khi phát sinh.</p></div>
+    </div>
+
+    <h3 style="margin:24px 0 10px;font-size:16.5px">Chi tiết theo 25 đơn vị cha</h3>
+    <div class="table-wrap">
+      <table class="diff">
+        <thead><tr>
+          <th style="min-width:190px">Đơn vị</th>
+          <th class="num">Người thuộc diện đánh giá</th>
+          <th class="num">Nhiệm vụ cá nhân</th>
+          <th style="min-width:300px">Khó khăn, vướng mắc chính</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Ban CHQS phường</td><td class="num" data-label="Người thuộc diện đánh giá">1</td><td class="num" data-label="Nhiệm vụ cá nhân">10</td><td data-label="Khó khăn, vướng mắc chính">Chỉ huy trưởng thuộc Nhóm 01 (xem chi tiết tại Nhóm 01); đơn vị đã nhập danh mục.</td></tr>
+          <tr><td>Ban Kinh tế – Ngân sách HĐND</td><td class="num" data-label="Người thuộc diện đánh giá">1</td><td class="num" data-label="Nhiệm vụ cá nhân">22</td><td data-label="Khó khăn, vướng mắc chính">Cá nhân đã có SPCV (Phó Trưởng ban Lê Hồ Ngọc Dung, 22 nhiệm vụ) nhưng đơn vị <b>chưa nhập Danh mục sản phẩm công việc</b> vào kỳ hiện tại — cần hoàn thiện và gửi duyệt đúng quy trình.</td></tr>
+          <tr><td>Ban Quản lý dự án đầu tư xây dựng</td><td class="num" data-label="Người thuộc diện đánh giá">11</td><td class="num" data-label="Nhiệm vụ cá nhân">97</td><td data-label="Khó khăn, vướng mắc chính">Đã nhập danh mục, 100% cá nhân có SPCV; bình quân nhiệm vụ/người thấp nhất khối (8,8) nhưng không có trường hợp 01–02 nhiệm vụ.</td></tr>
+          <tr><td>Ban Văn hóa – Xã hội HĐND</td><td class="num" data-label="Người thuộc diện đánh giá">0</td><td class="num" data-label="Nhiệm vụ cá nhân">0</td><td data-label="Khó khăn, vướng mắc chính">Đã xử lý phần cá nhân (đ/c Đào Thanh Quang chuyển sang nhóm không thuộc diện đánh giá); đơn vị vẫn <b>chưa nhập Danh mục sản phẩm công việc</b> vào kỳ hiện tại.</td></tr>
+          <tr><td>Ban Xây dựng Đảng</td><td class="num" data-label="Người thuộc diện đánh giá">5</td><td class="num" data-label="Nhiệm vụ cá nhân">52</td><td data-label="Khó khăn, vướng mắc chính">Đã nhập danh mục; không có cá nhân 01–02 nhiệm vụ.</td></tr>
+          <tr><td>Công an phường</td><td class="num" data-label="Người thuộc diện đánh giá">1</td><td class="num" data-label="Nhiệm vụ cá nhân">32</td><td data-label="Khó khăn, vướng mắc chính">Trưởng Công an thuộc Nhóm 01; còn 15 nhiệm vụ tập thể chưa giao theo báo cáo 20/11.</td></tr>
+          <tr><td>Hội đồng nhân dân phường</td><td class="num" data-label="Người thuộc diện đánh giá">1</td><td class="num" data-label="Nhiệm vụ cá nhân">6</td><td data-label="Khó khăn, vướng mắc chính">Phó Chủ tịch HĐND thuộc Nhóm 01; đơn vị đã nhập danh mục.</td></tr>
+          <tr><td>Phòng Kinh tế, Hạ tầng và Đô thị</td><td class="num" data-label="Người thuộc diện đánh giá">26</td><td class="num" data-label="Nhiệm vụ cá nhân">657</td><td data-label="Khó khăn, vướng mắc chính">Còn 47 nhiệm vụ tập thể chưa giao (nhiều nhất toàn phường, theo báo cáo 20/11); cá nhân cao nhất toàn phường Đỗ Thành Đạt 153 nhiệm vụ; 05 cá nhân từ 40 nhiệm vụ, 08 cá nhân từ 30 nhiệm vụ — ưu tiên rà soát trùng lặp.</td></tr>
+          <tr><td>Phòng Văn hóa – Xã hội</td><td class="num" data-label="Người thuộc diện đánh giá">14</td><td class="num" data-label="Nhiệm vụ cá nhân">219</td><td data-label="Khó khăn, vướng mắc chính">Trưởng phòng Phí Thị Ngọc Yến có 43 nhiệm vụ, thuộc nhóm từ 40 nhiệm vụ trở lên toàn phường.</td></tr>
+          <tr><td>Trung tâm Chính trị</td><td class="num" data-label="Người thuộc diện đánh giá">3</td><td class="num" data-label="Nhiệm vụ cá nhân">23</td><td data-label="Khó khăn, vướng mắc chính">Đã nhập danh mục; không có cá nhân 01–02 nhiệm vụ.</td></tr>
+          <tr><td>Trung tâm Hành chính công</td><td class="num" data-label="Người thuộc diện đánh giá">7</td><td class="num" data-label="Nhiệm vụ cá nhân">74</td><td data-label="Khó khăn, vướng mắc chính">Đã nhập danh mục, 100% cá nhân có SPCV, không có trường hợp 01–02 nhiệm vụ.</td></tr>
+          <tr><td>Trung tâm cung ứng dịch vụ công</td><td class="num" data-label="Người thuộc diện đánh giá">9</td><td class="num" data-label="Nhiệm vụ cá nhân">101</td><td data-label="Khó khăn, vướng mắc chính">Đã nhập danh mục, 100% cá nhân có SPCV.</td></tr>
+          <tr><td>Trường MN Hướng Dương</td><td class="num" data-label="Người thuộc diện đánh giá">50</td><td class="num" data-label="Nhiệm vụ cá nhân">953</td><td data-label="Khó khăn, vướng mắc chính">Tất cả các tổ đã nhập danh mục, 100% cá nhân có SPCV, không có trường hợp 01–02 nhiệm vụ.</td></tr>
+          <tr><td>Trường MN Phượng Hồng</td><td class="num" data-label="Người thuộc diện đánh giá">69</td><td class="num" data-label="Nhiệm vụ cá nhân">927</td><td data-label="Khó khăn, vướng mắc chính">Đã khắc phục Tổ 4–5 tuổi nhập danh mục; còn 07 nhiệm vụ tập thể chưa giao theo báo cáo 20/11.</td></tr>
+          <tr><td>Trường TH Huỳnh Văn Chính</td><td class="num" data-label="Người thuộc diện đánh giá">127</td><td class="num" data-label="Nhiệm vụ cá nhân">1.973</td><td data-label="Khó khăn, vướng mắc chính">Đã khắc phục 02 cá nhân từ 01 lên 18 và 10 nhiệm vụ; còn 01 cá nhân có 02 nhiệm vụ (Nguyễn Thị Băng Tâm).</td></tr>
+          <tr><td>Trường TH Hồ Văn Cường</td><td class="num" data-label="Người thuộc diện đánh giá">82</td><td class="num" data-label="Nhiệm vụ cá nhân">1.276</td><td data-label="Khó khăn, vướng mắc chính">Còn 47 nhiệm vụ tập thể chưa giao theo báo cáo 20/11 (cùng mức cao nhất toàn phường).</td></tr>
+          <tr><td>Trường THCS Hoàng Diệu</td><td class="num" data-label="Người thuộc diện đánh giá">79</td><td class="num" data-label="Nhiệm vụ cá nhân">1.796</td><td data-label="Khó khăn, vướng mắc chính">Bình quân nhiệm vụ/người cao (22,7); không có cá nhân 01–02 nhiệm vụ.</td></tr>
+          <tr><td>Trường THCS Nguyễn Trãi</td><td class="num" data-label="Người thuộc diện đánh giá">115</td><td class="num" data-label="Nhiệm vụ cá nhân">2.017</td><td data-label="Khó khăn, vướng mắc chính">Tổng nhiệm vụ cao nhất khối trường học; 05 cá nhân từ 30 nhiệm vụ trở lên (Hiệu trưởng Lê Minh Công 44 nhiệm vụ).</td></tr>
+          <tr><td>Trạm Y tế</td><td class="num" data-label="Người thuộc diện đánh giá">29</td><td class="num" data-label="Nhiệm vụ cá nhân">327</td><td data-label="Khó khăn, vướng mắc chính">Đơn vị đông người, 100% có SPCV, không có trường hợp 01–02 nhiệm vụ.</td></tr>
+          <tr><td>Văn phòng HĐND và UBND</td><td class="num" data-label="Người thuộc diện đánh giá">19</td><td class="num" data-label="Nhiệm vụ cá nhân">194</td><td data-label="Khó khăn, vướng mắc chính">03 chuyên viên chỉ có 02 nhiệm vụ (Trần Thị Bích Liễu, Võ Thị Như Trang, Xương Thị Kim Dung) — cần kiểm tra độ bao quát theo chức trách.</td></tr>
+          <tr><td>Văn phòng Đảng ủy</td><td class="num" data-label="Người thuộc diện đánh giá">5</td><td class="num" data-label="Nhiệm vụ cá nhân">101</td><td data-label="Khó khăn, vướng mắc chính">Chánh Văn phòng thuộc Nhóm 01 (32 nhiệm vụ).</td></tr>
+          <tr><td>Đảng ủy phường</td><td class="num" data-label="Người thuộc diện đánh giá">2</td><td class="num" data-label="Nhiệm vụ cá nhân">58</td><td data-label="Khó khăn, vướng mắc chính">Bí thư và Phó Bí thư Thường trực thuộc Nhóm 01.</td></tr>
+          <tr><td>Ủy ban Kiểm tra Đảng ủy</td><td class="num" data-label="Người thuộc diện đánh giá">5</td><td class="num" data-label="Nhiệm vụ cá nhân">57</td><td data-label="Khó khăn, vướng mắc chính">Đã nhập danh mục.</td></tr>
+          <tr><td>Ủy ban MTTQ Việt Nam phường</td><td class="num" data-label="Người thuộc diện đánh giá">10</td><td class="num" data-label="Nhiệm vụ cá nhân">190</td><td data-label="Khó khăn, vướng mắc chính">Còn 01 nhiệm vụ tập thể chưa giao theo báo cáo 20/11; hai cá nhân có số nhiệm vụ cao: Lê Kim Lan 36, Nguyễn Thị Ngọc Trang 35.</td></tr>
+          <tr><td>Ủy ban nhân dân phường</td><td class="num" data-label="Người thuộc diện đánh giá">3</td><td class="num" data-label="Nhiệm vụ cá nhân">72</td><td data-label="Khó khăn, vướng mắc chính">Chủ tịch và 02 Phó Chủ tịch thuộc Nhóm 01.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote">Nguồn: Biểu mẫu báo cáo tiến độ KPI hằng ngày Quý IV/2026 trên Google Drive (sheet Don_vi, Nhom_1, Tong_hop), số liệu đơn vị mốc 25/11/2026; số nhiệm vụ tập thể chưa giao theo báo cáo 20/11/2026.</p>
+  </section>
+
   <div class="empty hidden" id="emptyState">Không tìm thấy đơn vị nào khớp với điều kiện lọc hiện tại. Thử bỏ ô tìm kiếm hoặc tắt “Chỉ xem mục cần lưu ý”.</div>
 
   <footer>
-    <b>Nguồn số liệu:</b> File xuất từ phần mềm KPI ngày 25/11/2026 lúc 00:08:03 — kỳ (Chính thức) Đánh giá Quý IV/2026; <b>Báo cáo kết quả thực hiện ngày 25/11/2026 của Ban Xây dựng Đảng</b>; tiến độ danh mục Ban Thường vụ theo file “TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 179), cập nhật 00:15 ngày 27/11/2026; Báo cáo “Tiến độ đăng ký công việc trên Hệ thống KPI quý IV năm 2026” ngày 20/11/2026 của Ban Xây dựng Đảng (số nhiệm vụ tập thể và Phụ lục 1 — chốt 17/11/2026 — chưa có bản xuất mới). Dashboard là bản snapshot: số liệu phần mềm chốt 25/11/2026, tiến độ danh mục BTV cập nhật 27/11/2026; số nhiệm vụ cá nhân thể hiện tiến độ <i>đăng ký</i> trên hệ thống, kết quả hoàn thành thể hiện ở mục Danh mục Ban Thường vụ và trong thẻ từng đồng chí tại mục Nhóm 01 theo danh mục BTV. Trưởng Ban Xây dựng Đảng ký báo cáo: Nguyễn Thị Quỳnh Như.
+    <b>Nguồn số liệu:</b> File xuất từ phần mềm KPI ngày 25/11/2026 lúc 00:08:03 — kỳ (Chính thức) Đánh giá Quý IV/2026; <b>Báo cáo kết quả thực hiện ngày 25/11/2026 của Ban Xây dựng Đảng</b>; tiến độ danh mục Ban Thường vụ theo file “17.11 TỔNG HỢP TIẾN ĐỘ DANH MỤC BTV” trên Drive (version 273), cập nhật 17:46 ngày 28/11/2026; Báo cáo “Tiến độ đăng ký công việc trên Hệ thống KPI quý IV năm 2026” ngày 20/11/2026 của Ban Xây dựng Đảng (số nhiệm vụ tập thể và Phụ lục 1 — chốt 17/11/2026 — chưa có bản xuất mới). Dashboard là bản snapshot: số liệu phần mềm chốt 25/11/2026, tiến độ danh mục BTV cập nhật 28/11/2026; số nhiệm vụ cá nhân thể hiện tiến độ <i>đăng ký</i> trên hệ thống, kết quả hoàn thành thể hiện ở mục Danh mục Ban Thường vụ và trong thẻ từng đồng chí tại mục Nhóm 01 theo danh mục BTV. Trưởng Ban Xây dựng Đảng ký báo cáo: Nguyễn Thị Quỳnh Như.
   </footer>
 </main>
 </div>
